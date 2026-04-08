@@ -1,0 +1,412 @@
+<?php require_once '../includes/db.php'; ?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Entomologia UFLA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --verde: #3a6b35;
+      --verde-escuro: #2c5228;
+      --verde-claro: #5a9053;
+      --verde-bg: #f0f5ef;
+      --verde-borda: #c8dcc6;
+      --texto: #1a2e18;
+      --texto-suave: #4a6648;
+      --branco: #fff;
+      --sombra: 0 4px 20px rgba(42, 82, 40, 0.10)
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: #f5f7f5;
+      color: var(--texto)
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 240px;
+      background: var(--verde-escuro);
+      padding: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12)
+    }
+
+    .sidebar-logo h2 {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700
+    }
+
+    .sidebar-logo p {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.8rem;
+      margin-top: 3px
+    }
+
+    .nav {
+      flex: 1;
+      padding: 16px 0
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      color: rgba(255, 255, 255, 0.80);
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: all 0.15s
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff
+    }
+
+    .nav a.active {
+      border-left: 3px solid rgba(255, 255, 255, 0.70)
+    }
+
+    .nav-section {
+      padding: 16px 20px 6px;
+      color: rgba(255, 255, 255, 0.40);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em
+    }
+
+    .sidebar-bottom {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.10)
+    }
+
+    .sidebar-bottom a {
+      color: rgba(255, 255, 255, 0.60);
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    /* MAIN */
+    .main {
+      margin-left: 240px;
+      min-height: 100vh
+    }
+
+    .topbar {
+      background: var(--branco);
+      border-bottom: 1px solid var(--verde-borda);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .topbar h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--verde-escuro)
+    }
+
+    .topbar-user {
+      color: var(--texto-suave);
+      font-size: 0.9rem
+    }
+
+    .content {
+      padding: 32px
+    }
+
+    /* CARDS KPI */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px
+    }
+
+    .kpi {
+      background: var(--branco);
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid var(--verde-borda);
+      box-shadow: var(--sombra)
+    }
+
+    .kpi-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--verde);
+      line-height: 1
+    }
+
+    .kpi-label {
+      color: var(--texto-suave);
+      font-size: 0.85rem;
+      margin-top: 6px
+    }
+
+    /* TABLE */
+    .table-card {
+      background: var(--branco);
+      border-radius: 14px;
+      border: 1px solid var(--verde-borda);
+      box-shadow: var(--sombra);
+      overflow: hidden
+    }
+
+    .table-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--verde-borda);
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .table-header h3 {
+      font-size: 1rem;
+      color: var(--verde-escuro);
+      font-weight: 600
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th {
+      padding: 12px 20px;
+      text-align: left;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--texto-suave);
+      background: var(--verde-bg);
+      border-bottom: 1px solid var(--verde-borda)
+    }
+
+    td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #f0f0ee;
+      font-size: 0.92rem
+    }
+
+    tr:last-child td {
+      border-bottom: none
+    }
+
+    tr:hover td {
+      background: #fafdf9
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600
+    }
+
+    .badge-ativo {
+      background: #d4edda;
+      color: #1a6b2e
+    }
+
+    .badge-inativo {
+      background: #f8d7da;
+      color: #721c24
+    }
+
+    .thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      object-fit: cover
+    }
+
+    .thumb-placeholder {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: var(--verde-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s
+    }
+
+    .btn-edit {
+      background: var(--verde-bg);
+      color: var(--verde);
+      border: 1px solid var(--verde-borda)
+    }
+
+    .btn-edit:hover {
+      background: var(--verde-borda)
+    }
+
+    .btn-del {
+      background: #fef0f0;
+      color: #c0392b;
+      border: 1px solid #f5c6c6
+    }
+
+    .btn-del:hover {
+      background: #f5c6c6
+    }
+
+    .btn-primary {
+      background: var(--verde);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 9px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s
+    }
+
+    .btn-primary:hover {
+      background: var(--verde-escuro)
+    }
+  </style>
+</head>
+
+<body>
+  <?php
+  requireAdmin();
+  $pdo = getDB();
+
+  $ordens = $pdo->query("SELECT * FROM ordens ORDER BY ordem_exibicao, id")->fetchAll();
+  $totalOrdens = count($ordens);
+  $totalFamilias = $pdo->query("SELECT COUNT(*) FROM familias")->fetchColumn();
+  $totalPassos = $pdo->query("SELECT COUNT(*) FROM chave_passos")->fetchColumn();
+  ?>
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <h2>🪲 Entomologia</h2>
+      <p>Admin — ENT107 UFLA</p>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Principal</div>
+      <a href="index.php" class="active">Dashboard</a>
+      <a href="ordens.php">Ordens</a>
+      <a href="familias.php">Famílias</a>
+      <a href="chaves.php">Chaves Dicotômicas</a>
+      <div class="nav-section">Sistema</div>
+      <a href="admins.php">Administradores</a>
+      <a href="../index.php" target="_blank">Ver Site</a>
+    </div>
+    <div class="sidebar-bottom">
+      <a href="logout.php">← Sair (<?= htmlspecialchars($_SESSION['admin_nome']) ?>)</a>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>Dashboard</h1>
+      <span class="topbar-user">Olá, <?= htmlspecialchars($_SESSION['admin_nome']) ?></span>
+    </div>
+    <div class="content">
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-num"><?= $totalOrdens ?></div>
+          <div class="kpi-label">Ordens cadastradas</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-num"><?= $totalFamilias ?></div>
+          <div class="kpi-label">Famílias cadastradas</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-num"><?= $totalPassos ?></div>
+          <div class="kpi-label">Passos de chaves</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Ordens / Subordens</h3>
+          <a href="ordens.php?acao=novo" class="btn-primary">+ Nova Ordem</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Nome</th>
+              <th>Famílias</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($ordens as $o):
+              $nf = $pdo->prepare("SELECT COUNT(*) FROM familias WHERE ordem_id=?");
+              $nf->execute([$o['id']]);
+              $qtdFam = $nf->fetchColumn();
+            ?>
+              <tr>
+                <td><?= $o['imagem'] ? "<img src='../{$o['imagem']}' class='thumb' alt=''>" : "<div class='thumb-placeholder'>🪲</div>" ?></td>
+                <td><em><?= htmlspecialchars($o['nome']) ?></em></td>
+                <td><?= $qtdFam ?></td>
+                <td><span class="badge <?= $o['ativo'] ? 'badge-ativo' : 'badge-inativo' ?>"><?= $o['ativo'] ? 'Ativo' : 'Inativo' ?></span></td>
+                <td style="display:flex;gap:8px;align-items:center">
+                  <a href="ordens.php?acao=editar&id=<?= $o['id'] ?>" class="btn-sm btn-edit">Editar</a>
+                  <a href="chaves.php?ordem_id=<?= $o['id'] ?>" class="btn-sm btn-edit">Chave</a>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
