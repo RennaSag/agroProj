@@ -148,7 +148,7 @@
     $stmt->execute([$email, $email]);
 
     $admin = $stmt->fetch();
-    if ($admin && md5($senha) === $admin['senha']) {
+    if ($admin && password_verify($senha, $admin['senha'])) {
       $_SESSION['admin_id'] = $admin['id'];
       $_SESSION['admin_nome'] = $admin['nome'];
       header('Location: index.php');
