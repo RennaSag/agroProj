@@ -598,13 +598,12 @@
 
   <header>
     <h1>Chave de Classificação para Algumas Ordens e Famílias da Classe Insecta</h1>
-    <p>UFLA &nbsp;—&nbsp; Departamento de Entomologia &nbsp;—&nbsp; ENT107</p>
+    <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
     <div class="header-accent"></div>
   </header>
 
   <main>
     <div class="ordens-grid" id="ordensgrid">
-      <!-- preenchido via JS/PHP -->
     </div>
   </main>
 
@@ -638,7 +637,7 @@
 
         const imgHtml = ordem.imagem ?
           `<img src="${ordem.imagem}" class="card-img" alt="${ordem.nome}" loading="lazy">` :
-          `<div class="card-img-placeholder">🪲</div>`;
+          `<div class="card-img-placeholder">ImagemAqui</div>`;
 
         card.innerHTML = `
       ${imgHtml}

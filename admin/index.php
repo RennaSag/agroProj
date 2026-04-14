@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Entomologia UFLA</title>
+  <title>Admin - Entomologia</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -331,8 +331,8 @@
 
   <nav class="sidebar">
     <div class="sidebar-logo">
-      <h2>🪲 Entomologia</h2>
-      <p>Admin — ENT107 UFLA</p>
+      <h2>Entomologia</h2>
+      <p>Admin</p>
     </div>
     <div class="nav">
       <div class="nav-section">Principal</div>
@@ -345,7 +345,7 @@
       <a href="../index.php" target="_blank">Ver Site</a>
     </div>
     <div class="sidebar-bottom">
-      <a href="logout.php">← Sair (<?= htmlspecialchars($_SESSION['admin_nome']) ?>)</a>
+      <a href="logout.php">Sair (<?= htmlspecialchars($_SESSION['admin_nome']) ?>)</a>
     </div>
   </nav>
 
@@ -372,8 +372,8 @@
 
       <div class="table-card">
         <div class="table-header">
-          <h3>Ordens / Subordens</h3>
-          <a href="ordens.php?acao=novo" class="btn-primary">+ Nova Ordem</a>
+          <h3>Ordens/Subordens</h3>
+          <a href="ordens.php?acao=novo" class="btn-primary">Nova Ordem</a>
         </div>
         <table>
           <thead>
@@ -392,7 +392,7 @@
               $qtdFam = $nf->fetchColumn();
             ?>
               <tr>
-                <td><?= $o['imagem'] ? "<img src='../{$o['imagem']}' class='thumb' alt=''>" : "<div class='thumb-placeholder'>🪲</div>" ?></td>
+                <td><?= $o['imagem'] ? "<img src='../{$o['imagem']}' class='thumb' alt=''>" : "<div class='thumb-placeholder'>ImagemAqui</div>" ?></td>
                 <td><em><?= htmlspecialchars($o['nome']) ?></em></td>
                 <td><?= $qtdFam ?></td>
                 <td><span class="badge <?= $o['ativo'] ? 'badge-ativo' : 'badge-inativo' ?>"><?= $o['ativo'] ? 'Ativo' : 'Inativo' ?></span></td>

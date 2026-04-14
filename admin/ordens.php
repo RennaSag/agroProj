@@ -6,7 +6,7 @@ require_once '../includes/db.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ordens - Admin Entomologia</title>
+  <title>Admin - Ordens</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -492,16 +492,16 @@ require_once '../includes/db.php';
 
   <div class="main">
     <div class="topbar">
-      <h1>Ordens / Subordens</h1>
+      <h1>Ordens/Subordens</h1>
       <?php if ($acao === 'listar'): ?>
-        <a href="?acao=novo" class="btn-primary">+ Nova Ordem</a>
+        <a href="?acao=novo" class="btn-primary">Nova Ordem</a>
       <?php else: ?>
-        <a href="ordens.php" class="btn-secondary">← Voltar à Lista</a>
+        <a href="ordens.php" class="btn-secondary">Voltar à Lista</a>
       <?php endif; ?>
     </div>
     <div class="content">
-      <?php if ($msg): ?><div class="alert-success">✓ <?= htmlspecialchars($msg) ?></div><?php endif; ?>
-      <?php if ($erro): ?><div class="alert-error">✗ <?= htmlspecialchars($erro) ?></div><?php endif; ?>
+      <?php if ($msg): ?><div class="alert-success"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
+      <?php if ($erro): ?><div class="alert-error"><?= htmlspecialchars($erro) ?></div><?php endif; ?>
 
       <?php if ($acao === 'listar'): ?>
         <div class="card">
@@ -521,12 +521,12 @@ require_once '../includes/db.php';
             <tbody>
               <?php foreach ($pdo->query("SELECT * FROM ordens ORDER BY ordem_exibicao,id")->fetchAll() as $o): ?>
                 <tr>
-                  <td><?= $o['imagem'] ? "<img src='../{$o['imagem']}' class='thumb'>" : "<div class='thumb-ph'>🪲</div>" ?></td>
+                  <td><?= $o['imagem'] ? "<img src='../{$o['imagem']}' class='thumb'>" : "<div class='thumb-ph'>ImagemAqui</div>" ?></td>
                   <td><em><?= htmlspecialchars($o['nome']) ?></em></td>
                   <td><?= $o['ordem_exibicao'] ?></td>
                   <td><span class="<?= $o['ativo'] ? 'badge-ativo' : 'badge-inativo' ?>"><?= $o['ativo'] ? 'Ativo' : 'Inativo' ?></span></td>
                   <td>
-                    <a href="?acao=editar&id=<?= $o['id'] ?>" class="btn-sm btn-edit">✏ Editar</a>
+                    <a href="?acao=editar&id=<?= $o['id'] ?>" class="btn-sm btn-edit">Editar</a>
                     <a href="?acao=deletar&id=<?= $o['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir esta ordem e todas suas famílias/chaves?')">🗑 Excluir</a>
                   </td>
                 </tr>
@@ -554,7 +554,7 @@ require_once '../includes/db.php';
 
               <div class="form-row">
                 <div class="form-group">
-                  <label>Nome *</label>
+                  <label>Nome</label>
                   <input type="text" name="nome" class="form-control" required value="<?= htmlspecialchars($e['nome'] ?? '') ?>" placeholder="Ex: Hemiptera-Auchenorrhyncha">
                 </div>
                 <div class="form-group">

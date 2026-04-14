@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administradores – ENT107</title>
+  <title>Painel de Administradores</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -347,11 +347,11 @@
   </nav>
   <div class="main">
     <div class="topbar">
-      <h1>👤 Administradores</h1>
+      <h1>Administradores</h1>
     </div>
     <div class="content">
-      <?php if ($msg): ?><div class="alert-success">✓ <?= htmlspecialchars($msg) ?></div><?php endif; ?>
-      <?php if ($erro): ?><div class="alert-error">✗ <?= htmlspecialchars($erro) ?></div><?php endif; ?>
+      <?php if ($msg): ?><div class="alert-success"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
+      <?php if ($erro): ?><div class="alert-error"><?= htmlspecialchars($erro) ?></div><?php endif; ?>
 
       <div class="card">
         <div class="card-header">
@@ -393,20 +393,20 @@
           <form method="POST">
             <div class="form-row">
               <div class="form-group">
-                <label class="lbl">Nome *</label>
+                <label class="lbl">Nome</label>
                 <input type="text" name="nome" class="form-control" required placeholder="Ex: Prof. Silva">
               </div>
               <div class="form-group">
-                <label class="lbl">E-mail *</label>
+                <label class="lbl">E-mail</label>
                 <input type="email" name="email" class="form-control" required placeholder="prof@ufla.br">
               </div>
             </div>
             <div class="form-group">
-              <label class="lbl">Senha *</label>
+              <label class="lbl">Senha</label>
               <input type="password" name="senha" class="form-control" required minlength="6">
               <p class="hint">Mínimo 6 caracteres.</p>
             </div>
-            <button type="submit" class="btn-primary">+ Cadastrar Admin</button>
+            <button type="submit" class="btn-primary">Cadastrar Admin</button>
           </form>
         </div>
       </div>

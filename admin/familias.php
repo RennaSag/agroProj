@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Famílias – Admin Entomologia</title>
+  <title>Famílias</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -444,8 +444,8 @@
 
   <nav class="sidebar">
     <div class="sidebar-logo">
-      <h2>🪲 Entomologia</h2>
-      <p>Admin — ENT107 UFLA</p>
+      <h2>Entomologia</h2>
+      <p>Admin</p>
     </div>
     <div class="nav">
       <div class="nav-section">Principal</div>
@@ -457,21 +457,21 @@
       <a href="admins.php">Administradores</a>
       <a href="../index.php" target="_blank">Ver Site</a>
     </div>
-    <div class="sidebar-bottom"><a href="logout.php">← Sair</a></div>
+    <div class="sidebar-bottom"><a href="logout.php">Sair</a></div>
   </nav>
 
   <div class="main">
     <div class="topbar">
-      <h1>🔬 Famílias</h1>
+      <h1>Famílias</h1>
       <?php if ($acao === 'listar'): ?>
         <a href="?acao=novo<?= $filtro_ordem ? "&ordem_id=$filtro_ordem" : '' ?>" class="btn-primary">+ Nova Família</a>
       <?php else: ?>
-        <a href="familias.php" class="btn-secondary">← Voltar à Lista</a>
+        <a href="familias.php" class="btn-secondary">Voltar à Lista</a>
       <?php endif; ?>
     </div>
     <div class="content">
-      <?php if ($msg): ?><div class="alert-success">✓ <?= htmlspecialchars($msg) ?></div><?php endif; ?>
-      <?php if ($erro): ?><div class="alert-error">✗ <?= htmlspecialchars($erro) ?></div><?php endif; ?>
+      <?php if ($msg): ?><div class="alert-success"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
+      <?php if ($erro): ?><div class="alert-error"><?= htmlspecialchars($erro) ?></div><?php endif; ?>
 
       <?php if ($acao === 'listar'):
         $where = $filtro_ordem ? "WHERE f.ordem_id=$filtro_ordem" : "";
@@ -491,7 +491,7 @@
           <table>
             <thead>
               <tr>
-                <th>Img</th>
+                <th>Imagem</th>
                 <th>Nome</th>
                 <th>Ordem</th>
                 <th>Exemplos</th>
@@ -501,13 +501,13 @@
             <tbody>
               <?php foreach ($familias as $f): ?>
                 <tr>
-                  <td><?= $f['imagem'] ? "<img src='../{$f['imagem']}' class='thumb'>" : "<div class='thumb-ph'>🔬</div>" ?></td>
+                  <td><?= $f['imagem'] ? "<img src='../{$f['imagem']}' class='thumb'>" : "<div class='thumb-ph'>ImagemAqui</div>" ?></td>
                   <td><em><?= htmlspecialchars($f['nome']) ?></em></td>
                   <td><span class="tag-ordem"><?= htmlspecialchars($f['ordem_nome']) ?></span></td>
                   <td style="color:var(--texto-suave);font-size:0.88rem"><?= htmlspecialchars(mb_strimwidth($f['exemplos'] ?? '', 0, 50, '…')) ?></td>
                   <td>
-                    <a href="?acao=editar&id=<?= $f['id'] ?>" class="btn-sm btn-edit">✏ Editar</a>
-                    <a href="?acao=deletar&id=<?= $f['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir?')">🗑</a>
+                    <a href="?acao=editar&id=<?= $f['id'] ?>" class="btn-sm btn-edit">Editar</a>
+                    <a href="?acao=deletar&id=<?= $f['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir?')">Excluir</a>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -533,16 +533,16 @@
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="lbl">Ordem *</label>
+                  <label class="lbl">Ordem</label>
                   <select name="ordem_id" class="form-control" required>
-                    <option value="">Selecione...</option>
+                    <option value="">Selecione.</option>
                     <?php foreach ($ordens as $o): ?>
                       <option value="<?= $o['id'] ?>" <?= $preOrdem == $o['id'] ? 'selected' : '' ?>><?= htmlspecialchars($o['nome']) ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="lbl">Nome da Família *</label>
+                  <label class="lbl">Nome da Família</label>
                   <input type="text" name="nome" class="form-control" required value="<?= htmlspecialchars($e['nome'] ?? '') ?>" placeholder="Ex: Cicadidae">
                 </div>
               </div>
@@ -577,7 +577,7 @@
               </div>
 
               <div class="form-actions">
-                <button type="submit" class="btn-primary">💾 Salvar</button>
+                <button type="submit" class="btn-primary">Salvar</button>
                 <a href="familias.php" class="btn-secondary">Cancelar</a>
               </div>
             </form>

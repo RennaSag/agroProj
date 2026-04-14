@@ -469,8 +469,8 @@
 
   <nav class="sidebar">
     <div class="sidebar-logo">
-      <h2>🪲 Entomologia</h2>
-      <p>Admin — ENT107 UFLA</p>
+      <h2>Entomologia</h2>
+      <p>Admin</p>
     </div>
     <div class="nav">
       <div class="nav-section">Principal</div>
@@ -493,8 +493,8 @@
       <?php endif; ?>
     </div>
     <div class="content">
-      <?php if ($msg): ?><div class="alert-success">✓ <?= htmlspecialchars($msg) ?></div><?php endif; ?>
-      <?php if ($erro): ?><div class="alert-error">✗ <?= htmlspecialchars($erro) ?></div><?php endif; ?>
+      <?php if ($msg): ?><div class="alert-success"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
+      <?php if ($erro): ?><div class="alert-error"><?= htmlspecialchars($erro) ?></div><?php endif; ?>
 
       
       <div class="card">
@@ -529,8 +529,8 @@
                 <tr>
                   <th>#</th>
                   <th>Pergunta</th>
-                  <th>SIM → </th>
-                  <th>NÃO → </th>
+                  <th>SIM</th>
+                  <th>NÃO</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -541,23 +541,23 @@
                     <td style="max-width:300px"><?= htmlspecialchars(mb_strimwidth($p['pergunta'], 0, 80, '…')) ?></td>
                     <td style="font-size:0.85rem">
                       <?php if ($p['sim_resultado_familia_id']): ?>
-                        <strong style="color:var(--verde)">→ <em><?= htmlspecialchars($p['sim_fam_nome']) ?></em></strong>
+                        <strong style="color:var(--verde)"><em><?= htmlspecialchars($p['sim_fam_nome']) ?></em></strong>
                       <?php elseif ($p['sim_leva_passo']): ?>
-                        → Passo <?= $p['sim_leva_passo'] ?>
+                        Passo <?= $p['sim_leva_passo'] ?>
                       <?php else: echo '—';
                       endif; ?>
                     </td>
                     <td style="font-size:0.85rem">
                       <?php if ($p['nao_resultado_familia_id']): ?>
-                        <strong style="color:#c0392b">→ <em><?= htmlspecialchars($p['nao_fam_nome']) ?></em></strong>
+                        <strong style="color:#c0392b"><em><?= htmlspecialchars($p['nao_fam_nome']) ?></em></strong>
                       <?php elseif ($p['nao_leva_passo']): ?>
-                        → Passo <?= $p['nao_leva_passo'] ?>
+                      Passo <?= $p['nao_leva_passo'] ?>
                       <?php else: echo '—';
                       endif; ?>
                     </td>
                     <td>
-                      <a href="?acao=editar&passo_id=<?= $p['id'] ?>&ordem_id=<?= $ordem_id ?>" class="btn-sm btn-edit">✏</a>
-                      <a href="?acao=del_passo&passo_id=<?= $p['id'] ?>&ordem_id=<?= $ordem_id ?>" class="btn-sm btn-del" onclick="return confirm('Excluir este passo?')">🗑</a>
+                      <a href="?acao=editar&passo_id=<?= $p['id'] ?>&ordem_id=<?= $ordem_id ?>" class="btn-sm btn-edit">Editar</a>
+                      <a href="?acao=del_passo&passo_id=<?= $p['id'] ?>&ordem_id=<?= $ordem_id ?>" class="btn-sm btn-del" onclick="return confirm('Excluir este passo?')">Excluir</a>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -584,19 +584,19 @@
 
               <div class="form-row" style="margin-bottom:20px">
                 <div class="form-group" style="margin-bottom:0">
-                  <label class="lbl">Número do Passo *</label>
+                  <label class="lbl">Número do Passo</label>
                   <input type="number" name="passo_numero" class="form-control" required min="1" value="<?= $pe['passo_numero'] ?? $prox_passo ?>">
                   <p class="hint">Passos são exibidos em ordem crescente.</p>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="lbl">Pergunta Dicotômica *</label>
+                <label class="lbl">Pergunta Dicotômica</label>
                 <textarea name="pergunta" class="form-control" required placeholder="Ex: Inseto de tamanho grande (>2cm) com órgão estridulador nos machos?"><?= htmlspecialchars($pe['pergunta'] ?? '') ?></textarea>
               </div>
 
               <div class="divider"></div>
-              <div class="section-label">✓ Resposta SIM</div>
+              <div class="section-label">Resposta SIM</div>
               <div class="form-row" style="margin-bottom:20px">
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Texto da opção SIM</label>
@@ -606,14 +606,14 @@
               <div class="resultado-box" style="margin-bottom:20px">
                 <div class="form-row-3">
                   <div class="form-group" style="margin-bottom:0">
-                    <label class="lbl">SIM → Próximo passo</label>
+                    <label class="lbl">Sim: Próximo passo</label>
                     <input type="number" name="sim_leva_passo" class="form-control" min="1" value="<?= $pe['sim_leva_passo'] ?? '' ?>" placeholder="N° do passo">
                     <p class="hint">Deixe vazio se leva a uma família.</p>
                   </div>
                   <div class="form-group" style="margin-bottom:0;grid-column:span 2">
-                    <label class="lbl">SIM → Resultado (família)</label>
+                    <label class="lbl">SIM: Resultado (família)</label>
                     <select name="sim_resultado_familia_id" class="form-control">
-                      <option value="">— Não é resultado final —</option>
+                      <option value="">Não é resultado final</option>
                       <?php foreach ($familias as $f): ?>
                         <option value="<?= $f['id'] ?>" <?= ($pe['sim_resultado_familia_id'] ?? 0) == $f['id'] ? 'selected' : '' ?>><?= htmlspecialchars($f['nome']) ?></option>
                       <?php endforeach; ?>
@@ -623,7 +623,7 @@
               </div>
 
               <div class="divider"></div>
-              <div class="section-label" style="color:#c0392b">✗ Resposta NÃO</div>
+              <div class="section-label" style="color:#c0392b">Resposta NÃO</div>
               <div class="form-row" style="margin-bottom:20px">
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Texto da opção NÃO</label>
@@ -633,13 +633,13 @@
               <div class="resultado-box" style="margin-bottom:20px">
                 <div class="form-row-3">
                   <div class="form-group" style="margin-bottom:0">
-                    <label class="lbl">NÃO → Próximo passo</label>
+                    <label class="lbl">NÃO: Próximo passo</label>
                     <input type="number" name="nao_leva_passo" class="form-control" min="1" value="<?= $pe['nao_leva_passo'] ?? '' ?>" placeholder="N° do passo">
                   </div>
                   <div class="form-group" style="margin-bottom:0;grid-column:span 2">
-                    <label class="lbl">NÃO → Resultado (família)</label>
+                    <label class="lbl">NÃO: Resultado (família)</label>
                     <select name="nao_resultado_familia_id" class="form-control">
-                      <option value="">— Não é resultado final —</option>
+                      <option value="">Não é resultado final</option>
                       <?php foreach ($familias as $f): ?>
                         <option value="<?= $f['id'] ?>" <?= ($pe['nao_resultado_familia_id'] ?? 0) == $f['id'] ? 'selected' : '' ?>><?= htmlspecialchars($f['nome']) ?></option>
                       <?php endforeach; ?>

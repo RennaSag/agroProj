@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chave Dicotômica - ENT107 UFLA</title>
+  <title>Chave Dicotômica </title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.php?inline_css=1">
@@ -398,7 +398,7 @@
       const ordem = await ro.json();
       ordemNome = ordem.nome;
       document.getElementById('headerTitulo').textContent = ordemNome;
-      document.title = ordemNome + ' – ENT107';
+      document.title = ordemNome;
 
       
       const rp = await fetch(`api.php?action=passos&ordem_id=${ordemId}`);
@@ -409,7 +409,7 @@
       <div class="sem-chave">
         <h3>Chave dicotômica não cadastrada</h3>
         <p>A chave para <em>${ordemNome}</em> ainda não foi inserida pelo administrador.<br>Entre em contato com o responsável pela disciplina.</p>
-        <a href="index.php" class="btn btn-solid" style="display:inline-flex;margin-top:20px;max-width:240px">← Voltar ao Início</a>
+        <a href="index.php" class="btn btn-solid" style="display:inline-flex;margin-top:20px;max-width:240px">Voltar ao Início</a>
       </div>`;
         return;
       }
@@ -483,7 +483,7 @@
 
       const imgHtml = familia.imagem ?
         `<img src="${familia.imagem}" class="resultado-img" alt="${familia.nome}">` :
-        `<div class="resultado-img-placeholder">🪲</div>`;
+        `<div class="resultado-img-placeholder">ImagemAqui</div>`;
 
       document.getElementById('conteudo').innerHTML = `
     <div class="resultado-card">
@@ -500,8 +500,8 @@
           ${familia.exemplos ? `<p style="margin-top:10px;color:var(--texto-suave)"><strong>Exemplos:</strong> ${familia.exemplos}</p>` : ''}
         </div>` : ''}
       <div class="resultado-acoes">
-        <button class="btn btn-outline" onclick="renderPasso(0)">↺ Refazer Identificação</button>
-        <a class="btn btn-solid" href="index.php">⌂ Voltar ao Início</a>
+        <button class="btn btn-outline" onclick="renderPasso(0)">Refazer Identificação</button>
+        <a class="btn btn-solid" href="index.php">Voltar ao Início</a>
       </div>
     </div>`;
     }

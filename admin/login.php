@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin – Entomologia UFLA</title>
+  <title>Admin - Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -160,7 +160,7 @@
   ?>
   <div class="login-card">
     <div class="logo">
-      <h1>🪲 Entomologia</h1>
+      <h1>Entomologia</h1>
       <p>Painel Administrativo</p>
     </div>
     <?php if ($erro): ?>
@@ -177,7 +177,7 @@
       </div>
       <button type="submit" class="btn-login">Entrar</button>
     </form>
-    <div class="back-link"><a href="../index.php">← Voltar ao site</a></div>
+    <div class="back-link"><a href="../index.php">Voltar ao site</a></div>
   </div>
 </body>
 

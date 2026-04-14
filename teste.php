@@ -4,7 +4,7 @@ require_once 'includes/db.php';
 $pdo = getDB();
 
 $stmt = $pdo->prepare("SELECT * FROM admins WHERE email = ?");
-$stmt->execute(['admin@ufla.br']);
+$stmt->execute(['']);
 $admin = $stmt->fetch();
 
 echo "Achou: " . ($admin ? 'SIM' : 'NÃO') . "<br>";
