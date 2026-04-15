@@ -1,4 +1,4 @@
-require_once '../includes/db.php';
+<?php require_once '../includes/db.php'; ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -527,7 +527,7 @@ require_once '../includes/db.php';
                   <td><span class="<?= $o['ativo'] ? 'badge-ativo' : 'badge-inativo' ?>"><?= $o['ativo'] ? 'Ativo' : 'Inativo' ?></span></td>
                   <td>
                     <a href="?acao=editar&id=<?= $o['id'] ?>" class="btn-sm btn-edit">Editar</a>
-                    <a href="?acao=deletar&id=<?= $o['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir esta ordem e todas suas famílias/chaves?')">🗑 Excluir</a>
+                    <a href="?acao=deletar&id=<?= $o['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir esta ordem e todas suas famílias/chaves?')">Excluir</a>
                   </td>
                 </tr>
               <?php endforeach; ?>

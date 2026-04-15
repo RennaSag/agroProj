@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 08/04/2026 às 21:42
+-- Tempo de geração: 15/04/2026 às 19:48
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -40,7 +40,8 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `nome`, `email`, `senha`, `criado_em`) VALUES
-(1, 'adm', 'adm', 'b09c600fddc573f117449b3723f23d64', '2026-04-08 18:51:52');
+(7, 'renna', 'renna@gmail.com', '$2y$10$4fgrWFvb1wN/eYMK/BqxH.g5yOp0KRYTkhkf6.Qre0YRfjpm236ny', '2026-04-14 23:40:38'),
+(8, 'professor', 'professor@gmail.com', '$2y$10$ZawlbOQXR3wU8OTYwlBZNec2TD7C0g5A.Tr3Uew3VbNKqFRKRmYt6', '2026-04-15 17:17:26');
 
 -- --------------------------------------------------------
 
@@ -68,7 +69,8 @@ CREATE TABLE `chave_passos` (
 INSERT INTO `chave_passos` (`id`, `ordem_id`, `passo_numero`, `pergunta`, `opcao_sim_texto`, `opcao_nao_texto`, `sim_leva_passo`, `nao_leva_passo`, `sim_resultado_familia_id`, `nao_resultado_familia_id`) VALUES
 (1, 1, 1, 'Protórax desenvolvido e expandido para trás, formando um casco que cobre o abdome?', 'Protórax muito desenvolvido, formando estrutura em forma de capacete ou chifre', 'Protórax normal, não expandido sobre o abdome', NULL, 2, 2, NULL),
 (2, 1, 2, 'Inseto de tamanho grande (>2cm) com órgão estridulador nos machos?', 'Grande, com timbais para produção de som', 'Pequeno a médio, sem órgão estridulador evidente', NULL, 3, 1, NULL),
-(3, 1, 3, 'Tíbias posteriores com 1 ou 2 fileiras de espinhos (não apenas 1-2 espinhos isolados)?', 'Fileiras de espinhos nas tíbias posteriores', 'Apenas 1 ou 2 espinhos isolados nas tíbias', NULL, NULL, 3, 4);
+(3, 1, 3, 'Tíbias posteriores com 1 ou 2 fileiras de espinhos (não apenas 1-2 espinhos isolados)?', 'Fileiras de espinhos nas tíbias posteriores', 'Apenas 1 ou 2 espinhos isolados nas tíbias', NULL, NULL, 3, 4),
+(4, 13, 1, 'esse inseto é grande?', 'inseto grande', 'inseto pequeno', 1, 2, 69, 68);
 
 -- --------------------------------------------------------
 
@@ -241,13 +243,13 @@ ALTER TABLE `ordens`
 -- AUTO_INCREMENT de tabela `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `chave_passos`
 --
 ALTER TABLE `chave_passos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `familias`
