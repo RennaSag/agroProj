@@ -597,10 +597,28 @@
 <body>
 
   <header>
-    <h1>Chave de Classificação para Algumas Ordens e Famílias da Classe Insecta</h1>
-    <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
-    <div class="header-accent"></div>
-  </header>
+  <h1>Chave de Classificação para Algumas Ordens e Famílias da Classe Insecta</h1>
+  <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
+  <div class="header-accent"></div>
+  <a href="admin/login.php" style="
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.18s;
+  " onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+     onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+    Admin
+  </a>
+</header>
 
   <main>
     <div class="ordens-grid" id="ordensgrid">

@@ -9,6 +9,8 @@ define('DB_PASS', '');
 define('DB_NAME', 'entomologia');
 
 
+
+
 function getDB()
 {
     static $pdo = null;
@@ -58,10 +60,10 @@ function isAdmin()
     return isset($_SESSION['admin_id']);
 }
 
-function requireAdmin()
-{
-    if (!isAdmin()) {
-        header('Location: ../admin/login.php');
+function requireAdmin() {
+    if (!isset($_SESSION['admin_id'])) {
+        header('Location: /agroProj/admin/login.php');
         exit;
     }
 }
+//requerimento de adm pras paginas

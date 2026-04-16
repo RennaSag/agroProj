@@ -1,4 +1,5 @@
-<?php require_once '../includes/db.php'; ?>
+<?php require_once '../includes/db.php';
+requireAdmin(); ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
