@@ -1,20 +1,30 @@
 <?php require_once '../includes/db.php';
 
-session_start();
+// se ja esta logado vai direto pro admin
+if (isset($_SESSION['admin_id'])) {
+    header('Location: index.php');
+    exit;
+}
 
-// sessao expira ao fechar o navegador (sem cookie persistente)
-session_set_cookie_params([
-    'lifetime' => 0, 
-    'path'     => '/',
-    'secure'   => false,
-    'httponly' => true,
-    'samesite' => 'Strict'
-]);
+$erro = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+    $pdo = getDB();
 
-// Após validar login com sucesso:
-$_SESSION['admin_id'] = $admin['id'];
-header('Location: index.php');
-exit;
+    $stmt = $pdo->prepare("SELECT * FROM admins WHERE email=? OR nome=?");
+    $stmt->execute([$email, $email]);
+    $admin = $stmt->fetch();
+
+    if ($admin && password_verify($senha, $admin['senha'])) {
+        $_SESSION['admin_id']   = $admin['id'];
+        $_SESSION['admin_nome'] = $admin['nome'];
+        header('Location: index.php');
+        exit;
+    } else {
+        $erro = 'E-mail ou senha incorretos.';
+    }
+}
 
 ?>
 
