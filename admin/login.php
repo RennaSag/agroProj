@@ -1,5 +1,22 @@
 <?php require_once '../includes/db.php';
-requireAdmin(); ?>
+
+session_start();
+
+// sessao expira ao fechar o navegador (sem cookie persistente)
+session_set_cookie_params([
+    'lifetime' => 0, 
+    'path'     => '/',
+    'secure'   => false,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
+
+// Após validar login com sucesso:
+$_SESSION['admin_id'] = $admin['id'];
+header('Location: index.php');
+exit;
+
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">

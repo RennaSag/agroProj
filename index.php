@@ -600,7 +600,7 @@
   <h1>Chave de Classificação para Algumas Ordens e Famílias da Classe Insecta</h1>
   <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
   <div class="header-accent"></div>
-  <a href="admin/login.php" style="
+  <a href="admin/check_auth.php" style="
     position: absolute;
     top: 16px;
     right: 20px;
