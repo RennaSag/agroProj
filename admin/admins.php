@@ -343,7 +343,7 @@
       <a href="admins.php" class="active">Administradores</a>
       <a href="../index.php" target="_blank">Ver Site</a>
     </div>
-    <div class="sidebar-bottom"><a href="logout.php">← Sair</a></div>
+    <div class="sidebar-bottom"><a href="logout.php">Sair</a></div>
   </nav>
   <div class="main">
     <div class="topbar">

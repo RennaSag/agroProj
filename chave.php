@@ -363,7 +363,7 @@
 <body>
 
   <header>
-    <a class="header-back" href="index.php">←</a>
+    <a class="header-back" href="index.php"></a>
     <div class="header-info">
       <h2 id="headerTitulo">Carregando.</h2>
       <p>Chave Dicotômica</p>
