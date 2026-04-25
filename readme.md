@@ -1,4 +1,4 @@
-# Documentacao do Sistema - Chave Entomologica
+﻿# Documentacao do Sistema - Chave Entomologica
 
 ## Visao Geral
 
@@ -10,27 +10,40 @@ Sistema web para classificacao entomologica de insetos da Classe Insecta. Permit
 
 ```
 /
-├── index.php           - pagina principal (listagem de ordens)
-├── chave.php           - interface da chave dicotomica
-├── api.php             - api publica (json)
-├── gerar_senha.php     - utilitario para gerar hash de senha
-├── teste.php           - utilitario de teste de autenticacao
-├── includes/
-|   └──db.php           - conexao com banco e funcoes auxiliares
-├── admin/
-│   ├── index.php       - dashboard administrativo
-│   ├── ordens.php      - crud de ordens
-│   ├── familias.php    - crud de familias
-│   ├── chaves.php      - crud de passos da chave dicotomica
-│   ├── admins.php      - gerenciamento de administradores
-|   ├── login.php       - autenticacao do admin
-|   ├── logout.php      - controle de logout
-|   └── chech_auth.php   - controle de login
+|-- index.php              - pagina principal (listagem de ordens)
+|-- chave.php              - interface da chave dicotomica
+|-- api.php                - api publica (json)
+|-- gerar_senha.php        - utilitario para gerar hash de senha
+|-- teste.php              - utilitario de teste de autenticacao
+|-- .env                   - configuracoes locais (nao versionar)
+|-- .env.example           - modelo das configuracoes locais
+|-- assets/
+|   |-- css/               - estilos separados das paginas PHP
+|   `-- js/                - scripts futuros separados das paginas PHP
+|-- includes/
+|   |-- config.php         - carregamento das variaveis do .env
+|   `-- db.php             - conexao com banco e funcoes auxiliares
+|-- admin/
+|   |-- index.php          - dashboard administrativo
+|   |-- ordens.php         - crud de ordens
+|   |-- familias.php       - crud de familias
+|   |-- chaves.php         - crud de passos da chave dicotomica
+|   |-- admins.php         - gerenciamento de administradores
+|   |-- login.php          - autenticacao do admin
+|   |-- logout.php         - controle de logout
+|   `-- check_auth.php     - controle de login
+|-- database/
+|   `-- entomologia.sql    - estrutura e carga inicial do banco
+`-- docs/
+    `-- Diagrama de caso de uso.PNG
 ```
 
 ---
 
 ## Banco de Dados
+
+As credenciais do banco ficam no arquivo `.env`.
+Use `.env.example` como modelo ao configurar o projeto em outra maquina.
 
 ### Tabelas
 
@@ -143,3 +156,5 @@ Requer autenticacao via sessao PHP.
 - Frontend vanilla JS sem frameworks
 - Fontes: Playfair Display (titulos) e Source Sans 3 (texto)
 - Design responsivo com media queries para mobile
+
+
