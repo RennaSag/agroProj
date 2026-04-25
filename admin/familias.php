@@ -1,4 +1,4 @@
-﻿<?php require_once '../includes/db.php'; 
+<?php require_once '../includes/db.php'; 
 requireAdmin(); ?>
 
 <!DOCTYPE html>
@@ -7,7 +7,7 @@ requireAdmin(); ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FamÃ­lias</title>
+  <title>Famílias</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/admin-familias.css">
 </head>
@@ -44,13 +44,13 @@ requireAdmin(); ?>
       if ($_POST['form_acao'] === 'novo') {
         $stmt = $pdo->prepare("INSERT INTO familias (ordem_id,nome,descricao,exemplos,imagem,ativo) VALUES (?,?,?,?,?,?)");
         $stmt->execute([$ordem_id, $nome, $descricao, $exemplos, $imagem, $ativo]);
-        $msg = 'FamÃ­lia cadastrada!';
+        $msg = 'Família cadastrada!';
         $acao = 'listar';
       } elseif ($_POST['form_acao'] === 'editar') {
         $pid = (int)$_POST['id'];
         $stmt = $pdo->prepare("UPDATE familias SET ordem_id=?,nome=?,descricao=?,exemplos=?,imagem=?,ativo=? WHERE id=?");
         $stmt->execute([$ordem_id, $nome, $descricao, $exemplos, $imagem, $ativo, $pid]);
-        $msg = 'FamÃ­lia atualizada!';
+        $msg = 'Família atualizada!';
         $acao = 'listar';
       }
     }
@@ -58,7 +58,7 @@ requireAdmin(); ?>
 
   if ($acao === 'deletar' && $id) {
     $pdo->prepare("DELETE FROM familias WHERE id=?")->execute([$id]);
-    $msg = 'FamÃ­lia excluÃ­da.';
+    $msg = 'Família excluída.';
     $acao = 'listar';
   }
 
@@ -80,8 +80,8 @@ requireAdmin(); ?>
       <div class="nav-section">Principal</div>
       <a href="index.php">Dashboard</a>
       <a href="ordens.php">Ordens</a>
-      <a href="familias.php" class="active">FamÃ­lias</a>
-      <a href="chaves.php">Chaves DicotÃ´micas</a>
+      <a href="familias.php" class="active">Famílias</a>
+      <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php">Administradores</a>
       <a href="../index.php" target="_blank">Ver Site</a>
@@ -91,11 +91,11 @@ requireAdmin(); ?>
 
   <div class="main">
     <div class="topbar">
-      <h1>FamÃ­lias</h1>
+      <h1>Famílias</h1>
       <?php if ($acao === 'listar'): ?>
-        <a href="?acao=novo<?= $filtro_ordem ? "&ordem_id=$filtro_ordem" : '' ?>" class="btn-primary">+ Nova FamÃ­lia</a>
+        <a href="?acao=novo<?= $filtro_ordem ? "&ordem_id=$filtro_ordem" : '' ?>" class="btn-primary">+ Nova Família</a>
       <?php else: ?>
-        <a href="familias.php" class="btn-secondary">Voltar Ã  Lista</a>
+        <a href="familias.php" class="btn-secondary">Voltar à Lista</a>
       <?php endif; ?>
     </div>
     <div class="content">
@@ -114,7 +114,7 @@ requireAdmin(); ?>
               <option value="<?= $o['id'] ?>" <?= $filtro_ordem == $o['id'] ? 'selected' : '' ?>><?= htmlspecialchars($o['nome']) ?></option>
             <?php endforeach; ?>
           </select>
-          <span style="font-size:0.88rem;color:var(--texto-suave)"><?= count($familias) ?> famÃ­lias</span>
+          <span style="font-size:0.88rem;color:var(--texto-suave)"><?= count($familias) ?> famílias</span>
         </div>
         <div class="card">
           <table>
@@ -124,7 +124,7 @@ requireAdmin(); ?>
                 <th>Nome</th>
                 <th>Ordem</th>
                 <th>Exemplos</th>
-                <th>AÃ§Ãµes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -133,7 +133,7 @@ requireAdmin(); ?>
                   <td><?= $f['imagem'] ? "<img src='../{$f['imagem']}' class='thumb'>" : "<div class='thumb-ph'>ImagemAqui</div>" ?></td>
                   <td><em><?= htmlspecialchars($f['nome']) ?></em></td>
                   <td><span class="tag-ordem"><?= htmlspecialchars($f['ordem_nome']) ?></span></td>
-                  <td style="color:var(--texto-suave);font-size:0.88rem"><?= htmlspecialchars(mb_strimwidth($f['exemplos'] ?? '', 0, 50, 'â€¦')) ?></td>
+                  <td style="color:var(--texto-suave);font-size:0.88rem"><?= htmlspecialchars(mb_strimwidth($f['exemplos'] ?? '', 0, 50, '…')) ?></td>
                   <td>
                     <a href="?acao=editar&id=<?= $f['id'] ?>" class="btn-sm btn-edit">Editar</a>
                     <a href="?acao=deletar&id=<?= $f['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir?')">Excluir</a>
@@ -150,7 +150,7 @@ requireAdmin(); ?>
       ?>
         <div class="card">
           <div class="card-header">
-            <h3><?= $acao === 'novo' ? 'Nova FamÃ­lia' : 'Editar: ' . htmlspecialchars($e['nome'] ?? '') ?></h3>
+            <h3><?= $acao === 'novo' ? 'Nova Família' : 'Editar: ' . htmlspecialchars($e['nome'] ?? '') ?></h3>
           </div>
           <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
@@ -171,13 +171,13 @@ requireAdmin(); ?>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="lbl">Nome da FamÃ­lia</label>
+                  <label class="lbl">Nome da Família</label>
                   <input type="text" name="nome" class="form-control" required value="<?= htmlspecialchars($e['nome'] ?? '') ?>" placeholder="Ex: Cicadidae">
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="lbl">DescriÃ§Ã£o</label>
+                <label class="lbl">Descrição</label>
                 <textarea name="descricao" class="form-control"><?= htmlspecialchars($e['descricao'] ?? '') ?></textarea>
               </div>
 
@@ -189,7 +189,7 @@ requireAdmin(); ?>
                 <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:2px">
                   <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.92rem">
                     <input type="checkbox" name="ativo" <?= ($e['ativo'] ?? 1) ? 'checked' : '' ?> style="width:18px;height:18px;accent-color:var(--verde)">
-                    FamÃ­lia ativa
+                    Família ativa
                   </label>
                 </div>
               </div>
@@ -197,7 +197,7 @@ requireAdmin(); ?>
               <div class="form-group">
                 <label class="lbl">Imagem</label>
                 <input type="file" name="imagem" class="form-control" accept="image/*" onchange="previewImg(this)">
-                <p class="hint">JPG, PNG ou WebP - mÃ¡x 5MB<?= $e['imagem'] ?? '' ? '. Atual: <em>' . basename($e['imagem']) . '</em>' : '' ?></p>
+                <p class="hint">JPG, PNG ou WebP - máx 5MB<?= $e['imagem'] ?? '' ? '. Atual: <em>' . basename($e['imagem']) . '</em>' : '' ?></p>
                 <?php if (!empty($e['imagem'])): ?>
                   <img src="../<?= htmlspecialchars($e['imagem']) ?>" class="img-preview" style="display:block;max-width:180px;border-radius:10px;margin-top:10px">
                 <?php else: ?>
@@ -232,3 +232,4 @@ requireAdmin(); ?>
 </body>
 
 </html>
+

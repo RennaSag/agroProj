@@ -66,3 +66,4 @@ function requireAdmin() {
     }
 }
 //requerimento de adm pras paginas
+

@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chave EntomolÃ³gica</title>
+  <title>Chave Entomológica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/site-home.css">
@@ -13,7 +13,7 @@
 <body>
 
   <header>
-  <h1>Chave de ClassificaÃ§Ã£o para Algumas Ordens e FamÃ­lias da Classe Insecta</h1>
+  <h1>Chave de Classificação para Algumas Ordens e Famílias da Classe Insecta</h1>
   <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
   <div class="header-accent"></div>
   <a href="admin/check_auth.php" style="
@@ -46,7 +46,7 @@
     <div class="modal" id="modalContent">
       <div class="modal-header">
         <h3 id="modalTitulo">-</h3>
-        <button class="modal-close" onclick="fecharModal()">âœ•</button>
+        <button class="modal-close" onclick="fecharModal()">✕</button>
       </div>
       <div class="modal-body" id="modalBody"></div>
       <div class="modal-footer">
@@ -78,7 +78,7 @@
       <div class="card-body">
         <div class="card-nome">${ordem.nome}</div>
         <div class="card-acoes">
-          <button class="btn btn-outline" onclick="abrirModal(${ordem.id})">DescriÃ§Ã£o</button>
+          <button class="btn btn-outline" onclick="abrirModal(${ordem.id})">Descrição</button>
           <a class="btn btn-solid" href="chave.php?ordem=${ordem.id}">Chave</a>
         </div>
       </div>`;
@@ -95,7 +95,7 @@
 
       const caract = d.caracteristicas ? JSON.parse(d.caracteristicas) : [];
       const caracterHtml = caract.length ? `
-    <div class="modal-section-title">CaracterÃ­sticas Gerais</div>
+    <div class="modal-section-title">Características Gerais</div>
     <ul class="modal-list">${caract.map(c => `<li>${c}</li>`).join('')}</ul>
   ` : '';
 
@@ -105,12 +105,12 @@
   ` : '';
 
       const agricolaHtml = d.importancia_agricola ? `
-    <div class="modal-section-title">ImportÃ¢ncia AgrÃ­cola</div>
+    <div class="modal-section-title">Importância Agrícola</div>
     <p style="color:var(--texto);font-size:0.95rem;line-height:1.6">${d.importancia_agricola}</p>
   ` : '';
 
       const familiasHtml = d.familias && d.familias.length ? `
-    <div class="modal-section-title">FamÃ­lias IncluÃ­das</div>
+    <div class="modal-section-title">Famílias Incluídas</div>
     <div class="modal-tags">${d.familias.map(f => `<span class="tag">${f}</span>`).join('')}</div>
   ` : '';
 
@@ -132,3 +132,4 @@
 </body>
 
 </html>
+

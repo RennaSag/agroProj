@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chave DicotÃ´mica </title>
+  <title>Chave Dicotômica </title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/site-chave.css">
@@ -16,7 +16,7 @@
     <a class="header-back" href="index.php"></a>
     <div class="header-info">
       <h2 id="headerTitulo">Carregando.</h2>
-      <p>Chave DicotÃ´mica</p>
+      <p>Chave Dicotômica</p>
     </div>
     <span class="header-passo" id="headerPasso"></span>
   </header>
@@ -57,9 +57,9 @@
       if (!passos || passos.length === 0) {
         document.getElementById('conteudo').innerHTML = `
       <div class="sem-chave">
-        <h3>Chave dicotÃ´mica nÃ£o cadastrada</h3>
-        <p>A chave para <em>${ordemNome}</em> ainda nÃ£o foi inserida pelo administrador.<br>Entre em contato com o responsÃ¡vel pela disciplina.</p>
-        <a href="index.php" class="btn btn-solid" style="display:inline-flex;margin-top:20px;max-width:240px">Voltar ao InÃ­cio</a>
+        <h3>Chave dicotômica não cadastrada</h3>
+        <p>A chave para <em>${ordemNome}</em> ainda não foi inserida pelo administrador.<br>Entre em contato com o responsável pela disciplina.</p>
+        <a href="index.php" class="btn btn-solid" style="display:inline-flex;margin-top:20px;max-width:240px">Voltar ao Início</a>
       </div>`;
         return;
       }
@@ -81,16 +81,16 @@
       <div class="passo-num">${p.passo_numero}.</div>
       <p class="passo-pergunta">${p.pergunta}</p>
       <button class="opcao-btn" onclick="responder('sim', ${idx})">
-        <span class="opcao-badge badge-sim">âœ“</span>
+        <span class="opcao-badge badge-sim">✓</span>
         <div>
           <div class="opcao-label">SIM</div>
           ${p.opcao_sim_texto ? `<div class="opcao-desc">${p.opcao_sim_texto}</div>` : ''}
         </div>
       </button>
       <button class="opcao-btn" onclick="responder('nao', ${idx})">
-        <span class="opcao-badge badge-nao">âœ—</span>
+        <span class="opcao-badge badge-nao">✗</span>
         <div>
-          <div class="opcao-label">NÃƒO</div>
+          <div class="opcao-label">NÃO</div>
           ${p.opcao_nao_texto ? `<div class="opcao-desc">${p.opcao_nao_texto}</div>` : ''}
         </div>
       </button>
@@ -138,9 +138,9 @@
       document.getElementById('conteudo').innerHTML = `
     <div class="resultado-card">
       <div class="resultado-topo">
-        <div class="resultado-check">âœ“</div>
-        <div class="resultado-label">FamÃ­lia Identificada!</div>
-        <div class="resultado-familia">${familia.nome || 'â€”'}</div>
+        <div class="resultado-check">✓</div>
+        <div class="resultado-label">Família Identificada!</div>
+        <div class="resultado-familia">${familia.nome || '—'}</div>
         <div class="resultado-ordem">Ordem: <em>${ordemNome}</em></div>
       </div>
       ${imgHtml}
@@ -150,8 +150,8 @@
           ${familia.exemplos ? `<p style="margin-top:10px;color:var(--texto-suave)"><strong>Exemplos:</strong> ${familia.exemplos}</p>` : ''}
         </div>` : ''}
       <div class="resultado-acoes">
-        <button class="btn btn-outline" onclick="renderPasso(0)">Refazer IdentificaÃ§Ã£o</button>
-        <a class="btn btn-solid" href="index.php">Voltar ao InÃ­cio</a>
+        <button class="btn btn-outline" onclick="renderPasso(0)">Refazer Identificação</button>
+        <a class="btn btn-solid" href="index.php">Voltar ao Início</a>
       </div>
     </div>`;
     }
@@ -161,3 +161,4 @@
 </body>
 
 </html>
+

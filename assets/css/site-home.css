@@ -1,4 +1,4 @@
-﻿*,
+*,
     *::before,
     *::after {
       box-sizing: border-box;
@@ -284,7 +284,7 @@
     }
 
     .modal-list li::before {
-      content: 'â€¢';
+      content: '•';
       position: absolute;
       left: 0;
       color: var(--verde-claro);
@@ -581,4 +581,5 @@
         padding: 24px 16px 60px;
       }
     }
+
 

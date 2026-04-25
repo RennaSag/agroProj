@@ -1,4 +1,4 @@
-﻿<?php require_once '../includes/db.php';
+<?php require_once '../includes/db.php';
 requireAdmin(); ?>
 
 <!DOCTYPE html>
@@ -32,8 +32,8 @@ requireAdmin(); ?>
       <div class="nav-section">Principal</div>
       <a href="index.php" class="active">Dashboard</a>
       <a href="ordens.php">Ordens</a>
-      <a href="familias.php">FamÃ­lias</a>
-      <a href="chaves.php">Chaves DicotÃ´micas</a>
+      <a href="familias.php">Famílias</a>
+      <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php">Administradores</a>
       <a href="../index.php" target="_blank">Ver Site</a>
@@ -46,7 +46,7 @@ requireAdmin(); ?>
   <div class="main">
     <div class="topbar">
       <h1>Dashboard</h1>
-      <span class="topbar-user">OlÃ¡, <?= htmlspecialchars($_SESSION['admin_nome']) ?></span>
+      <span class="topbar-user">Olá, <?= htmlspecialchars($_SESSION['admin_nome']) ?></span>
     </div>
     <div class="content">
       <div class="kpi-grid">
@@ -56,7 +56,7 @@ requireAdmin(); ?>
         </div>
         <div class="kpi">
           <div class="kpi-num"><?= $totalFamilias ?></div>
-          <div class="kpi-label">FamÃ­lias cadastradas</div>
+          <div class="kpi-label">Famílias cadastradas</div>
         </div>
         <div class="kpi">
           <div class="kpi-num"><?= $totalPassos ?></div>
@@ -74,9 +74,9 @@ requireAdmin(); ?>
             <tr>
               <th>Imagem</th>
               <th>Nome</th>
-              <th>FamÃ­lias</th>
+              <th>Famílias</th>
               <th>Status</th>
-              <th>AÃ§Ãµes</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -104,3 +104,4 @@ requireAdmin(); ?>
 </body>
 
 </html>
+

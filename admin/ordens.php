@@ -1,4 +1,4 @@
-﻿<?php require_once '../includes/db.php';
+<?php require_once '../includes/db.php';
 requireAdmin(); ?>
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ requireAdmin(); ?>
     $ativo = isset($_POST['ativo']) ? 1 : 0;
     $ordem_exibicao = (int)($_POST['ordem_exibicao'] ?? 0);
 
-    // Converte caracterÃ­sticas (uma por linha) em JSON
+    // Converte características (uma por linha) em JSON
     $caract_arr = array_filter(array_map('trim', explode("\n", $caracteristicas_raw)));
     $caracteristicas = json_encode(array_values($caract_arr), JSON_UNESCAPED_UNICODE);
 
@@ -62,11 +62,11 @@ requireAdmin(); ?>
   // DELETE
   if ($acao === 'deletar' && $id) {
     $pdo->prepare("DELETE FROM ordens WHERE id=?")->execute([$id]);
-    $msg = 'Ordem excluÃ­da.';
+    $msg = 'Ordem excluída.';
     $acao = 'listar';
   }
 
-  // Carrega para ediÃ§Ã£o
+  // Carrega para edição
   $ordem_edit = null;
   if ($acao === 'editar' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM ordens WHERE id=?");
@@ -87,8 +87,8 @@ requireAdmin(); ?>
       <div class="nav-section">Principal</div>
       <a href="index.php">Dashboard</a>
       <a href="ordens.php" class="active">Ordens</a>
-      <a href="familias.php">FamÃ­lias</a>
-      <a href="chaves.php">Chaves DicotÃ´micas</a>
+      <a href="familias.php">Famílias</a>
+      <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php">Administradores</a>
       <a href="../index.php" target="_blank">Ver Site</a>
@@ -102,7 +102,7 @@ requireAdmin(); ?>
       <?php if ($acao === 'listar'): ?>
         <a href="?acao=novo" class="btn-primary">Nova Ordem</a>
       <?php else: ?>
-        <a href="ordens.php" class="btn-secondary">Voltar Ã  Lista</a>
+        <a href="ordens.php" class="btn-secondary">Voltar à Lista</a>
       <?php endif; ?>
     </div>
     <div class="content">
@@ -121,7 +121,7 @@ requireAdmin(); ?>
                 <th>Nome</th>
                 <th>Ordem</th>
                 <th>Status</th>
-                <th>AÃ§Ãµes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -133,7 +133,7 @@ requireAdmin(); ?>
                   <td><span class="<?= $o['ativo'] ? 'badge-ativo' : 'badge-inativo' ?>"><?= $o['ativo'] ? 'Ativo' : 'Inativo' ?></span></td>
                   <td>
                     <a href="?acao=editar&id=<?= $o['id'] ?>" class="btn-sm btn-edit">Editar</a>
-                    <a href="?acao=deletar&id=<?= $o['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir esta ordem e todas suas famÃ­lias/chaves?')">Excluir</a>
+                    <a href="?acao=deletar&id=<?= $o['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir esta ordem e todas suas famílias/chaves?')">Excluir</a>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -164,20 +164,20 @@ requireAdmin(); ?>
                   <input type="text" name="nome" class="form-control" required value="<?= htmlspecialchars($e['nome'] ?? '') ?>" placeholder="Ex: Hemiptera-Auchenorrhyncha">
                 </div>
                 <div class="form-group">
-                  <label>Ordem de ExibiÃ§Ã£o</label>
+                  <label>Ordem de Exibição</label>
                   <input type="number" name="ordem_exibicao" class="form-control" value="<?= $e['ordem_exibicao'] ?? 0 ?>" min="0">
                 </div>
               </div>
 
               <div class="form-group">
-                <label>DescriÃ§Ã£o Geral</label>
+                <label>Descrição Geral</label>
                 <textarea name="descricao" class="form-control"><?= htmlspecialchars($e['descricao'] ?? '') ?></textarea>
               </div>
 
               <div class="form-group">
-                <label>CaracterÃ­sticas (uma por linha)</label>
-                <textarea name="caracteristicas" class="form-control" placeholder="PeÃ§as bucais picadoras-sugadoras&#10;Antenas curtas e setÃ¡ceas&#10;..."><?= htmlspecialchars($caract_txt) ?></textarea>
-                <p class="hint">Cada linha vira um item na lista de caracterÃ­sticas.</p>
+                <label>Características (uma por linha)</label>
+                <textarea name="caracteristicas" class="form-control" placeholder="Peças bucais picadoras-sugadoras&#10;Antenas curtas e setáceas&#10;..."><?= htmlspecialchars($caract_txt) ?></textarea>
+                <p class="hint">Cada linha vira um item na lista de características.</p>
               </div>
 
               <div class="form-row">
@@ -188,20 +188,20 @@ requireAdmin(); ?>
                 <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:2px">
                   <label style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:0.92rem;cursor:pointer">
                     <input type="checkbox" name="ativo" <?= ($e['ativo'] ?? 1) ? 'checked' : '' ?> style="width:18px;height:18px;accent-color:var(--verde)">
-                    Ordem ativa (visÃ­vel no site)
+                    Ordem ativa (visível no site)
                   </label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label>ImportÃ¢ncia AgrÃ­cola</label>
+                <label>Importância Agrícola</label>
                 <textarea name="importancia_agricola" class="form-control"><?= htmlspecialchars($e['importancia_agricola'] ?? '') ?></textarea>
               </div>
 
               <div class="form-group">
                 <label>Imagem</label>
                 <input type="file" name="imagem" class="form-control" accept="image/*" onchange="previewImg(this)">
-                <p class="hint">JPG, PNG ou WebP - mÃ¡x 5MB. <?= $e['imagem'] ?? '' ? 'Imagem atual: <em>' . basename($e['imagem']) . '</em>' : '' ?></p>
+                <p class="hint">JPG, PNG ou WebP - máx 5MB. <?= $e['imagem'] ?? '' ? 'Imagem atual: <em>' . basename($e['imagem']) . '</em>' : '' ?></p>
                 <?php if (!empty($e['imagem'])): ?>
                   <img src="../<?= htmlspecialchars($e['imagem']) ?>" class="img-preview" style="display:block">
                 <?php else: ?>
@@ -235,3 +235,4 @@ requireAdmin(); ?>
 </body>
 
 </html>
+

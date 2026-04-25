@@ -1,4 +1,4 @@
-﻿<?php require_once '../includes/db.php';
+<?php require_once '../includes/db.php';
 requireAdmin(); ?>
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@ requireAdmin(); ?>
         $stmt->execute([$nome, $email, $hash]);
         $msg = 'Administrador cadastrado com sucesso!';
       } catch (Exception $e) {
-        $erro = 'E-mail jÃ¡ cadastrado.';
+        $erro = 'E-mail já cadastrado.';
       }
     }
   }
@@ -55,8 +55,8 @@ requireAdmin(); ?>
       <div class="nav-section">Principal</div>
       <a href="index.php">Dashboard</a>
       <a href="ordens.php">Ordens</a>
-      <a href="familias.php">FamÃ­lias</a>
-      <a href="chaves.php">Chaves DicotÃ´micas</a>
+      <a href="familias.php">Famílias</a>
+      <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php" class="active">Administradores</a>
       <a href="../index.php" target="_blank">Ver Site</a>
@@ -73,7 +73,7 @@ requireAdmin(); ?>
 
       <div class="card">
         <div class="card-header">
-          <h3>UsuÃ¡rios do painel</h3>
+          <h3>Usuários do painel</h3>
         </div>
         <table>
           <thead>
@@ -81,7 +81,7 @@ requireAdmin(); ?>
               <th>Nome</th>
               <th>E-mail</th>
               <th>Cadastrado em</th>
-              <th>AÃ§Ãµes</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -92,9 +92,9 @@ requireAdmin(); ?>
                 <td style="color:var(--texto-suave)"><?= date('d/m/Y', strtotime($a['criado_em'])) ?></td>
                 <td>
                   <?php if ($a['id'] !== (int)$_SESSION['admin_id']): ?>
-                    <a href="?del=<?= $a['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Remover este admin?')">ðŸ—‘ Remover</a>
+                    <a href="?del=<?= $a['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Remover este admin?')">🗑 Remover</a>
                   <?php else: ?>
-                    <span style="font-size:0.82rem;color:var(--texto-suave)">(vocÃª)</span>
+                    <span style="font-size:0.82rem;color:var(--texto-suave)">(você)</span>
                   <?php endif; ?>
                 </td>
               </tr>
@@ -122,7 +122,7 @@ requireAdmin(); ?>
             <div class="form-group">
               <label class="lbl">Senha</label>
               <input type="password" name="senha" class="form-control" required minlength="6">
-              <p class="hint">MÃ­nimo 6 caracteres.</p>
+              <p class="hint">Mínimo 6 caracteres.</p>
             </div>
             <button type="submit" class="btn-primary">Cadastrar Admin</button>
           </form>
@@ -133,3 +133,4 @@ requireAdmin(); ?>
 </body>
 
 </html>
+

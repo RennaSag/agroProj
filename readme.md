@@ -1,4 +1,4 @@
-﻿# Documentacao do Sistema - Chave Entomologica
+# Documentacao do Sistema - Chave Entomologica
 
 ## Visao Geral
 

@@ -1,4 +1,4 @@
-﻿<?php require_once '../includes/db.php';
+<?php require_once '../includes/db.php';
 
 // se ja esta logado vai direto pro admin
 if (isset($_SESSION['admin_id'])) {
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <div class="form-group">
         <label>Senha</label>
-        <input type="password" name="senha" required placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+        <input type="password" name="senha" required placeholder="••••••••">
       </div>
       <button type="submit" class="btn-login">Entrar</button>
     </form>
@@ -86,3 +86,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
+

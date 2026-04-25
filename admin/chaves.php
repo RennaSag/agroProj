@@ -1,4 +1,4 @@
-﻿<?php require_once '../includes/db.php';
+<?php require_once '../includes/db.php';
 requireAdmin(); ?>
 
 <!DOCTYPE html>
@@ -7,7 +7,7 @@ requireAdmin(); ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chaves DicotÃ´micas - Admin</title>
+  <title>Chaves Dicotômicas - Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/admin-chaves.css">
 </head>
@@ -60,7 +60,7 @@ requireAdmin(); ?>
 
   if ($acao === 'del_passo' && $passo_id) {
     $pdo->prepare("DELETE FROM chave_passos WHERE id=?")->execute([$passo_id]);
-    $msg = 'Passo excluÃ­do.';
+    $msg = 'Passo excluído.';
     $acao = 'listar';
   }
 
@@ -101,8 +101,8 @@ requireAdmin(); ?>
       <div class="nav-section">Principal</div>
       <a href="index.php">Dashboard</a>
       <a href="ordens.php">Ordens</a>
-      <a href="familias.php">FamÃ­lias</a>
-      <a href="chaves.php" class="active">Chaves DicotÃ´micas</a>
+      <a href="familias.php">Famílias</a>
+      <a href="chaves.php" class="active">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php">Administradores</a>
       <a href="../index.php" target="_blank">Ver Site</a>
@@ -112,7 +112,7 @@ requireAdmin(); ?>
 
   <div class="main">
     <div class="topbar">
-      <h1>Chaves DicotÃ´micas</h1>
+      <h1>Chaves Dicotômicas</h1>
       <?php if ($ordem_id): ?>
         <a href="../chave.php?ordem=<?= $ordem_id ?>" target="_blank" class="btn-secondary">Ver Chave no Site</a>
       <?php endif; ?>
@@ -155,21 +155,21 @@ requireAdmin(); ?>
                   <th>#</th>
                   <th>Pergunta</th>
                   <th>SIM</th>
-                  <th>NÃƒO</th>
-                  <th>AÃ§Ãµes</th>
+                  <th>NÃO</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
                 <?php foreach ($passos as $p): ?>
                   <tr>
                     <td><span class="passo-num"><?= $p['passo_numero'] ?></span></td>
-                    <td style="max-width:300px"><?= htmlspecialchars(mb_strimwidth($p['pergunta'], 0, 80, 'â€¦')) ?></td>
+                    <td style="max-width:300px"><?= htmlspecialchars(mb_strimwidth($p['pergunta'], 0, 80, '…')) ?></td>
                     <td style="font-size:0.85rem">
                       <?php if ($p['sim_resultado_familia_id']): ?>
                         <strong style="color:var(--verde)"><em><?= htmlspecialchars($p['sim_fam_nome']) ?></em></strong>
                       <?php elseif ($p['sim_leva_passo']): ?>
                         Passo <?= $p['sim_leva_passo'] ?>
-                      <?php else: echo 'â€”';
+                      <?php else: echo '—';
                       endif; ?>
                     </td>
                     <td style="font-size:0.85rem">
@@ -177,7 +177,7 @@ requireAdmin(); ?>
                         <strong style="color:#c0392b"><em><?= htmlspecialchars($p['nao_fam_nome']) ?></em></strong>
                       <?php elseif ($p['nao_leva_passo']): ?>
                       Passo <?= $p['nao_leva_passo'] ?>
-                      <?php else: echo 'â€”';
+                      <?php else: echo '—';
                       endif; ?>
                     </td>
                     <td>
@@ -209,36 +209,36 @@ requireAdmin(); ?>
 
               <div class="form-row" style="margin-bottom:20px">
                 <div class="form-group" style="margin-bottom:0">
-                  <label class="lbl">NÃºmero do Passo</label>
+                  <label class="lbl">Número do Passo</label>
                   <input type="number" name="passo_numero" class="form-control" required min="1" value="<?= $pe['passo_numero'] ?? $prox_passo ?>">
-                  <p class="hint">Passos sÃ£o exibidos em ordem crescente.</p>
+                  <p class="hint">Passos são exibidos em ordem crescente.</p>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="lbl">Pergunta DicotÃ´mica</label>
-                <textarea name="pergunta" class="form-control" required placeholder="Ex: Inseto de tamanho grande (>2cm) com Ã³rgÃ£o estridulador nos machos?"><?= htmlspecialchars($pe['pergunta'] ?? '') ?></textarea>
+                <label class="lbl">Pergunta Dicotômica</label>
+                <textarea name="pergunta" class="form-control" required placeholder="Ex: Inseto de tamanho grande (>2cm) com órgão estridulador nos machos?"><?= htmlspecialchars($pe['pergunta'] ?? '') ?></textarea>
               </div>
 
               <div class="divider"></div>
               <div class="section-label">Resposta SIM</div>
               <div class="form-row" style="margin-bottom:20px">
                 <div class="form-group" style="margin-bottom:0">
-                  <label class="lbl">Texto da opÃ§Ã£o SIM</label>
-                  <input type="text" name="opcao_sim_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_sim_texto'] ?? '') ?>" placeholder="DescriÃ§Ã£o breve da caracterÃ­stica SIM">
+                  <label class="lbl">Texto da opção SIM</label>
+                  <input type="text" name="opcao_sim_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_sim_texto'] ?? '') ?>" placeholder="Descrição breve da característica SIM">
                 </div>
               </div>
               <div class="resultado-box" style="margin-bottom:20px">
                 <div class="form-row-3">
                   <div class="form-group" style="margin-bottom:0">
-                    <label class="lbl">Sim: PrÃ³ximo passo</label>
-                    <input type="number" name="sim_leva_passo" class="form-control" min="1" value="<?= $pe['sim_leva_passo'] ?? '' ?>" placeholder="NÂ° do passo">
-                    <p class="hint">Deixe vazio se leva a uma famÃ­lia.</p>
+                    <label class="lbl">Sim: Próximo passo</label>
+                    <input type="number" name="sim_leva_passo" class="form-control" min="1" value="<?= $pe['sim_leva_passo'] ?? '' ?>" placeholder="N° do passo">
+                    <p class="hint">Deixe vazio se leva a uma família.</p>
                   </div>
                   <div class="form-group" style="margin-bottom:0;grid-column:span 2">
-                    <label class="lbl">SIM: Resultado (famÃ­lia)</label>
+                    <label class="lbl">SIM: Resultado (família)</label>
                     <select name="sim_resultado_familia_id" class="form-control">
-                      <option value="">NÃ£o Ã© resultado final</option>
+                      <option value="">Não é resultado final</option>
                       <?php foreach ($familias as $f): ?>
                         <option value="<?= $f['id'] ?>" <?= ($pe['sim_resultado_familia_id'] ?? 0) == $f['id'] ? 'selected' : '' ?>><?= htmlspecialchars($f['nome']) ?></option>
                       <?php endforeach; ?>
@@ -248,23 +248,23 @@ requireAdmin(); ?>
               </div>
 
               <div class="divider"></div>
-              <div class="section-label" style="color:#c0392b">Resposta NÃƒO</div>
+              <div class="section-label" style="color:#c0392b">Resposta NÃO</div>
               <div class="form-row" style="margin-bottom:20px">
                 <div class="form-group" style="margin-bottom:0">
-                  <label class="lbl">Texto da opÃ§Ã£o NÃƒO</label>
-                  <input type="text" name="opcao_nao_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_nao_texto'] ?? '') ?>" placeholder="DescriÃ§Ã£o breve da caracterÃ­stica NÃƒO">
+                  <label class="lbl">Texto da opção NÃO</label>
+                  <input type="text" name="opcao_nao_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_nao_texto'] ?? '') ?>" placeholder="Descrição breve da característica NÃO">
                 </div>
               </div>
               <div class="resultado-box" style="margin-bottom:20px">
                 <div class="form-row-3">
                   <div class="form-group" style="margin-bottom:0">
-                    <label class="lbl">NÃƒO: PrÃ³ximo passo</label>
-                    <input type="number" name="nao_leva_passo" class="form-control" min="1" value="<?= $pe['nao_leva_passo'] ?? '' ?>" placeholder="NÂ° do passo">
+                    <label class="lbl">NÃO: Próximo passo</label>
+                    <input type="number" name="nao_leva_passo" class="form-control" min="1" value="<?= $pe['nao_leva_passo'] ?? '' ?>" placeholder="N° do passo">
                   </div>
                   <div class="form-group" style="margin-bottom:0;grid-column:span 2">
-                    <label class="lbl">NÃƒO: Resultado (famÃ­lia)</label>
+                    <label class="lbl">NÃO: Resultado (família)</label>
                     <select name="nao_resultado_familia_id" class="form-control">
-                      <option value="">NÃ£o Ã© resultado final</option>
+                      <option value="">Não é resultado final</option>
                       <?php foreach ($familias as $f): ?>
                         <option value="<?= $f['id'] ?>" <?= ($pe['nao_resultado_familia_id'] ?? 0) == $f['id'] ? 'selected' : '' ?>><?= htmlspecialchars($f['nome']) ?></option>
                       <?php endforeach; ?>
@@ -289,3 +289,4 @@ requireAdmin(); ?>
 </body>
 
 </html>
+
