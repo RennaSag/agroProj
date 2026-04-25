@@ -66,3 +66,4 @@ switch ($action) {
         http_response_code(404);
         echo json_encode(['error' => 'Ação não encontrada']);
 }
+
