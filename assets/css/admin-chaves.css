@@ -374,3 +374,12 @@
       padding: 16px
     }
 
+    .option-preview {
+      display: block;
+      width: 160px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 9px;
+      border: 1px solid var(--verde-borda);
+      margin-top: 10px
+    }

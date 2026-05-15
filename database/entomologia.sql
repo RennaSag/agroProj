@@ -55,7 +55,9 @@ CREATE TABLE `chave_passos` (
   `passo_numero` int(11) NOT NULL,
   `pergunta` text NOT NULL,
   `opcao_sim_texto` varchar(255) DEFAULT NULL,
+  `sim_imagem` varchar(255) DEFAULT NULL,
   `opcao_nao_texto` varchar(255) DEFAULT NULL,
+  `nao_imagem` varchar(255) DEFAULT NULL,
   `sim_leva_passo` int(11) DEFAULT NULL COMMENT 'NULL = resultado final',
   `nao_leva_passo` int(11) DEFAULT NULL COMMENT 'NULL = resultado final',
   `sim_resultado_familia_id` int(11) DEFAULT NULL,
@@ -66,11 +68,11 @@ CREATE TABLE `chave_passos` (
 -- Despejando dados para a tabela `chave_passos`
 --
 
-INSERT INTO `chave_passos` (`id`, `ordem_id`, `passo_numero`, `pergunta`, `opcao_sim_texto`, `opcao_nao_texto`, `sim_leva_passo`, `nao_leva_passo`, `sim_resultado_familia_id`, `nao_resultado_familia_id`) VALUES
-(1, 1, 1, 'Protórax desenvolvido e expandido para trás, formando um casco que cobre o abdome?', 'Protórax muito desenvolvido, formando estrutura em forma de capacete ou chifre', 'Protórax normal, não expandido sobre o abdome', NULL, 2, 2, NULL),
-(2, 1, 2, 'Inseto de tamanho grande (>2cm) com órgão estridulador nos machos?', 'Grande, com timbais para produção de som', 'Pequeno a médio, sem órgão estridulador evidente', NULL, 3, 1, NULL),
-(3, 1, 3, 'Tíbias posteriores com 1 ou 2 fileiras de espinhos (não apenas 1-2 espinhos isolados)?', 'Fileiras de espinhos nas tíbias posteriores', 'Apenas 1 ou 2 espinhos isolados nas tíbias', NULL, NULL, 3, 4),
-(4, 13, 1, 'esse inseto é grande?', 'inseto grande', 'inseto pequeno', 1, 2, 69, 68);
+INSERT INTO `chave_passos` (`id`, `ordem_id`, `passo_numero`, `pergunta`, `opcao_sim_texto`, `sim_imagem`, `opcao_nao_texto`, `nao_imagem`, `sim_leva_passo`, `nao_leva_passo`, `sim_resultado_familia_id`, `nao_resultado_familia_id`) VALUES
+(1, 1, 1, 'Protórax desenvolvido e expandido para trás, formando um casco que cobre o abdome?', 'Protórax muito desenvolvido, formando estrutura em forma de capacete ou chifre', NULL, 'Protórax normal, não expandido sobre o abdome', NULL, NULL, 2, 2, NULL),
+(2, 1, 2, 'Inseto de tamanho grande (>2cm) com órgão estridulador nos machos?', 'Grande, com timbais para produção de som', NULL, 'Pequeno a médio, sem órgão estridulador evidente', NULL, NULL, 3, 1, NULL),
+(3, 1, 3, 'Tíbias posteriores com 1 ou 2 fileiras de espinhos (não apenas 1-2 espinhos isolados)?', 'Fileiras de espinhos nas tíbias posteriores', NULL, 'Apenas 1 ou 2 espinhos isolados nas tíbias', NULL, NULL, NULL, 3, 4),
+(4, 13, 1, 'esse inseto é grande?', 'inseto grande', NULL, 'inseto pequeno', NULL, 1, 2, 69, 68);
 
 -- --------------------------------------------------------
 

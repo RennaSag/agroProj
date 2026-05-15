@@ -34,28 +34,58 @@ requireAdmin(); ?>
     return $stmt->fetchAll();
   }
 
+  function ensureChaveImagemColumns($pdo)
+  {
+    $cols = $pdo->query("SHOW COLUMNS FROM chave_passos")->fetchAll();
+    $names = array_column($cols, 'Field');
+
+    if (!in_array('sim_imagem', $names, true)) {
+      $pdo->exec("ALTER TABLE chave_passos ADD sim_imagem varchar(255) DEFAULT NULL AFTER opcao_sim_texto");
+    }
+
+    if (!in_array('nao_imagem', $names, true)) {
+      $pdo->exec("ALTER TABLE chave_passos ADD nao_imagem varchar(255) DEFAULT NULL AFTER opcao_nao_texto");
+    }
+  }
+
+  ensureChaveImagemColumns($pdo);
+
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $oid = (int)$_POST['ordem_id'];
     $pergunta = trim($_POST['pergunta'] ?? '');
     $passo_num = (int)$_POST['passo_numero'];
     $sim_texto = trim($_POST['opcao_sim_texto'] ?? '');
     $nao_texto = trim($_POST['opcao_nao_texto'] ?? '');
+    $sim_imagem = $_POST['sim_imagem_atual'] ?? '';
+    $nao_imagem = $_POST['nao_imagem_atual'] ?? '';
     $sim_passo = $_POST['sim_leva_passo'] !== '' ? (int)$_POST['sim_leva_passo'] : null;
     $nao_passo = $_POST['nao_leva_passo'] !== '' ? (int)$_POST['nao_leva_passo'] : null;
     $sim_fam = $_POST['sim_resultado_familia_id'] !== '' ? (int)$_POST['sim_resultado_familia_id'] : null;
     $nao_fam = $_POST['nao_resultado_familia_id'] !== '' ? (int)$_POST['nao_resultado_familia_id'] : null;
 
-    if ($_POST['form_acao'] === 'novo_passo') {
-      $stmt = $pdo->prepare("INSERT INTO chave_passos (ordem_id,passo_numero,pergunta,opcao_sim_texto,opcao_nao_texto,sim_leva_passo,nao_leva_passo,sim_resultado_familia_id,nao_resultado_familia_id) VALUES (?,?,?,?,?,?,?,?,?)");
-      $stmt->execute([$oid, $passo_num, $pergunta, $sim_texto, $nao_texto, $sim_passo, $nao_passo, $sim_fam, $nao_fam]);
+    if (!empty($_FILES['sim_imagem']['tmp_name'])) {
+      $upload = uploadImagem($_FILES['sim_imagem'], 'chave_sim');
+      if (is_string($upload)) $sim_imagem = $upload;
+      elseif (is_array($upload)) $erro = $upload['error'];
+    }
+
+    if (!$erro && !empty($_FILES['nao_imagem']['tmp_name'])) {
+      $upload = uploadImagem($_FILES['nao_imagem'], 'chave_nao');
+      if (is_string($upload)) $nao_imagem = $upload;
+      elseif (is_array($upload)) $erro = $upload['error'];
+    }
+
+    if (!$erro && $_POST['form_acao'] === 'novo_passo') {
+      $stmt = $pdo->prepare("INSERT INTO chave_passos (ordem_id,passo_numero,pergunta,opcao_sim_texto,sim_imagem,opcao_nao_texto,nao_imagem,sim_leva_passo,nao_leva_passo,sim_resultado_familia_id,nao_resultado_familia_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+      $stmt->execute([$oid, $passo_num, $pergunta, $sim_texto, $sim_imagem, $nao_texto, $nao_imagem, $sim_passo, $nao_passo, $sim_fam, $nao_fam]);
       $msg = 'Passo adicionado!';
-    } elseif ($_POST['form_acao'] === 'editar_passo') {
+    } elseif (!$erro && $_POST['form_acao'] === 'editar_passo') {
       $pid = (int)$_POST['passo_id'];
-      $stmt = $pdo->prepare("UPDATE chave_passos SET passo_numero=?,pergunta=?,opcao_sim_texto=?,opcao_nao_texto=?,sim_leva_passo=?,nao_leva_passo=?,sim_resultado_familia_id=?,nao_resultado_familia_id=? WHERE id=?");
-      $stmt->execute([$passo_num, $pergunta, $sim_texto, $nao_texto, $sim_passo, $nao_passo, $sim_fam, $nao_fam, $pid]);
+      $stmt = $pdo->prepare("UPDATE chave_passos SET passo_numero=?,pergunta=?,opcao_sim_texto=?,sim_imagem=?,opcao_nao_texto=?,nao_imagem=?,sim_leva_passo=?,nao_leva_passo=?,sim_resultado_familia_id=?,nao_resultado_familia_id=? WHERE id=?");
+      $stmt->execute([$passo_num, $pergunta, $sim_texto, $sim_imagem, $nao_texto, $nao_imagem, $sim_passo, $nao_passo, $sim_fam, $nao_fam, $pid]);
       $msg = 'Passo atualizado!';
     }
-    $acao = 'listar';
+    if (!$erro) $acao = 'listar';
   }
 
   if ($acao === 'del_passo' && $passo_id) {
@@ -199,7 +229,7 @@ requireAdmin(); ?>
             <h3><?= ($acao === 'editar' && $passo_edit) ? 'Editar Passo ' . $passo_edit['passo_numero'] : 'Adicionar Novo Passo' ?></h3>
           </div>
           <div class="card-body">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
               <input type="hidden" name="form_acao" value="<?= ($acao === 'editar' && $passo_edit) ? 'editar_passo' : 'novo_passo' ?>">
               <input type="hidden" name="ordem_id" value="<?= $ordem_id ?>">
               <?php if ($acao === 'editar' && $passo_edit): ?>
@@ -227,6 +257,15 @@ requireAdmin(); ?>
                   <label class="lbl">Texto da opção SIM</label>
                   <input type="text" name="opcao_sim_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_sim_texto'] ?? '') ?>" placeholder="Descrição breve da característica SIM">
                 </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="lbl">Imagem da Opção A</label>
+                  <input type="hidden" name="sim_imagem_atual" value="<?= htmlspecialchars($pe['sim_imagem'] ?? '') ?>">
+                  <input type="file" name="sim_imagem" class="form-control" accept="image/*">
+                  <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['sim_imagem']) ? 'Atual: <em>' . basename($pe['sim_imagem']) . '</em>' : '' ?></p>
+                  <?php if (!empty($pe['sim_imagem'])): ?>
+                    <img src="../<?= htmlspecialchars($pe['sim_imagem']) ?>" class="option-preview" alt="">
+                  <?php endif; ?>
+                </div>
               </div>
               <div class="resultado-box" style="margin-bottom:20px">
                 <div class="form-row-3">
@@ -253,6 +292,15 @@ requireAdmin(); ?>
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Texto da opção NÃO</label>
                   <input type="text" name="opcao_nao_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_nao_texto'] ?? '') ?>" placeholder="Descrição breve da característica NÃO">
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="lbl">Imagem da Opção B</label>
+                  <input type="hidden" name="nao_imagem_atual" value="<?= htmlspecialchars($pe['nao_imagem'] ?? '') ?>">
+                  <input type="file" name="nao_imagem" class="form-control" accept="image/*">
+                  <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['nao_imagem']) ? 'Atual: <em>' . basename($pe['nao_imagem']) . '</em>' : '' ?></p>
+                  <?php if (!empty($pe['nao_imagem'])): ?>
+                    <img src="../<?= htmlspecialchars($pe['nao_imagem']) ?>" class="option-preview" alt="">
+                  <?php endif; ?>
                 </div>
               </div>
               <div class="resultado-box" style="margin-bottom:20px">
