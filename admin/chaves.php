@@ -9,383 +9,7 @@ requireAdmin(); ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chaves Dicotômicas - Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    :root {
-      --verde: #3a6b35;
-      --verde-escuro: #2c5228;
-      --verde-bg: #f0f5ef;
-      --verde-borda: #c8dcc6;
-      --texto: #1a2e18;
-      --texto-suave: #4a6648;
-      --branco: #fff;
-      --sombra: 0 4px 20px rgba(42, 82, 40, 0.10)
-    }
-
-    body {
-      font-family: 'Source Sans 3', sans-serif;
-      background: #f5f7f5;
-      color: var(--texto)
-    }
-
-    .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 240px;
-      background: var(--verde-escuro);
-      z-index: 100;
-      display: flex;
-      flex-direction: column
-    }
-
-    .sidebar-logo {
-      padding: 24px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12)
-    }
-
-    .sidebar-logo h2 {
-      font-family: 'Playfair Display', serif;
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 700
-    }
-
-    .sidebar-logo p {
-      color: rgba(255, 255, 255, 0.55);
-      font-size: 0.8rem;
-      margin-top: 3px
-    }
-
-    .nav {
-      flex: 1;
-      padding: 16px 0
-    }
-
-    .nav a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 20px;
-      color: rgba(255, 255, 255, 0.80);
-      text-decoration: none;
-      font-size: 0.92rem;
-      transition: all 0.15s
-    }
-
-    .nav a:hover,
-    .nav a.active {
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff
-    }
-
-    .nav a.active {
-      border-left: 3px solid rgba(255, 255, 255, 0.70)
-    }
-
-    .nav-section {
-      padding: 16px 20px 6px;
-      color: rgba(255, 255, 255, 0.40);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em
-    }
-
-    .sidebar-bottom {
-      padding: 16px 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.10)
-    }
-
-    .sidebar-bottom a {
-      color: rgba(255, 255, 255, 0.60);
-      text-decoration: none;
-      font-size: 0.85rem
-    }
-
-    .main {
-      margin-left: 240px;
-      min-height: 100vh
-    }
-
-    .topbar {
-      background: var(--branco);
-      border-bottom: 1px solid var(--verde-borda);
-      padding: 16px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between
-    }
-
-    .topbar h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--verde-escuro)
-    }
-
-    .content {
-      padding: 32px
-    }
-
-    .card {
-      background: var(--branco);
-      border-radius: 14px;
-      border: 1px solid var(--verde-borda);
-      box-shadow: var(--sombra);
-      overflow: hidden;
-      margin-bottom: 28px
-    }
-
-    .card-header {
-      padding: 20px 28px;
-      border-bottom: 1px solid var(--verde-borda);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px
-    }
-
-    .card-header h3 {
-      font-size: 1rem;
-      color: var(--verde-escuro);
-      font-weight: 600
-    }
-
-    .card-body {
-      padding: 28px
-    }
-
-    .form-group {
-      margin-bottom: 20px
-    }
-
-    label.lbl {
-      display: block;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: var(--texto);
-      margin-bottom: 7px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1.5px solid var(--verde-borda);
-      border-radius: 9px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 0.95rem;
-      color: var(--texto);
-      transition: border 0.18s
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--verde)
-    }
-
-    textarea.form-control {
-      min-height: 80px;
-      resize: vertical
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px
-    }
-
-    .form-row-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px
-    }
-
-    .btn-primary {
-      background: var(--verde);
-      color: #fff;
-      padding: 11px 22px;
-      border-radius: 9px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 0.92rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s
-    }
-
-    .btn-primary:hover {
-      background: var(--verde-escuro)
-    }
-
-    .btn-secondary {
-      background: var(--verde-bg);
-      color: var(--verde);
-      border: 1.5px solid var(--verde-borda);
-      padding: 10px 20px;
-      border-radius: 9px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 0.92rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 8px
-    }
-
-    .alert-success {
-      background: #d4edda;
-      border: 1px solid #b8dabc;
-      border-radius: 9px;
-      padding: 12px 16px;
-      color: #1a6b2e;
-      margin-bottom: 20px;
-      font-size: 0.92rem
-    }
-
-    .alert-error {
-      background: #fef0f0;
-      border: 1px solid #f5c6c6;
-      border-radius: 9px;
-      padding: 12px 16px;
-      color: #c0392b;
-      margin-bottom: 20px;
-      font-size: 0.92rem
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse
-    }
-
-    th {
-      padding: 12px 20px;
-      text-align: left;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--texto-suave);
-      background: var(--verde-bg);
-      border-bottom: 1px solid var(--verde-borda)
-    }
-
-    td {
-      padding: 12px 20px;
-      border-bottom: 1px solid #f0f0ee;
-      font-size: 0.9rem;
-      vertical-align: top
-    }
-
-    tr:last-child td {
-      border-bottom: none
-    }
-
-    .btn-sm {
-      padding: 6px 14px;
-      border-radius: 7px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.15s;
-      margin-right: 6px
-    }
-
-    .btn-edit {
-      background: var(--verde-bg);
-      color: var(--verde);
-      border: 1px solid var(--verde-borda)
-    }
-
-    .btn-edit:hover {
-      background: var(--verde-borda)
-    }
-
-    .btn-del {
-      background: #fef0f0;
-      color: #c0392b;
-      border: 1px solid #f5c6c6
-    }
-
-    .btn-del:hover {
-      background: #f5c6c6
-    }
-
-    .passo-num {
-      display: inline-flex;
-      width: 28px;
-      height: 28px;
-      background: var(--verde);
-      color: #fff;
-      border-radius: 50%;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-right: 6px
-    }
-
-    .ordem-select {
-      padding: 9px 14px;
-      border: 1.5px solid var(--verde-borda);
-      border-radius: 9px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 0.92rem;
-      color: var(--texto);
-      background: var(--branco);
-      min-width: 260px
-    }
-
-    .hint {
-      font-size: 0.82rem;
-      color: var(--texto-suave);
-      margin-top: 4px
-    }
-
-    .divider {
-      height: 1px;
-      background: var(--verde-borda);
-      margin: 20px 0
-    }
-
-    .section-label {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--verde);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px
-    }
-
-    .resultado-box {
-      background: var(--verde-bg);
-      border: 1px solid var(--verde-borda);
-      border-radius: 10px;
-      padding: 16px
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/admin-chaves.css">
 </head>
 
 <body>
@@ -410,28 +34,58 @@ requireAdmin(); ?>
     return $stmt->fetchAll();
   }
 
+  function ensureChaveImagemColumns($pdo)
+  {
+    $cols = $pdo->query("SHOW COLUMNS FROM chave_passos")->fetchAll();
+    $names = array_column($cols, 'Field');
+
+    if (!in_array('sim_imagem', $names, true)) {
+      $pdo->exec("ALTER TABLE chave_passos ADD sim_imagem varchar(255) DEFAULT NULL AFTER opcao_sim_texto");
+    }
+
+    if (!in_array('nao_imagem', $names, true)) {
+      $pdo->exec("ALTER TABLE chave_passos ADD nao_imagem varchar(255) DEFAULT NULL AFTER opcao_nao_texto");
+    }
+  }
+
+  ensureChaveImagemColumns($pdo);
+
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $oid = (int)$_POST['ordem_id'];
     $pergunta = trim($_POST['pergunta'] ?? '');
     $passo_num = (int)$_POST['passo_numero'];
     $sim_texto = trim($_POST['opcao_sim_texto'] ?? '');
     $nao_texto = trim($_POST['opcao_nao_texto'] ?? '');
+    $sim_imagem = $_POST['sim_imagem_atual'] ?? '';
+    $nao_imagem = $_POST['nao_imagem_atual'] ?? '';
     $sim_passo = $_POST['sim_leva_passo'] !== '' ? (int)$_POST['sim_leva_passo'] : null;
     $nao_passo = $_POST['nao_leva_passo'] !== '' ? (int)$_POST['nao_leva_passo'] : null;
     $sim_fam = $_POST['sim_resultado_familia_id'] !== '' ? (int)$_POST['sim_resultado_familia_id'] : null;
     $nao_fam = $_POST['nao_resultado_familia_id'] !== '' ? (int)$_POST['nao_resultado_familia_id'] : null;
 
-    if ($_POST['form_acao'] === 'novo_passo') {
-      $stmt = $pdo->prepare("INSERT INTO chave_passos (ordem_id,passo_numero,pergunta,opcao_sim_texto,opcao_nao_texto,sim_leva_passo,nao_leva_passo,sim_resultado_familia_id,nao_resultado_familia_id) VALUES (?,?,?,?,?,?,?,?,?)");
-      $stmt->execute([$oid, $passo_num, $pergunta, $sim_texto, $nao_texto, $sim_passo, $nao_passo, $sim_fam, $nao_fam]);
+    if (!empty($_FILES['sim_imagem']['tmp_name'])) {
+      $upload = uploadImagem($_FILES['sim_imagem'], 'chave_sim');
+      if (is_string($upload)) $sim_imagem = $upload;
+      elseif (is_array($upload)) $erro = $upload['error'];
+    }
+
+    if (!$erro && !empty($_FILES['nao_imagem']['tmp_name'])) {
+      $upload = uploadImagem($_FILES['nao_imagem'], 'chave_nao');
+      if (is_string($upload)) $nao_imagem = $upload;
+      elseif (is_array($upload)) $erro = $upload['error'];
+    }
+
+    if (!$erro && $_POST['form_acao'] === 'novo_passo') {
+      $stmt = $pdo->prepare("INSERT INTO chave_passos (ordem_id,passo_numero,pergunta,opcao_sim_texto,sim_imagem,opcao_nao_texto,nao_imagem,sim_leva_passo,nao_leva_passo,sim_resultado_familia_id,nao_resultado_familia_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+      $stmt->execute([$oid, $passo_num, $pergunta, $sim_texto, $sim_imagem, $nao_texto, $nao_imagem, $sim_passo, $nao_passo, $sim_fam, $nao_fam]);
       $msg = 'Passo adicionado!';
-    } elseif ($_POST['form_acao'] === 'editar_passo') {
+    } elseif (!$erro && $_POST['form_acao'] === 'editar_passo') {
       $pid = (int)$_POST['passo_id'];
-      $stmt = $pdo->prepare("UPDATE chave_passos SET passo_numero=?,pergunta=?,opcao_sim_texto=?,opcao_nao_texto=?,sim_leva_passo=?,nao_leva_passo=?,sim_resultado_familia_id=?,nao_resultado_familia_id=? WHERE id=?");
-      $stmt->execute([$passo_num, $pergunta, $sim_texto, $nao_texto, $sim_passo, $nao_passo, $sim_fam, $nao_fam, $pid]);
+      $stmt = $pdo->prepare("UPDATE chave_passos SET passo_numero=?,pergunta=?,opcao_sim_texto=?,sim_imagem=?,opcao_nao_texto=?,nao_imagem=?,sim_leva_passo=?,nao_leva_passo=?,sim_resultado_familia_id=?,nao_resultado_familia_id=? WHERE id=?");
+      $stmt->execute([$passo_num, $pergunta, $sim_texto, $sim_imagem, $nao_texto, $nao_imagem, $sim_passo, $nao_passo, $sim_fam, $nao_fam, $pid]);
       $msg = 'Passo atualizado!';
     }
-    $acao = 'listar';
+    if (!$erro) $acao = 'listar';
   }
 
   if ($acao === 'del_passo' && $passo_id) {
@@ -575,7 +229,7 @@ requireAdmin(); ?>
             <h3><?= ($acao === 'editar' && $passo_edit) ? 'Editar Passo ' . $passo_edit['passo_numero'] : 'Adicionar Novo Passo' ?></h3>
           </div>
           <div class="card-body">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
               <input type="hidden" name="form_acao" value="<?= ($acao === 'editar' && $passo_edit) ? 'editar_passo' : 'novo_passo' ?>">
               <input type="hidden" name="ordem_id" value="<?= $ordem_id ?>">
               <?php if ($acao === 'editar' && $passo_edit): ?>
@@ -603,6 +257,15 @@ requireAdmin(); ?>
                   <label class="lbl">Texto da opção SIM</label>
                   <input type="text" name="opcao_sim_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_sim_texto'] ?? '') ?>" placeholder="Descrição breve da característica SIM">
                 </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="lbl">Imagem da Opção A</label>
+                  <input type="hidden" name="sim_imagem_atual" value="<?= htmlspecialchars($pe['sim_imagem'] ?? '') ?>">
+                  <input type="file" name="sim_imagem" class="form-control" accept="image/*">
+                  <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['sim_imagem']) ? 'Atual: <em>' . basename($pe['sim_imagem']) . '</em>' : '' ?></p>
+                  <?php if (!empty($pe['sim_imagem'])): ?>
+                    <img src="../<?= htmlspecialchars($pe['sim_imagem']) ?>" class="option-preview" alt="">
+                  <?php endif; ?>
+                </div>
               </div>
               <div class="resultado-box" style="margin-bottom:20px">
                 <div class="form-row-3">
@@ -629,6 +292,15 @@ requireAdmin(); ?>
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Texto da opção NÃO</label>
                   <input type="text" name="opcao_nao_texto" class="form-control" value="<?= htmlspecialchars($pe['opcao_nao_texto'] ?? '') ?>" placeholder="Descrição breve da característica NÃO">
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="lbl">Imagem da Opção B</label>
+                  <input type="hidden" name="nao_imagem_atual" value="<?= htmlspecialchars($pe['nao_imagem'] ?? '') ?>">
+                  <input type="file" name="nao_imagem" class="form-control" accept="image/*">
+                  <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['nao_imagem']) ? 'Atual: <em>' . basename($pe['nao_imagem']) . '</em>' : '' ?></p>
+                  <?php if (!empty($pe['nao_imagem'])): ?>
+                    <img src="../<?= htmlspecialchars($pe['nao_imagem']) ?>" class="option-preview" alt="">
+                  <?php endif; ?>
                 </div>
               </div>
               <div class="resultado-box" style="margin-bottom:20px">
@@ -665,3 +337,4 @@ requireAdmin(); ?>
 </body>
 
 </html>
+
