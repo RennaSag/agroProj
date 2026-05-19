@@ -8,8 +8,7 @@ Desenvolvido para a disciplina de Entomologia do IF Goiano.
 
 ## Acesso
 
-- **Site:** [link do Render aqui]
-- **Admin:** [link do Render]/admin/login.php
+- **Site:** https://agroproj-plgg.onrender.com
 
 ---
 
