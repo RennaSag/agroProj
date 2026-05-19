@@ -2,7 +2,7 @@
 
 Sistema web para classificação entomológica de insetos da Classe Insecta. Permite que alunos identifiquem famílias de insetos por meio de chaves dicotômicas interativas. Possui painel administrativo para gerenciamento de ordens, famílias e chaves.
 
-Desenvolvido para a disciplina de Entomologia do IF Goiano.
+Desenvolvido como Projeto de Extensão
 
 ---
 
@@ -96,37 +96,8 @@ Desenvolvido para a disciplina de Entomologia do IF Goiano.
 
 O deploy é feito via Docker no Render e dispara automaticamente a cada push na branch `postgres`.
 
-### Variáveis de ambiente no Render
 
-Configure em **Environment → Environment Variables**:
 
-| Variável | Descrição |
-|----------|-----------|
-| `DB_HOST` | Host do banco no Neon (sem `-pooler`) |
-| `DB_USER` | Usuário do banco |
-| `DB_PASS` | Senha do banco |
-| `DB_NAME` | Nome do banco (geralmente `neondb`) |
-
-> **Atenção:** use o host direto do Neon, não o host do pooler. Remova `-pooler` do hostname se aparecer na connection string.
-
-### Observação sobre imagens
-
-O Render não possui disco persistente no plano gratuito. Imagens enviadas pelo admin ficam salvas apenas enquanto o container estiver rodando — um novo deploy apaga a pasta `uploads/`. Para persistência de imagens, integrar com Cloudinary ou similar.
-
----
-
-## API Pública
-
-Endpoint base: `api.php?action=<acao>`
-
-| action | parâmetros | descrição |
-|--------|------------|-----------|
-| `ordens` | — | lista todas as ordens ativas |
-| `ordem` | `id` (int) | retorna dados de uma ordem e suas famílias |
-| `passos` | `ordem_id` (int) | retorna todos os passos da chave dicotômica |
-| `familia` | `id` (int) | retorna dados de uma família |
-
----
 
 ## Banco de Dados
 
@@ -141,8 +112,6 @@ Endpoint base: `api.php?action=<acao>`
 **chave_passos** — passos da chave dicotômica, com texto e imagem para cada opção (sim/não) e destino (próximo passo ou família resultado)
 
 ---
-
-## Colaboradores
 
 - Para contribuir: faça um push na branch `postgres` e o Render faz o deploy automaticamente.
 - Para acesso ao painel admin: solicite ao responsável pelo projeto.
