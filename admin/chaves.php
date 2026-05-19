@@ -34,22 +34,6 @@ requireAdmin(); ?>
     return $stmt->fetchAll();
   }
 
-  function ensureChaveImagemColumns($pdo)
-  {
-    $cols = $pdo->query("SHOW COLUMNS FROM chave_passos")->fetchAll();
-    $names = array_column($cols, 'Field');
-
-    if (!in_array('sim_imagem', $names, true)) {
-      $pdo->exec("ALTER TABLE chave_passos ADD sim_imagem varchar(255) DEFAULT NULL AFTER opcao_sim_texto");
-    }
-
-    if (!in_array('nao_imagem', $names, true)) {
-      $pdo->exec("ALTER TABLE chave_passos ADD nao_imagem varchar(255) DEFAULT NULL AFTER opcao_nao_texto");
-    }
-  }
-
-  ensureChaveImagemColumns($pdo);
-
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $oid = (int)$_POST['ordem_id'];
     $pergunta = trim($_POST['pergunta'] ?? '');
@@ -151,7 +135,6 @@ requireAdmin(); ?>
       <?php if ($msg): ?><div class="alert-success"><?= htmlspecialchars($msg) ?></div><?php endif; ?>
       <?php if ($erro): ?><div class="alert-error"><?= htmlspecialchars($erro) ?></div><?php endif; ?>
 
-      
       <div class="card">
         <div class="card-header">
           <h3>Selecionar Ordem para Editar Chave</h3>
@@ -172,7 +155,6 @@ requireAdmin(); ?>
         $oNome = $ordem_atual->fetchColumn();
       ?>
 
-      
         <div class="card">
           <div class="card-header">
             <h3>Passos da Chave: <em><?= htmlspecialchars($oNome) ?></em></h3>
@@ -223,7 +205,6 @@ requireAdmin(); ?>
           <?php endif; ?>
         </div>
 
-       
         <div class="card">
           <div class="card-header">
             <h3><?= ($acao === 'editar' && $passo_edit) ? 'Editar Passo ' . $passo_edit['passo_numero'] : 'Adicionar Novo Passo' ?></h3>
@@ -337,4 +318,3 @@ requireAdmin(); ?>
 </body>
 
 </html>
-

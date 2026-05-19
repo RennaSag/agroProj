@@ -16,7 +16,7 @@ function getDB()
     if ($pdo === null) {
         try {
             $pdo = new PDO(
-                'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
+                'pgsql:host=' . DB_HOST . ';port=5432;dbname=' . DB_NAME . ';sslmode=require',
                 DB_USER,
                 DB_PASS,
                 [
@@ -59,11 +59,10 @@ function isAdmin()
     return isset($_SESSION['admin_id']);
 }
 
-function requireAdmin() {
+function requireAdmin()
+{
     if (!isset($_SESSION['admin_id'])) {
-        header('Location: /agroProj/admin/login.php');
+        header('Location: /admin/login.php');
         exit;
     }
 }
-//requerimento de adm pras paginas
-
