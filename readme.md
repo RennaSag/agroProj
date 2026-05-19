@@ -113,5 +113,3 @@ O deploy é feito via Docker no Render e dispara automaticamente a cada push na 
 
 ---
 
-- Para contribuir: faça um push na branch `postgres` e o Render faz o deploy automaticamente.
-- Para acesso ao painel admin: solicite ao responsável pelo projeto.
