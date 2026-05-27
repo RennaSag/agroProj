@@ -9,7 +9,9 @@ requireAdmin(); ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel de Administradores</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/admin-admins.css">
+  <link rel="stylesheet" href="../assets/css/ui-base.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-admins.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-responsive.css?v=20260527">
 </head>
 
 <body>
@@ -59,7 +61,7 @@ requireAdmin(); ?>
       <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php" class="active">Administradores</a>
-      <a href="../index.php" target="_blank">Ver Site</a>
+      <a href="../index.php" target="_blank" rel="noopener">Ver Site</a>
     </div>
     <div class="sidebar-bottom"><a href="logout.php">Sair</a></div>
   </nav>
@@ -90,13 +92,13 @@ requireAdmin(); ?>
                 <td><?= htmlspecialchars($a['nome']) ?></td>
                 <td><?= htmlspecialchars($a['email']) ?></td>
                 <td style="color:var(--texto-suave)"><?= date('d/m/Y', strtotime($a['criado_em'])) ?></td>
-                <td>
+                <td><div class="admin-table-actions">
                   <?php if ($a['id'] !== (int)$_SESSION['admin_id']): ?>
                     <a href="?del=<?= $a['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Remover este admin?')">🗑 Remover</a>
                   <?php else: ?>
                     <span style="font-size:0.82rem;color:var(--texto-suave)">(você)</span>
                   <?php endif; ?>
-                </td>
+                </div></td>
               </tr>
             <?php endforeach; ?>
           </tbody>
@@ -130,7 +132,7 @@ requireAdmin(); ?>
       </div>
     </div>
   </div>
+  <script src="../assets/js/admin-layout.js?v=20260527"></script>
 </body>
 
 </html>
-

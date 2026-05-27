@@ -61,9 +61,8 @@ function isAdmin()
 
 function requireAdmin() {
     if (!isset($_SESSION['admin_id'])) {
-        header('Location: /agroProj/admin/login.php');
+        header('Location: login.php');
         exit;
     }
 }
 //requerimento de adm pras paginas
-

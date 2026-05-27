@@ -19,7 +19,7 @@ Sistema web para classificacao entomologica de insetos da Classe Insecta. Permit
 |-- .env.example           - modelo das configuracoes locais
 |-- assets/
 |   |-- css/               - estilos separados das paginas PHP
-|   `-- js/                - scripts futuros separados das paginas PHP
+|   `-- js/                - scripts separados das paginas PHP
 |-- includes/
 |   |-- config.php         - carregamento das variaveis do .env
 |   `-- db.php             - conexao com banco e funcoes auxiliares
@@ -34,7 +34,10 @@ Sistema web para classificacao entomologica de insetos da Classe Insecta. Permit
 |   `-- check_auth.php     - controle de login
 |-- database/
 |   `-- entomologia.sql    - estrutura e carga inicial do banco
+|-- graphify-out/          - mapeamento de dependencias e arquitetura do sistema
 `-- docs/
+    |-- telas/                                     - capturas das telas do sistema
+    |-- RELATORIO_ALTERACOES_UI_ACESSIBILIDADE.md  - relatorio das melhorias
     `-- Diagrama de caso de uso.PNG
 ```
 
@@ -168,5 +171,3 @@ Requer autenticacao via sessao PHP.
 - Frontend vanilla JS sem frameworks
 - Fontes: Playfair Display (titulos) e Source Sans 3 (texto)
 - Design responsivo com media queries para mobile
-
-

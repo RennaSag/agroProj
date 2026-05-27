@@ -34,34 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Dashboard</title>
+  <title>Login - Painel Administrativo</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/admin-login.css">
+  <link rel="stylesheet" href="../assets/css/ui-base.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-login.css?v=20260527">
 </head>
 
 <body>
-  <?php
-  
-  $erro = '';
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $senha = $_POST['senha'] ?? '';
-    $pdo = getDB();
-    
-    $stmt = $pdo->prepare("SELECT * FROM admins WHERE email=? OR nome=?");
-    $stmt->execute([$email, $email]);
-
-    $admin = $stmt->fetch();
-    if ($admin && password_verify($senha, $admin['senha'])) {
-      $_SESSION['admin_id'] = $admin['id'];
-      $_SESSION['admin_nome'] = $admin['nome'];
-      header('Location: index.php');
-      exit;
-    } else {
-      $erro = 'E-mail ou senha incorretos.';
-    }
-  }
-  ?>
   <div class="login-card">
     <div class="logo">
       <h1>Entomologia</h1>
@@ -72,12 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
     <form method="POST">
       <div class="form-group">
-        <label>E-mail</label>
-        <input type="text" name="email" required placeholder="adm" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" name="email" autocomplete="username" required placeholder="professor@gmail.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
       </div>
       <div class="form-group">
-        <label>Senha</label>
-        <input type="password" name="senha" required placeholder="••••••••">
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" name="senha" autocomplete="current-password" required placeholder="********">
       </div>
       <button type="submit" class="btn-login">Entrar</button>
     </form>
@@ -86,4 +65,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
-

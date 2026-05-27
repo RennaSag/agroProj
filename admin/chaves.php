@@ -9,7 +9,9 @@ requireAdmin(); ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chaves Dicotômicas - Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/admin-chaves.css">
+  <link rel="stylesheet" href="../assets/css/ui-base.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-chaves.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-responsive.css?v=20260527">
 </head>
 
 <body>
@@ -135,7 +137,7 @@ requireAdmin(); ?>
       <a href="chaves.php" class="active">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php">Administradores</a>
-      <a href="../index.php" target="_blank">Ver Site</a>
+      <a href="../index.php" target="_blank" rel="noopener">Ver Site</a>
     </div>
     <div class="sidebar-bottom"><a href="logout.php">Sair</a></div>
   </nav>
@@ -144,7 +146,7 @@ requireAdmin(); ?>
     <div class="topbar">
       <h1>Chaves Dicotômicas</h1>
       <?php if ($ordem_id): ?>
-        <a href="../chave.php?ordem=<?= $ordem_id ?>" target="_blank" class="btn-secondary">Ver Chave no Site</a>
+        <a href="../chave.php?ordem=<?= $ordem_id ?>" target="_blank" rel="noopener" class="btn-secondary">Ver Chave no Site</a>
       <?php endif; ?>
     </div>
     <div class="content">
@@ -201,6 +203,7 @@ requireAdmin(); ?>
                         Passo <?= $p['sim_leva_passo'] ?>
                       <?php else: echo '—';
                       endif; ?>
+                      <?php if (empty($p['sim_imagem'])): ?><span class="content-badge">Sem imagem</span><?php endif; ?>
                     </td>
                     <td style="font-size:0.85rem">
                       <?php if ($p['nao_resultado_familia_id']): ?>
@@ -209,11 +212,12 @@ requireAdmin(); ?>
                       Passo <?= $p['nao_leva_passo'] ?>
                       <?php else: echo '—';
                       endif; ?>
+                      <?php if (empty($p['nao_imagem'])): ?><span class="content-badge">Sem imagem</span><?php endif; ?>
                     </td>
-                    <td>
+                    <td><div class="admin-table-actions">
                       <a href="?acao=editar&passo_id=<?= $p['id'] ?>&ordem_id=<?= $ordem_id ?>" class="btn-sm btn-edit">Editar</a>
                       <a href="?acao=del_passo&passo_id=<?= $p['id'] ?>&ordem_id=<?= $ordem_id ?>" class="btn-sm btn-del" onclick="return confirm('Excluir este passo?')">Excluir</a>
-                    </td>
+                    </div></td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
@@ -260,10 +264,13 @@ requireAdmin(); ?>
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Imagem da Opção A</label>
                   <input type="hidden" name="sim_imagem_atual" value="<?= htmlspecialchars($pe['sim_imagem'] ?? '') ?>">
-                  <input type="file" name="sim_imagem" class="form-control" accept="image/*">
+                  <input type="file" name="sim_imagem" class="form-control" accept="image/*" data-preview-target="simOptionPreview" data-empty-target="simOptionEmpty">
                   <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['sim_imagem']) ? 'Atual: <em>' . basename($pe['sim_imagem']) . '</em>' : '' ?></p>
                   <?php if (!empty($pe['sim_imagem'])): ?>
-                    <img src="../<?= htmlspecialchars($pe['sim_imagem']) ?>" class="option-preview" alt="">
+                    <img id="simOptionPreview" src="../<?= htmlspecialchars($pe['sim_imagem']) ?>" class="option-preview" alt="Pré-visualização da opção A">
+                  <?php else: ?>
+                    <div id="simOptionEmpty" class="upload-empty">Sem imagem cadastrada para a opção A.</div>
+                    <img id="simOptionPreview" class="option-preview" hidden alt="Pré-visualização da opção A">
                   <?php endif; ?>
                 </div>
               </div>
@@ -296,10 +303,13 @@ requireAdmin(); ?>
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Imagem da Opção B</label>
                   <input type="hidden" name="nao_imagem_atual" value="<?= htmlspecialchars($pe['nao_imagem'] ?? '') ?>">
-                  <input type="file" name="nao_imagem" class="form-control" accept="image/*">
+                  <input type="file" name="nao_imagem" class="form-control" accept="image/*" data-preview-target="naoOptionPreview" data-empty-target="naoOptionEmpty">
                   <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['nao_imagem']) ? 'Atual: <em>' . basename($pe['nao_imagem']) . '</em>' : '' ?></p>
                   <?php if (!empty($pe['nao_imagem'])): ?>
-                    <img src="../<?= htmlspecialchars($pe['nao_imagem']) ?>" class="option-preview" alt="">
+                    <img id="naoOptionPreview" src="../<?= htmlspecialchars($pe['nao_imagem']) ?>" class="option-preview" alt="Pré-visualização da opção B">
+                  <?php else: ?>
+                    <div id="naoOptionEmpty" class="upload-empty">Sem imagem cadastrada para a opção B.</div>
+                    <img id="naoOptionPreview" class="option-preview" hidden alt="Pré-visualização da opção B">
                   <?php endif; ?>
                 </div>
               </div>
@@ -334,7 +344,7 @@ requireAdmin(); ?>
       <?php endif; ?>
     </div>
   </div>
+  <script src="../assets/js/admin-layout.js?v=20260527"></script>
 </body>
 
 </html>
-
