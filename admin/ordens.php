@@ -9,7 +9,9 @@ requireAdmin(); ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Ordens</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/admin-ordens.css">
+  <link rel="stylesheet" href="../assets/css/ui-base.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-ordens.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-responsive.css?v=20260527">
 </head>
 
 <body>
@@ -91,7 +93,7 @@ requireAdmin(); ?>
       <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php">Administradores</a>
-      <a href="../index.php" target="_blank">Ver Site</a>
+      <a href="../index.php" target="_blank" rel="noopener">Ver Site</a>
     </div>
     <div class="sidebar-bottom"><a href="logout.php">Sair</a></div>
   </nav>
@@ -127,14 +129,23 @@ requireAdmin(); ?>
             <tbody>
               <?php foreach ($pdo->query("SELECT * FROM ordens ORDER BY ordem_exibicao,id")->fetchAll() as $o): ?>
                 <tr>
-                  <td><?= $o['imagem'] ? "<img src='../{$o['imagem']}' class='thumb'>" : "<div class='thumb-ph'>ImagemAqui</div>" ?></td>
-                  <td><em><?= htmlspecialchars($o['nome']) ?></em></td>
+                  <td>
+                    <?php if (!empty($o['imagem'])): ?>
+                      <img src="../<?= htmlspecialchars($o['imagem']) ?>" class="thumb" alt="">
+                    <?php else: ?>
+                      <div class="missing-thumb" aria-label="Sem imagem"><span aria-hidden="true">▧</span>Sem imagem</div>
+                    <?php endif; ?>
+                  </td>
+                  <td>
+                    <em><?= htmlspecialchars($o['nome']) ?></em>
+                    <?php if (empty($o['imagem'])): ?><span class="content-badge">Sem imagem</span><?php endif; ?>
+                  </td>
                   <td><?= $o['ordem_exibicao'] ?></td>
                   <td><span class="<?= $o['ativo'] ? 'badge-ativo' : 'badge-inativo' ?>"><?= $o['ativo'] ? 'Ativo' : 'Inativo' ?></span></td>
-                  <td>
+                  <td><div class="admin-table-actions">
                     <a href="?acao=editar&id=<?= $o['id'] ?>" class="btn-sm btn-edit">Editar</a>
                     <a href="?acao=deletar&id=<?= $o['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir esta ordem e todas suas famílias/chaves?')">Excluir</a>
-                  </td>
+                  </div></td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
@@ -203,9 +214,10 @@ requireAdmin(); ?>
                 <input type="file" name="imagem" class="form-control" accept="image/*" onchange="previewImg(this)">
                 <p class="hint">JPG, PNG ou WebP - máx 5MB. <?= $e['imagem'] ?? '' ? 'Imagem atual: <em>' . basename($e['imagem']) . '</em>' : '' ?></p>
                 <?php if (!empty($e['imagem'])): ?>
-                  <img src="../<?= htmlspecialchars($e['imagem']) ?>" class="img-preview" style="display:block">
+                  <img src="../<?= htmlspecialchars($e['imagem']) ?>" class="img-preview" style="display:block" alt="Pré-visualização da imagem atual">
                 <?php else: ?>
-                  <img id="imgPreview" class="img-preview">
+                  <div id="imgPreviewEmpty" class="upload-empty">Sem imagem cadastrada. Selecione um arquivo para visualizar antes de salvar.</div>
+                  <img id="imgPreview" class="img-preview" hidden alt="Pré-visualização da nova imagem">
                 <?php endif; ?>
               </div>
 
@@ -226,13 +238,16 @@ requireAdmin(); ?>
         const reader = new FileReader();
         reader.onload = e => {
           prev.src = e.target.result;
+          prev.hidden = false;
           prev.style.display = 'block';
+          const empty = document.getElementById('imgPreviewEmpty');
+          if (empty) empty.hidden = true;
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
   </script>
+  <script src="../assets/js/admin-layout.js?v=20260527"></script>
 </body>
 
 </html>
-

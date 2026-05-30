@@ -1,0 +1,97 @@
+{
+  "D:\\xampp\\htdocs\\agroProj-main\\api.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "bbbed290766c69d20aefd203c66afa0c",
+    "semantic_hash": "bbbed290766c69d20aefd203c66afa0c"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\chave.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "842c74b591417cc7c2b76334bca99ff7",
+    "semantic_hash": "842c74b591417cc7c2b76334bca99ff7"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\gerar_senha.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "02fb3139b6f2d2c20fdc84eca57eb505",
+    "semantic_hash": "02fb3139b6f2d2c20fdc84eca57eb505"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\index.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "446133499047ee6a4d8b45aee5d964f4",
+    "semantic_hash": "446133499047ee6a4d8b45aee5d964f4"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\teste.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "4a863486e13819022b198f9202c3bfa6",
+    "semantic_hash": "4a863486e13819022b198f9202c3bfa6"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\admins.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "c7fb931a2bf7271e0758731d4e3bcc60",
+    "semantic_hash": "c7fb931a2bf7271e0758731d4e3bcc60"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\chaves.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "389ed0f17aac4707e01071c3ea6723ae",
+    "semantic_hash": "389ed0f17aac4707e01071c3ea6723ae"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\check_auth.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "d3435e25fdd394408043aadf33087e46",
+    "semantic_hash": "d3435e25fdd394408043aadf33087e46"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\familias.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "9005f3604a3724624fffa0afec9162cd",
+    "semantic_hash": "9005f3604a3724624fffa0afec9162cd"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\index.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "ef5728c5dcf83d267095ae4d008a8ab2",
+    "semantic_hash": "ef5728c5dcf83d267095ae4d008a8ab2"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\login.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "c55e4d6e8836673dc434117b051f4f0f",
+    "semantic_hash": "c55e4d6e8836673dc434117b051f4f0f"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\logout.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "b21f473300e75dcf4830fd3a4ead7207",
+    "semantic_hash": "b21f473300e75dcf4830fd3a4ead7207"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\admin\\ordens.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "5ea418d5d9ca9482b16cc677416979d0",
+    "semantic_hash": "5ea418d5d9ca9482b16cc677416979d0"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\database\\entomologia.sql": {
+    "mtime": 1779061403.0,
+    "ast_hash": "3ea24a2da969b65220a53fb2cdbacc19",
+    "semantic_hash": "3ea24a2da969b65220a53fb2cdbacc19"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\includes\\config.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "71863cbe05d2d83508961958fc9c0f69",
+    "semantic_hash": "71863cbe05d2d83508961958fc9c0f69"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\includes\\db.php": {
+    "mtime": 1779061403.0,
+    "ast_hash": "246f72a99730b439819519712d4867a3",
+    "semantic_hash": "246f72a99730b439819519712d4867a3"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\readme.md": {
+    "mtime": 1779061403.0,
+    "ast_hash": "dd45fdefc5d14e9d54b9ae5b3f157444",
+    "semantic_hash": "dd45fdefc5d14e9d54b9ae5b3f157444"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\docs\\Diagrama de caso de uso.PNG": {
+    "mtime": 1779061403.0,
+    "ast_hash": "ea9243e9f4864ea2da6ac31d5a0f1160",
+    "semantic_hash": "ea9243e9f4864ea2da6ac31d5a0f1160"
+  },
+  "D:\\xampp\\htdocs\\agroProj-main\\uploads\\insetos\\ordem_6a166ad182e21.jpg": {
+    "mtime": 1779854033.5322046,
+    "ast_hash": "2e8d6d82c8674af761af52253c0c8522",
+    "semantic_hash": "2e8d6d82c8674af761af52253c0c8522"
+  }
+}

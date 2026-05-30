@@ -7,7 +7,8 @@
   <title>Chave Entomológica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site-home.css">
+  <link rel="stylesheet" href="assets/css/ui-base.css?v=20260527">
+  <link rel="stylesheet" href="assets/css/site-home.css?v=20260527">
 </head>
 
 <body>
@@ -16,120 +17,168 @@
   <h1>Chave de Classificação para Algumas Ordens e Famílias da Classe Insecta</h1>
   <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
   <div class="header-accent"></div>
-  <a href="admin/check_auth.php" style="
-    position: absolute;
-    top: 16px;
-    right: 20px;
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.35);
-    border-radius: 8px;
-    padding: 7px 16px;
-    font-size: 0.85rem;
-    font-family: 'Source Sans 3', sans-serif;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.18s;
-  " onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-     onmouseout="this.style.background='rgba(255,255,255,0.15)'">
-    Admin
-  </a>
+  <a href="admin/check_auth.php" class="admin-link">Área administrativa</a>
 </header>
 
   <main>
+    <section class="intro" aria-labelledby="introTitulo">
+      <p class="intro-kicker">Identificação orientada</p>
+      <h2 id="introTitulo">Selecione uma ordem para começar</h2>
+      <p>Consulte as características principais ou inicie a chave dicotômica para identificar a família do inseto.</p>
+    </section>
     <div class="ordens-grid" id="ordensgrid">
     </div>
   </main>
 
-  
-  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)fecharModal()">
-    <div class="modal" id="modalContent">
+  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+    <div class="modal" id="modalContent" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" tabindex="-1">
       <div class="modal-header">
         <h3 id="modalTitulo">-</h3>
-        <button class="modal-close" onclick="fecharModal()">✕</button>
+        <button type="button" class="modal-close" id="modalClose" aria-label="Fechar detalhes">×</button>
       </div>
       <div class="modal-body" id="modalBody"></div>
       <div class="modal-footer">
-        <a href="#" class="btn-acessar-chave" id="modalChaveBtn">Acessar Chave</a>
+        <a href="#" class="btn-acessar-chave" id="modalChaveBtn">Iniciar identificação</a>
       </div>
     </div>
   </div>
 
-  <button class="fab-help" title="Ajuda">?</button>
-
   <script>
-    // carrega ordens via API
-    async function carregarOrdens() {
-      const resp = await fetch('api.php?action=ordens');
-      const data = await resp.json();
-      const grid = document.getElementById('ordensgrid');
-      grid.innerHTML = '';
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalContent = document.getElementById('modalContent');
+    let modalTrigger = null;
 
-      data.forEach(ordem => {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const imgHtml = ordem.imagem ?
-          `<img src="${ordem.imagem}" class="card-img" alt="${ordem.nome}" loading="lazy">` :
-          `<div class="card-img-placeholder">ImagemAqui</div>`;
-
-        card.innerHTML = `
-      ${imgHtml}
-      <div class="card-body">
-        <div class="card-nome">${ordem.nome}</div>
-        <div class="card-acoes">
-          <button class="btn btn-outline" onclick="abrirModal(${ordem.id})">Descrição</button>
-          <a class="btn btn-solid" href="chave.php?ordem=${ordem.id}">Chave</a>
-        </div>
-      </div>`;
-        grid.appendChild(card);
-      });
+    function escapeHtml(value) {
+      const node = document.createElement('span');
+      node.textContent = String(value ?? '');
+      return node.innerHTML;
     }
 
-    async function abrirModal(ordemId) {
+    function imagemAusente(className) {
+      return `<div class="${className}" role="img" aria-label="Imagem não cadastrada"><span aria-hidden="true">▧</span>Imagem não cadastrada</div>`;
+    }
+
+    async function carregarOrdens() {
+      const grid = document.getElementById('ordensgrid');
+      try {
+        const resp = await fetch('api.php?action=ordens');
+        if (!resp.ok) throw new Error('Falha ao carregar ordens');
+        const data = await resp.json();
+        grid.innerHTML = '';
+
+        data.forEach(ordem => {
+          const id = Number(ordem.id);
+          const nome = escapeHtml(ordem.nome);
+          const card = document.createElement('article');
+          card.className = 'card';
+
+          const imgHtml = ordem.imagem ?
+            `<img src="${escapeHtml(ordem.imagem)}" class="card-img" alt="${nome}" loading="lazy">` :
+            imagemAusente('card-img-placeholder');
+
+          card.innerHTML = `
+            ${imgHtml}
+            <div class="card-body">
+              <div class="card-nome">${nome}</div>
+              <div class="card-acoes">
+                <button type="button" class="btn btn-outline" data-modal-id="${id}">Ver características</button>
+                <a class="btn btn-solid" href="chave.php?ordem=${id}">Iniciar identificação</a>
+              </div>
+            </div>`;
+          grid.appendChild(card);
+        });
+      } catch (erro) {
+        grid.innerHTML = '<p class="empty-feedback">Não foi possível carregar as ordens neste momento.</p>';
+      }
+    }
+
+    async function abrirModal(ordemId, acionador) {
+      modalTrigger = acionador || document.activeElement;
       const resp = await fetch(`api.php?action=ordem&id=${ordemId}`);
       const d = await resp.json();
 
       document.getElementById('modalTitulo').textContent = d.nome;
       document.getElementById('modalChaveBtn').href = `chave.php?ordem=${d.id}`;
 
-      const caract = d.caracteristicas ? JSON.parse(d.caracteristicas) : [];
+      let caract = [];
+      try {
+        caract = d.caracteristicas ? JSON.parse(d.caracteristicas) : [];
+      } catch (erro) {
+        caract = [];
+      }
       const caracterHtml = caract.length ? `
     <div class="modal-section-title">Características Gerais</div>
-    <ul class="modal-list">${caract.map(c => `<li>${c}</li>`).join('')}</ul>
+    <ul class="modal-list">${caract.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul>
   ` : '';
 
       const exemplosHtml = d.exemplos ? `
     <div class="modal-section-title">Exemplos</div>
-    <p style="color:var(--texto);font-size:0.95rem">${d.exemplos}</p>
+    <p class="modal-text">${escapeHtml(d.exemplos)}</p>
   ` : '';
 
       const agricolaHtml = d.importancia_agricola ? `
     <div class="modal-section-title">Importância Agrícola</div>
-    <p style="color:var(--texto);font-size:0.95rem;line-height:1.6">${d.importancia_agricola}</p>
+    <p class="modal-text">${escapeHtml(d.importancia_agricola)}</p>
   ` : '';
 
       const familiasHtml = d.familias && d.familias.length ? `
     <div class="modal-section-title">Famílias Incluídas</div>
-    <div class="modal-tags">${d.familias.map(f => `<span class="tag">${f}</span>`).join('')}</div>
+    <div class="modal-tags">${d.familias.map(f => `<span class="tag">${escapeHtml(f)}</span>`).join('')}</div>
   ` : '';
 
-      const imgHtml = d.imagem ? `<img src="${d.imagem}" class="modal-img" alt="${d.nome}">` : '';
+      const imgHtml = d.imagem ?
+        `<img src="${escapeHtml(d.imagem)}" class="modal-img" alt="${escapeHtml(d.nome)}">` :
+        imagemAusente('modal-img-placeholder');
 
       document.getElementById('modalBody').innerHTML = imgHtml + caracterHtml + exemplosHtml + agricolaHtml + familiasHtml;
-      document.getElementById('modalOverlay').classList.add('open');
+      modalOverlay.classList.add('open');
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      modalContent.focus();
     }
 
     function fecharModal() {
-      document.getElementById('modalOverlay').classList.remove('open');
+      if (!modalOverlay.classList.contains('open')) return;
+      modalOverlay.classList.remove('open');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (modalTrigger) modalTrigger.focus();
     }
 
+    document.getElementById('ordensgrid').addEventListener('click', e => {
+      const button = e.target.closest('[data-modal-id]');
+      if (button) abrirModal(button.dataset.modalId, button);
+    });
+    document.getElementById('modalClose').addEventListener('click', fecharModal);
+    modalOverlay.addEventListener('click', e => {
+      if (e.target === modalOverlay) fecharModal();
+    });
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') fecharModal();
+      if (!modalOverlay.classList.contains('open')) return;
+      if (e.key === 'Escape') {
+        fecharModal();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+
+      const focusable = [...modalContent.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')];
+      if (!focusable.length) {
+        e.preventDefault();
+        modalContent.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === modalContent)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     });
     carregarOrdens();
   </script>
 </body>
 
 </html>
-
