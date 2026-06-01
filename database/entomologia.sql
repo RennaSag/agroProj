@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 15/04/2026 às 19:48
+-- Tempo de geração: 01/06/2026 às 06:06
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -69,10 +69,30 @@ CREATE TABLE `chave_passos` (
 --
 
 INSERT INTO `chave_passos` (`id`, `ordem_id`, `passo_numero`, `pergunta`, `opcao_sim_texto`, `sim_imagem`, `opcao_nao_texto`, `nao_imagem`, `sim_leva_passo`, `nao_leva_passo`, `sim_resultado_familia_id`, `nao_resultado_familia_id`) VALUES
-(1, 1, 1, 'Protórax desenvolvido e expandido para trás, formando um casco que cobre o abdome?', 'Protórax muito desenvolvido, formando estrutura em forma de capacete ou chifre', NULL, 'Protórax normal, não expandido sobre o abdome', NULL, NULL, 2, 2, NULL),
-(2, 1, 2, 'Inseto de tamanho grande (>2cm) com órgão estridulador nos machos?', 'Grande, com timbais para produção de som', NULL, 'Pequeno a médio, sem órgão estridulador evidente', NULL, NULL, 3, 1, NULL),
-(3, 1, 3, 'Tíbias posteriores com 1 ou 2 fileiras de espinhos (não apenas 1-2 espinhos isolados)?', 'Fileiras de espinhos nas tíbias posteriores', NULL, 'Apenas 1 ou 2 espinhos isolados nas tíbias', NULL, NULL, NULL, 3, 4),
+(1, 1, 1, 'Protórax desenvolvido e expandido para trás, formando um casco que cobre o abdome?', 'Protórax muito desenvolvido, formando estrutura em forma de capacete ou chifre', 'uploads/insetos/chave_sim_6a1cf950e91d2.jfif', 'Protórax normal, não expandido sobre o abdome', 'uploads/insetos/chave_nao_6a1cf950e94c8.jfif', NULL, 2, 2, NULL),
+(2, 1, 2, 'Inseto de tamanho grande (>2cm) com órgão estridulador nos machos?', 'Grande, com timbais para produção de som', 'uploads/insetos/chave_sim_6a1cf98224f74.jfif', 'Pequeno a médio, sem órgão estridulador evidente', 'uploads/insetos/chave_nao_6a1cf982250a2.jfif', NULL, 3, 1, NULL),
+(3, 1, 3, 'Tíbias posteriores com 1 ou 2 fileiras de espinhos (não apenas 1-2 espinhos isolados)?', 'Fileiras de espinhos nas tíbias posteriores', 'uploads/insetos/chave_sim_6a1cf9a0b3463.jfif', 'Apenas 1 ou 2 espinhos isolados nas tíbias', 'uploads/insetos/chave_nao_6a1cf9a0b365f.png', NULL, NULL, 3, 4),
 (4, 13, 1, 'esse inseto é grande?', 'inseto grande', NULL, 'inseto pequeno', NULL, 1, 2, 69, 68);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `configuracoes`
+--
+
+CREATE TABLE `configuracoes` (
+  `chave` varchar(100) NOT NULL,
+  `valor` varchar(255) NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `configuracoes`
+--
+
+INSERT INTO `configuracoes` (`chave`, `valor`, `descricao`, `atualizado_em`) VALUES
+('exibir_miniaturas_historico', '1', 'Exibir miniaturas das opções no histórico da identificação', '2026-06-01 03:18:50');
 
 -- --------------------------------------------------------
 
@@ -98,7 +118,7 @@ INSERT INTO `familias` (`id`, `ordem_id`, `nome`, `descricao`, `exemplos`, `imag
 (1, 1, 'Cicadidae', 'Três ocelos; fêmures anteriores dilatados. Insetos de grande porte com órgão estridulador nos machos.', 'Cigarras', NULL, 1),
 (2, 1, 'Membracidae', 'Pronoto estendendo-se sobre o abdome, às vezes com ornamentações grotescas.', 'Membracídeos, \"bichos espinho\"', NULL, 1),
 (3, 1, 'Cicadellidae', 'Tíbias posteriores com 1 ou 2 fileiras de espinhos.', 'Cigarrinhas', NULL, 1),
-(4, 1, 'Cercopidae', 'Tíbias posteriores com 1 ou 2 espinhos.', 'Cigarrinhas-espumadeiras', NULL, 1),
+(4, 1, 'Cercopidae', 'Tíbias posteriores com 1 ou 2 espinhos.', 'Cigarrinhas-espumadeiras', 'uploads/insetos/familia_6a1cfa7165fe6.jfif', 1),
 (5, 1, 'Delphacidae', 'Tíbias posteriores com 1 esporão apical.', 'Delfacídeos', NULL, 1),
 (6, 1, 'Flatidae', 'Segundo artículo dos tarsos posteriores com 2 espinhos apicais.', 'Flatídeos', NULL, 1),
 (7, 1, 'Fulgoridae', 'Asas posteriores com a área anal reticulada.', 'Fulgurídeos', NULL, 1),
@@ -168,6 +188,28 @@ INSERT INTO `familias` (`id`, `ordem_id`, `nome`, `descricao`, `exemplos`, `imag
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `familia_exemplo_imagens`
+--
+
+CREATE TABLE `familia_exemplo_imagens` (
+  `id` int(11) NOT NULL,
+  `familia_id` int(11) NOT NULL,
+  `imagem` varchar(255) NOT NULL,
+  `ordem` int(11) NOT NULL DEFAULT 0,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `familia_exemplo_imagens`
+--
+
+INSERT INTO `familia_exemplo_imagens` (`id`, `familia_id`, `imagem`, `ordem`, `criado_em`) VALUES
+(2, 4, 'uploads/insetos/familia_exemplo_6a1cfe6696e6d.jfif', 1, '2026-06-01 03:37:10'),
+(3, 4, 'uploads/insetos/familia_exemplo_6a1cfe818ae56.jfif', 2, '2026-06-01 03:37:37');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `ordens`
 --
 
@@ -190,7 +232,7 @@ CREATE TABLE `ordens` (
 --
 
 INSERT INTO `ordens` (`id`, `nome`, `descricao`, `caracteristicas`, `exemplos`, `importancia_agricola`, `imagem`, `ativo`, `ordem_exibicao`, `criado_em`, `atualizado_em`) VALUES
-(1, 'Hemiptera-Auchenorrhyncha', 'Subordem de Hemiptera com antenas curtas com filamento apical e rostro originando-se da parte posterior da cabeça.', '[\"Peças bucais picadoras-sugadoras\",\"Rostro com origem na parte posterior da cabeça\",\"Antenas curtas e setáceas\",\"Asas anteriores uniformes em textura\"]', 'Cigarras, cigarrinhas', 'Importantes vetores de doenças em plantas agrícolas. Sugam seiva do floema e xilema.', '', 1, 1, '2026-04-08 18:51:52', '2026-04-08 18:51:52'),
+(1, 'Hemiptera-Auchenorrhyncha', 'Subordem de Hemiptera com antenas curtas com filamento apical e rostro originando-se da parte posterior da cabeça.', '[\"Peças bucais picadoras-sugadoras\",\"Rostro com origem na parte posterior da cabeça\",\"Antenas curtas e setáceas\",\"Asas anteriores uniformes em textura\"]', 'Cigarras, cigarrinhas', 'Importantes vetores de doenças em plantas agrícolas. Sugam seiva do floema e xilema.', 'uploads/insetos/ordem_6a166ad182e21.jpg', 1, 1, '2026-04-08 18:51:52', '2026-05-27 03:53:53'),
 (2, 'Hemiptera-Sternorrhyncha', 'Subordem de Hemiptera com antenas longas ou curtas sem filamento apical e rostro surgindo entre as coxas anteriores.', '[\"Rostro surgindo entre as coxas anteriores\",\"Antenas longas ou curtas sem filamento apical\",\"Corpo frequentemente coberto por secreções\"]', 'Pulgões, moscas-brancas, cochonilhas, psilídeos', 'Pragas de grande importância econômica. Causam danos diretos por sucção de seiva e indiretos como vetores de vírus.', '', 1, 2, '2026-04-08 18:51:52', '2026-04-08 18:51:52'),
 (3, 'Hemiptera-Heteroptera', 'Subordem de Hemiptera com hemiélitros e grande diversidade de hábitos.', '[\"Hemiélitros com parte basal coriácea e parte apical membranosa\",\"Glândulas odoríferas metatorácicas\",\"Metamorfose hemimetabólica\"]', 'Percevejos, barbeiros, baratas-d\'água, marigosas', 'Inclui pragas agrícolas importantes como percevejos da soja, além de predadores benéficos.', '', 1, 3, '2026-04-08 18:51:52', '2026-04-08 18:51:52'),
 (4, 'Orthoptera', 'Ordem com pernas posteriores saltatórias, antenas filiformes ou setáceas.', '[\"Pernas posteriores saltatórias\",\"Metamorfose hemimetabólica\",\"Tegminas coriáceas\",\"Cercos presentes\"]', 'Gafanhotos, grilos, esperanças, paquinhas', 'Gafanhotos podem causar devastação em lavouras. Grilos atacam plântulas e raízes.', '', 1, 4, '2026-04-08 18:51:52', '2026-04-08 18:51:52'),
@@ -225,11 +267,24 @@ ALTER TABLE `chave_passos`
   ADD KEY `nao_resultado_familia_id` (`nao_resultado_familia_id`);
 
 --
+-- Índices de tabela `configuracoes`
+--
+ALTER TABLE `configuracoes`
+  ADD PRIMARY KEY (`chave`);
+
+--
 -- Índices de tabela `familias`
 --
 ALTER TABLE `familias`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ordem_id` (`ordem_id`);
+
+--
+-- Índices de tabela `familia_exemplo_imagens`
+--
+ALTER TABLE `familia_exemplo_imagens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `familia_id` (`familia_id`);
 
 --
 -- Índices de tabela `ordens`
@@ -257,7 +312,13 @@ ALTER TABLE `chave_passos`
 -- AUTO_INCREMENT de tabela `familias`
 --
 ALTER TABLE `familias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+
+--
+-- AUTO_INCREMENT de tabela `familia_exemplo_imagens`
+--
+ALTER TABLE `familia_exemplo_imagens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `ordens`
@@ -282,9 +343,14 @@ ALTER TABLE `chave_passos`
 --
 ALTER TABLE `familias`
   ADD CONSTRAINT `familias_ibfk_1` FOREIGN KEY (`ordem_id`) REFERENCES `ordens` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `familia_exemplo_imagens`
+--
+ALTER TABLE `familia_exemplo_imagens`
+  ADD CONSTRAINT `familia_exemplo_imagens_ibfk_1` FOREIGN KEY (`familia_id`) REFERENCES `familias` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-

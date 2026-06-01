@@ -61,6 +61,7 @@ requireAdmin(); ?>
       <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php" class="active">Administradores</a>
+      <a href="configuracoes.php">Configurações</a>
       <a href="../index.php" target="_blank" rel="noopener">Ver Site</a>
     </div>
     <div class="sidebar-bottom"><a href="logout.php">Sair</a></div>

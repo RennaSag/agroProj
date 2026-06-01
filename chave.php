@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/ui-base.css?v=20260527">
-  <link rel="stylesheet" href="assets/css/site-chave.css?v=20260527-2">
+  <link rel="stylesheet" href="assets/css/site-chave.css?v=20260601-2">
 </head>
 
 <body>
@@ -19,7 +19,6 @@
       <h1 id="headerTitulo">Carregando.</h1>
       <p>Chave dicotômica</p>
     </div>
-    <span class="header-passo" id="headerPasso"></span>
   </header>
 
   <div class="chave-main">
@@ -51,6 +50,8 @@
     let ordemNome = '';
     let choiceHistory = [];
     let transitioning = false;
+    let exibirMiniaturasHistorico = true;
+    let examplePopoverTrigger = null;
 
     const progressBar = document.getElementById('progressBar');
     const progressFill = document.getElementById('progressFill');
@@ -81,14 +82,13 @@
     function updateProgress(passoAtual, total, concluido = false) {
       const progresso = concluido ? 100 : Math.round((passoAtual / total) * 100);
       const texto = concluido ?
-        'Identificação concluída (100%)' :
-        `Passo ${passoAtual} de ${total} (${progresso}%)`;
+        'Identificação concluída' :
+        `Passo ${passoAtual}`;
 
       progressFill.style.width = `${progresso}%`;
       progressBar.setAttribute('aria-valuenow', String(progresso));
       progressBar.setAttribute('aria-valuetext', texto);
       progressText.textContent = texto;
-      document.getElementById('headerPasso').textContent = concluido ? 'Identificado!' : `Passo ${passoAtual} de ${total}`;
     }
 
     function renderHistory() {
@@ -102,10 +102,27 @@
 
       historyList.innerHTML = choiceHistory.map(item => `
         <li>
-          <span class="history-step">Passo ${item.stepNumber}</span>
-          <strong>${escapeHtml(item.label)}</strong>
-          <span>${escapeHtml(item.description)}</span>
+          <div class="history-content">
+            <span class="history-step">Passo ${item.stepNumber}</span>
+            <strong>${escapeHtml(item.label)}</strong>
+            <span>${escapeHtml(item.description)}</span>
+          </div>
+          ${renderHistoryThumb(item)}
         </li>`).join('');
+    }
+
+    function renderHistoryThumb(item) {
+      if (!exibirMiniaturasHistorico) return '';
+
+      if (item.image) {
+        return `<img src="${escapeHtml(item.image)}" class="history-thumb" alt="Imagem da ${escapeHtml(item.label.toLowerCase())} selecionada no passo ${item.stepNumber}">`;
+      }
+
+      return `
+        <div class="history-thumb history-thumb-empty" role="img" aria-label="Imagem não cadastrada para a ${escapeHtml(item.label.toLowerCase())} selecionada no passo ${item.stepNumber}">
+          <span aria-hidden="true">▧</span>
+          <small>Sem imagem</small>
+        </div>`;
     }
 
     function focusCurrentHeading(id) {
@@ -125,6 +142,16 @@
         ordemNome = ordem.nome;
         document.getElementById('headerTitulo').textContent = ordemNome;
         document.title = ordemNome;
+
+        try {
+          const rc = await fetch('api.php?action=configuracoes_chave');
+          if (rc.ok) {
+            const configuracoes = await rc.json();
+            exibirMiniaturasHistorico = configuracoes.exibir_miniaturas_historico !== false;
+          }
+        } catch (erroConfig) {
+          exibirMiniaturasHistorico = true;
+        }
 
         const rp = await fetch(`api.php?action=passos&ordem_id=${ordemId}`);
         passos = await rp.json();
@@ -202,12 +229,14 @@
       const isSim = escolha === 'sim';
       const label = isSim ? 'Opção A' : 'Opção B';
       const description = isSim ? p.opcao_sim_texto : p.opcao_nao_texto;
+      const image = isSim ? p.sim_imagem : p.nao_imagem;
 
       choiceHistory.push({
         fromIndex: idx,
         stepNumber: idx + 1,
         label,
-        description: description || (isSim ? 'Característica presente' : 'Característica ausente')
+        description: description || (isSim ? 'Característica presente' : 'Característica ausente'),
+        image: image || ''
       });
       renderHistory();
 
@@ -218,7 +247,8 @@
               nome: p.sim_familia,
               descricao: p.sim_desc,
               exemplos: p.sim_ex,
-              imagem: p.sim_img
+              imagem: p.sim_img,
+              exemplo_imagens: p.sim_exemplo_imagens || []
             });
             return;
           } else if (p.sim_leva_passo) {
@@ -234,7 +264,8 @@
               nome: p.nao_familia,
               descricao: p.nao_desc,
               exemplos: p.nao_ex,
-              imagem: p.nao_img
+              imagem: p.nao_img,
+              exemplo_imagens: p.nao_exemplo_imagens || []
             });
             return;
           } else if (p.nao_leva_passo) {
@@ -256,6 +287,65 @@
       }, 160);
     }
 
+    function renderExampleImages(familia) {
+      const imagens = Array.isArray(familia.exemplo_imagens) ? familia.exemplo_imagens : [];
+      if (!imagens.length) return '';
+
+      const nomeFamilia = familia.nome || 'família identificada';
+      const thumbs = imagens.map((item, index) => {
+        const src = item.imagem || item;
+        const label = `Imagem de exemplo ${index + 1} de ${nomeFamilia}`;
+        return `
+          <button type="button" class="example-thumb" data-example-src="${escapeHtml(src)}" data-example-alt="${escapeHtml(label)}" aria-label="Ampliar ${escapeHtml(label)}">
+            <img src="${escapeHtml(src)}" alt="${escapeHtml(label)}">
+          </button>`;
+      }).join('');
+
+      return `
+        <div class="resultado-example-gallery" aria-label="Imagens de exemplos da família">
+          <div class="example-thumbs">${thumbs}</div>
+          <div class="example-popover" id="examplePopover" role="dialog" aria-modal="true" aria-label="Imagem ampliada do exemplo" hidden>
+            <div class="example-popover-card">
+              <button type="button" class="example-popover-close" id="closeExamplePopover" aria-label="Fechar imagem ampliada">&times;</button>
+              <img id="examplePopoverImg" src="" alt="">
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function openExamplePopover(button) {
+      const popover = document.getElementById('examplePopover');
+      const popoverImg = document.getElementById('examplePopoverImg');
+      const closeButton = document.getElementById('closeExamplePopover');
+      const gallery = button.closest('.resultado-example-gallery');
+      if (!popover || !popoverImg || !closeButton || !gallery) return;
+
+      examplePopoverTrigger = button;
+      popoverImg.src = button.dataset.exampleSrc;
+      popoverImg.alt = button.dataset.exampleAlt || 'Imagem de exemplo ampliada';
+      popover.hidden = false;
+      document.body.classList.add('example-viewer-open');
+      closeButton.focus();
+    }
+
+    function closeExamplePopover(returnFocus = true) {
+      const popover = document.getElementById('examplePopover');
+      const popoverImg = document.getElementById('examplePopoverImg');
+      if (!popover || popover.hidden) return;
+
+      popover.hidden = true;
+      if (popoverImg) {
+        popoverImg.removeAttribute('src');
+        popoverImg.alt = '';
+      }
+      document.body.classList.remove('example-viewer-open');
+
+      if (returnFocus && examplePopoverTrigger) {
+        examplePopoverTrigger.focus();
+      }
+      examplePopoverTrigger = null;
+    }
+
     function renderResultado(familia) {
       transitioning = false;
       updateProgress(1, 1, true);
@@ -263,6 +353,7 @@
       const imgHtml = familia.imagem ?
         `<img src="${escapeHtml(familia.imagem)}" class="resultado-img" alt="${escapeHtml(familia.nome)}">` :
         `<div class="resultado-img-placeholder" role="img" aria-label="Imagem não cadastrada"><span aria-hidden="true">▧</span>Imagem não cadastrada</div>`;
+      const exampleImagesHtml = renderExampleImages(familia);
 
       conteudo.innerHTML = `
         <div class="resultado-card" aria-labelledby="resultadoTitulo">
@@ -273,10 +364,11 @@
             <div class="resultado-ordem">Ordem: <em>${escapeHtml(ordemNome)}</em></div>
           </div>
           ${imgHtml}
-          ${familia.descricao || familia.exemplos ? `
+          ${familia.descricao || familia.exemplos || exampleImagesHtml ? `
             <div class="resultado-desc">
               ${familia.descricao ? `<p>${escapeHtml(familia.descricao)}</p>` : ''}
               ${familia.exemplos ? `<p class="resultado-exemplos"><strong>Exemplos:</strong> ${escapeHtml(familia.exemplos)}</p>` : ''}
+              ${exampleImagesHtml}
             </div>` : ''}
           <div class="resultado-acoes">
             <button type="button" class="btn btn-outline" id="restartKey">Refazer identificação</button>
@@ -309,11 +401,41 @@
         return;
       }
 
+      const exampleThumb = event.target.closest('.example-thumb');
+      if (exampleThumb) {
+        openExamplePopover(exampleThumb);
+        return;
+      }
+
+      if (event.target.closest('#closeExamplePopover')) {
+        closeExamplePopover();
+        return;
+      }
+
       if (event.target.closest('#restartKey')) {
         reiniciarIdentificacao();
       }
     });
     backStep.addEventListener('click', voltarPassoAnterior);
+    document.addEventListener('click', event => {
+      const popover = document.getElementById('examplePopover');
+      if (!popover || popover.hidden) return;
+      if (event.target.closest('.example-thumb')) return;
+      if (event.target === popover) {
+        closeExamplePopover(false);
+      }
+    });
+    document.addEventListener('focusin', event => {
+      const popover = document.getElementById('examplePopover');
+      if (!popover || popover.hidden) return;
+      if (event.target.closest('#examplePopover') || event.target.closest('.example-thumb')) return;
+      closeExamplePopover(false);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        closeExamplePopover();
+      }
+    });
 
     init();
   </script>

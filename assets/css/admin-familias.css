@@ -370,3 +370,70 @@
       margin-top: 10px
     }
 
+    .example-count-badge {
+      background: var(--verde-bg);
+      border: 1px solid var(--verde-borda);
+      border-radius: 999px;
+      color: var(--verde);
+      display: inline-flex;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      white-space: nowrap
+    }
+
+    .example-images-field {
+      background: #f8fbf8;
+      border: 1px solid var(--verde-borda);
+      border-radius: 12px;
+      padding: 18px
+    }
+
+    .example-images-current,
+    .example-images-preview {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      margin-top: 14px
+    }
+
+    .example-image-admin-card,
+    .example-image-preview-item {
+      background: var(--branco);
+      border: 1px solid var(--verde-borda);
+      border-radius: 10px;
+      color: var(--texto-suave);
+      display: flex;
+      flex-direction: column;
+      font-size: 0.82rem;
+      gap: 8px;
+      overflow: hidden;
+      padding: 8px
+    }
+
+    .example-image-admin-card {
+      cursor: pointer
+    }
+
+    .example-image-admin-card img,
+    .example-image-preview-item img {
+      aspect-ratio: 4 / 3;
+      border-radius: 7px;
+      object-fit: cover;
+      width: 100%
+    }
+
+    .example-image-admin-card span,
+    .example-image-preview-item span {
+      align-items: center;
+      display: flex;
+      gap: 7px;
+      min-height: 28px;
+      overflow-wrap: anywhere
+    }
+
+    .example-image-admin-card input {
+      accent-color: #c0392b;
+      height: 16px;
+      width: 16px
+    }
