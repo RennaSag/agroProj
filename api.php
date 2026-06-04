@@ -16,7 +16,7 @@ switch ($action) {
 
     case 'ordem':
         $id = (int)($_GET['id'] ?? 0);
-        $stmt = $pdo->prepare("SELECT * FROM ordens WHERE id=? AND ativo=1");
+        $stmt = $pdo->prepare("SELECT * FROM ordens WHERE id=? AND ativo=TRUE");
         $stmt->execute([$id]);
         $ordem = $stmt->fetch();
         if (!$ordem) {
