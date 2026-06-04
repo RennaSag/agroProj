@@ -26,7 +26,9 @@ requireAdmin(); ?>
   $erro = '';
 
  
-  $ordens = $pdo->query("SELECT id, nome FROM ordens WHERE ativo=1 ORDER BY ordem_exibicao, id")->fetchAll();
+$ordens = $pdo->query(
+    "SELECT id, nome FROM ordens WHERE ativo = TRUE ORDER BY ordem_exibicao, id"
+)->fetchAll();
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = trim($_POST['nome'] ?? '');

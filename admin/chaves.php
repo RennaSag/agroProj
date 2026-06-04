@@ -26,7 +26,7 @@ requireAdmin(); ?>
   $msg = '';
   $erro = '';
 
-  $ordens = $pdo->query("SELECT id, nome FROM ordens WHERE ativo=1 ORDER BY ordem_exibicao, id")->fetchAll();
+  $ordens = $pdo->query("SELECT id, nome FROM ordens WHERE ativo=TRUE ORDER BY ordem_exibicao, id")->fetchAll();
 
   function getFamilias($pdo, $ordem_id)
   {
