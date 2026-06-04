@@ -26,7 +26,7 @@ function getDB()
                 ]
             );
         } catch (PDOException $e) {
-            die(json_encode(['error' => 'Erro de conexão: ' . $e->getMessage()]));
+            die(json_encode(['error' => 'erro de conexao: ' . $e->getMessage()]));
         }
     }
     return $pdo;
@@ -34,14 +34,14 @@ function getDB()
 
 define('UPLOAD_DIR', __DIR__ . '/../uploads/insetos/');
 define('UPLOAD_URL', 'uploads/insetos/');
-define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
+define('MAX_FILE_SIZE', 5 * 1024 * 1024);
 define('ALLOWED_TYPES', ['image/jpeg', 'image/png', 'image/webp']);
 
 function uploadImagem($file, $prefixo = 'inseto')
 {
     if (!isset($file['tmp_name']) || empty($file['tmp_name'])) return null;
-    if ($file['size'] > MAX_FILE_SIZE) return ['error' => 'Arquivo muito grande (máx 5MB)'];
-    if (!in_array($file['type'], ALLOWED_TYPES)) return ['error' => 'Tipo não permitido. Use JPG, PNG ou WebP'];
+    if ($file['size'] > MAX_FILE_SIZE) return ['error' => 'arquivo muito grande (max 5mb)'];
+    if (!in_array($file['type'], ALLOWED_TYPES)) return ['error' => 'tipo nao permitido. use jpg, png ou webp'];
 
     $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
     $nome = $prefixo . '_' . uniqid() . '.' . strtolower($ext);
@@ -51,7 +51,7 @@ function uploadImagem($file, $prefixo = 'inseto')
     if (move_uploaded_file($file['tmp_name'], $destino)) {
         return UPLOAD_URL . $nome;
     }
-    return ['error' => 'Falha ao salvar arquivo'];
+    return ['error' => 'falha ao salvar arquivo'];
 }
 
 function isAdmin()
@@ -66,7 +66,8 @@ function requireAdmin()
         exit;
     }
 }
-//requerimento de adm pras paginas
+
+// requerimento de adm pras paginas
 
 function ensureConfiguracoesTable($pdo = null)
 {
@@ -76,19 +77,20 @@ function ensureConfiguracoesTable($pdo = null)
             chave varchar(100) NOT NULL,
             valor varchar(255) NOT NULL,
             descricao varchar(255) DEFAULT NULL,
-            atualizado_em timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+            atualizado_em timestamp NOT NULL DEFAULT current_timestamp,
             PRIMARY KEY (chave)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        )
     ");
 
     $stmt = $pdo->prepare("
-        INSERT IGNORE INTO configuracoes (chave, valor, descricao)
+        INSERT INTO configuracoes (chave, valor, descricao)
         VALUES (?, ?, ?)
+        ON CONFLICT (chave) DO NOTHING
     ");
     $stmt->execute([
         'exibir_miniaturas_historico',
         '1',
-        'Exibir miniaturas das opções no histórico da identificação'
+        'exibir miniaturas das opcoes no historico da identificacao'
     ]);
 }
 
@@ -112,9 +114,10 @@ function setConfiguracao($chave, $valor, $descricao = null)
     $stmt = $pdo->prepare("
         INSERT INTO configuracoes (chave, valor, descricao)
         VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE
-            valor = VALUES(valor),
-            descricao = VALUES(descricao)
+        ON CONFLICT (chave) DO UPDATE
+            SET valor = EXCLUDED.valor,
+                descricao = EXCLUDED.descricao,
+                atualizado_em = current_timestamp
     ");
     $stmt->execute([$chave, $valor, $descricao]);
 }
@@ -130,17 +133,19 @@ function ensureFamiliaExemploImagensTable($pdo = null)
     $pdo = $pdo ?: getDB();
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS familia_exemplo_imagens (
-            id int(11) NOT NULL AUTO_INCREMENT,
-            familia_id int(11) NOT NULL,
+            id serial PRIMARY KEY,
+            familia_id integer NOT NULL,
             imagem varchar(255) NOT NULL,
-            ordem int(11) NOT NULL DEFAULT 0,
-            criado_em timestamp NOT NULL DEFAULT current_timestamp(),
-            PRIMARY KEY (id),
-            KEY familia_id (familia_id),
+            ordem integer NOT NULL DEFAULT 0,
+            criado_em timestamp NOT NULL DEFAULT current_timestamp,
             CONSTRAINT familia_exemplo_imagens_ibfk_1
                 FOREIGN KEY (familia_id) REFERENCES familias (id)
                 ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        )
+    ");
+    $pdo->exec("
+        CREATE INDEX IF NOT EXISTS idx_familia_exemplo_imagens_familia_id
+        ON familia_exemplo_imagens (familia_id)
     ");
 }
 
