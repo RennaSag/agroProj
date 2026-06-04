@@ -14,7 +14,7 @@
 <body>
 
   <header>
-  <h1>Chave de Classificação para Algumas Ordens e Famílias da Classe Insecta</h1>
+  <h1>Chaves de Classificação Entomoólicas</h1>
   <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
   <div class="header-accent"></div>
   <a href="admin/check_auth.php" class="admin-link">Área administrativa</a>
