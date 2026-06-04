@@ -31,7 +31,7 @@ requireAdmin(); ?>
   function getFamilias($pdo, $ordem_id)
   {
     if (!$ordem_id) return [];
-    $stmt = $pdo->prepare("SELECT id, nome FROM familias WHERE ordem_id=? AND ativo=1 ORDER BY nome");
+    $stmt = $pdo->prepare("SELECT id, nome FROM familias WHERE ordem_id=? AND ativo=TRUE ORDER BY nome");
     $stmt->execute([$ordem_id]);
     return $stmt->fetchAll();
   }

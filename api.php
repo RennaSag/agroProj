@@ -10,7 +10,7 @@ $pdo = getDB();
 switch ($action) {
 
     case 'ordens':
-        $stmt = $pdo->query("SELECT id, nome, imagem FROM ordens WHERE ativo=1 ORDER BY ordem_exibicao, id");
+        $stmt = $pdo->query("SELECT id, nome, imagem FROM ordens WHERE ativo=TRUE ORDER BY ordem_exibicao, id");
         echo json_encode($stmt->fetchAll());
         break;
 
@@ -25,7 +25,7 @@ switch ($action) {
         }
 
         // Busca famílias da ordem
-        $sf = $pdo->prepare("SELECT nome FROM familias WHERE ordem_id=? AND ativo=1 ORDER BY nome");
+        $sf = $pdo->prepare("SELECT nome FROM familias WHERE ordem_id=? AND ativo=TRUE ORDER BY nome");
         $sf->execute([$id]);
         $ordem['familias'] = array_column($sf->fetchAll(), 'nome');
 
