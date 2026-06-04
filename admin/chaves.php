@@ -36,22 +36,7 @@ requireAdmin(); ?>
     return $stmt->fetchAll();
   }
 
-  function ensureChaveImagemColumns($pdo)
-  {
-    $cols = $pdo->query("SHOW COLUMNS FROM chave_passos")->fetchAll();
-    $names = array_column($cols, 'Field');
-
-    if (!in_array('sim_imagem', $names, true)) {
-      $pdo->exec("ALTER TABLE chave_passos ADD sim_imagem varchar(255) DEFAULT NULL AFTER opcao_sim_texto");
-    }
-
-    if (!in_array('nao_imagem', $names, true)) {
-      $pdo->exec("ALTER TABLE chave_passos ADD nao_imagem varchar(255) DEFAULT NULL AFTER opcao_nao_texto");
-    }
-  }
-
-  ensureChaveImagemColumns($pdo);
-
+ 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $oid = (int)$_POST['ordem_id'];
     $pergunta = trim($_POST['pergunta'] ?? '');
