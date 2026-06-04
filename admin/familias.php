@@ -10,20 +10,50 @@ requireAdmin(); ?>
   <title>Famílias</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/ui-base.css?v=20260527">
-  <link rel="stylesheet" href="../assets/css/admin-familias.css?v=20260527">
-  <link rel="stylesheet" href="../assets/css/admin-responsive.css?v=20260527">
+  <link rel="stylesheet" href="../assets/css/admin-familias.css?v=20260601">
+  <link rel="stylesheet" href="../assets/css/admin-responsive.css?v=20260601">
 </head>
 
 <body>
   <?php
-  
-  requireAdmin();
   $pdo = getDB();
+  ensureFamiliaExemploImagensTable($pdo);
   $acao = $_GET['acao'] ?? 'listar';
   $id = (int)($_GET['id'] ?? 0);
   $filtro_ordem = (int)($_GET['ordem_id'] ?? 0);
   $msg = '';
   $erro = '';
+
+  function salvarExemploImagensFamilia($familiaId, $files, $pdo, &$erro)
+  {
+    if (!isset($files['name']) || !is_array($files['name'])) return;
+
+    foreach ($files['name'] as $index => $nomeOriginal) {
+      $codigoErro = $files['error'][$index] ?? UPLOAD_ERR_NO_FILE;
+      if ($codigoErro === UPLOAD_ERR_NO_FILE) continue;
+
+      if ($codigoErro !== UPLOAD_ERR_OK) {
+        $erro = 'Não foi possível enviar uma das imagens de exemplo.';
+        return;
+      }
+
+      $arquivo = [
+        'name' => $nomeOriginal,
+        'type' => $files['type'][$index] ?? '',
+        'tmp_name' => $files['tmp_name'][$index] ?? '',
+        'error' => $codigoErro,
+        'size' => $files['size'][$index] ?? 0,
+      ];
+
+      $upload = uploadImagem($arquivo, 'familia_exemplo');
+      if (is_string($upload)) {
+        adicionarFamiliaExemploImagem($familiaId, $upload, $pdo);
+      } elseif (is_array($upload)) {
+        $erro = $upload['error'];
+        return;
+      }
+    }
+  }
 
  
 $ordens = $pdo->query(
@@ -48,30 +78,56 @@ $ordens = $pdo->query(
       if ($_POST['form_acao'] === 'novo') {
         $stmt = $pdo->prepare("INSERT INTO familias (ordem_id,nome,descricao,exemplos,imagem,ativo) VALUES (?,?,?,?,?,?)");
         $stmt->execute([$ordem_id, $nome, $descricao, $exemplos, $imagem, $ativo]);
-        $msg = 'Família cadastrada!';
-        $acao = 'listar';
+        $familiaId = (int)$pdo->lastInsertId();
+        salvarExemploImagensFamilia($familiaId, $_FILES['exemplo_imagens'] ?? [], $pdo, $erro);
+        if (!$erro) {
+          $msg = 'Família cadastrada!';
+          $acao = 'listar';
+        } else {
+          $id = $familiaId;
+          $acao = 'editar';
+        }
       } elseif ($_POST['form_acao'] === 'editar') {
         $pid = (int)$_POST['id'];
         $stmt = $pdo->prepare("UPDATE familias SET ordem_id=?,nome=?,descricao=?,exemplos=?,imagem=?,ativo=? WHERE id=?");
         $stmt->execute([$ordem_id, $nome, $descricao, $exemplos, $imagem, $ativo, $pid]);
-        $msg = 'Família atualizada!';
-        $acao = 'listar';
+
+        foreach ((array)($_POST['remover_exemplo_imagens'] ?? []) as $imagemId) {
+          removerFamiliaExemploImagem((int)$imagemId, $pid, $pdo);
+        }
+
+        salvarExemploImagensFamilia($pid, $_FILES['exemplo_imagens'] ?? [], $pdo, $erro);
+        if (!$erro) {
+          $msg = 'Família atualizada!';
+          $acao = 'listar';
+        } else {
+          $id = $pid;
+          $acao = 'editar';
+        }
       }
     }
   }
 
   if ($acao === 'deletar' && $id) {
+    foreach (getFamiliaExemploImagens($id, $pdo) as $imagemExemplo) {
+      removerArquivoUpload($imagemExemplo['imagem']);
+    }
     $pdo->prepare("DELETE FROM familias WHERE id=?")->execute([$id]);
     $msg = 'Família excluída.';
     $acao = 'listar';
   }
 
   $familia_edit = null;
+  $familia_exemplo_imagens = [];
   if ($acao === 'editar' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM familias WHERE id=?");
     $stmt->execute([$id]);
     $familia_edit = $stmt->fetch();
-    if (!$familia_edit) $acao = 'listar';
+    if (!$familia_edit) {
+      $acao = 'listar';
+    } else {
+      $familia_exemplo_imagens = getFamiliaExemploImagens($id, $pdo);
+    }
   }
   ?>
 
@@ -88,6 +144,7 @@ $ordens = $pdo->query(
       <a href="chaves.php">Chaves Dicotômicas</a>
       <div class="nav-section">Sistema</div>
       <a href="admins.php">Administradores</a>
+      <a href="configuracoes.php">Configurações</a>
       <a href="../index.php" target="_blank" rel="noopener">Ver Site</a>
     </div>
     <div class="sidebar-bottom"><a href="logout.php">Sair</a></div>
@@ -108,7 +165,14 @@ $ordens = $pdo->query(
 
       <?php if ($acao === 'listar'):
         $where = $filtro_ordem ? "WHERE f.ordem_id=$filtro_ordem" : "";
-        $familias = $pdo->query("SELECT f.*, o.nome AS ordem_nome FROM familias f JOIN ordens o ON o.id=f.ordem_id $where ORDER BY o.ordem_exibicao, f.nome")->fetchAll();
+        $familias = $pdo->query("
+          SELECT f.*, o.nome AS ordem_nome,
+                 (SELECT COUNT(*) FROM familia_exemplo_imagens fei WHERE fei.familia_id = f.id) AS exemplo_imagens_total
+          FROM familias f
+          JOIN ordens o ON o.id=f.ordem_id
+          $where
+          ORDER BY o.ordem_exibicao, f.nome
+        ")->fetchAll();
       ?>
         <div class="filter-bar">
           <span style="font-size:0.9rem;color:var(--texto-suave)">Filtrar por ordem:</span>
@@ -128,6 +192,7 @@ $ordens = $pdo->query(
                 <th>Nome</th>
                 <th>Ordem</th>
                 <th>Exemplos</th>
+                <th>Imagens de exemplos</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -147,6 +212,9 @@ $ordens = $pdo->query(
                   </td>
                   <td><span class="tag-ordem"><?= htmlspecialchars($f['ordem_nome']) ?></span></td>
                   <td style="color:var(--texto-suave);font-size:0.88rem"><?= htmlspecialchars(mb_strimwidth($f['exemplos'] ?? '', 0, 50, '…')) ?></td>
+                  <td>
+                    <span class="example-count-badge"><?= (int)$f['exemplo_imagens_total'] ?> imagem(ns)</span>
+                  </td>
                   <td><div class="admin-table-actions">
                     <a href="?acao=editar&id=<?= $f['id'] ?>" class="btn-sm btn-edit">Editar</a>
                     <a href="?acao=deletar&id=<?= $f['id'] ?>" class="btn-sm btn-del" onclick="return confirm('Excluir?')">Excluir</a>
@@ -207,6 +275,31 @@ $ordens = $pdo->query(
                 </div>
               </div>
 
+              <div class="form-group example-images-field">
+                <label class="lbl">Imagens de exemplos</label>
+                <input type="file" id="exemploImagens" name="exemplo_imagens[]" class="form-control" accept="image/*" multiple>
+                <p class="hint">Envie uma ou mais imagens para ilustrar os exemplos da família. JPG, PNG ou WebP - máx 5MB por arquivo.</p>
+                <div id="exampleImagesPreview" class="example-images-preview" hidden></div>
+
+                <?php if ($acao === 'editar'): ?>
+                  <?php if ($familia_exemplo_imagens): ?>
+                    <div class="example-images-current" aria-label="Imagens de exemplos cadastradas">
+                      <?php foreach ($familia_exemplo_imagens as $imagemExemplo): ?>
+                        <label class="example-image-admin-card">
+                          <img src="../<?= htmlspecialchars($imagemExemplo['imagem']) ?>" alt="Imagem de exemplo cadastrada">
+                          <span>
+                            <input type="checkbox" name="remover_exemplo_imagens[]" value="<?= (int)$imagemExemplo['id'] ?>">
+                            Remover
+                          </span>
+                        </label>
+                      <?php endforeach; ?>
+                    </div>
+                  <?php else: ?>
+                    <div class="upload-empty">Nenhuma imagem de exemplo cadastrada para esta família.</div>
+                  <?php endif; ?>
+                <?php endif; ?>
+              </div>
+
               <div class="form-group">
                 <label class="lbl">Imagem</label>
                 <input type="file" name="imagem" class="form-control" accept="image/*" onchange="previewImg(this)">
@@ -244,6 +337,42 @@ $ordens = $pdo->query(
         };
         r.readAsDataURL(input.files[0]);
       }
+    }
+
+    const exemploInput = document.getElementById('exemploImagens');
+    const exemploPreview = document.getElementById('exampleImagesPreview');
+    if (exemploInput && exemploPreview) {
+      exemploInput.addEventListener('change', () => {
+        exemploPreview.innerHTML = '';
+        const files = Array.from(exemploInput.files || []).filter(file => file.type.startsWith('image/'));
+
+        if (!files.length) {
+          exemploPreview.hidden = true;
+          return;
+        }
+
+        files.forEach(file => {
+          const item = document.createElement('div');
+          item.className = 'example-image-preview-item';
+
+          const img = document.createElement('img');
+          img.alt = `Pré-visualização de ${file.name}`;
+
+          const caption = document.createElement('span');
+          caption.textContent = file.name;
+
+          const reader = new FileReader();
+          reader.addEventListener('load', event => {
+            img.src = event.target.result;
+          });
+          reader.readAsDataURL(file);
+
+          item.append(img, caption);
+          exemploPreview.appendChild(item);
+        });
+
+        exemploPreview.hidden = false;
+      });
     }
   </script>
   <script src="../assets/js/admin-layout.js?v=20260527"></script>
