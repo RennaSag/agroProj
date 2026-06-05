@@ -1,8 +1,35 @@
-# Documentacao do Sistema - Chave Entomologica
+# Chave Entomológica
 
-## Visao Geral
+Sistema web para classificação de insetos da Classe Insecta, desenvolvido como projeto acadêmico no **IF Goiano**. Permite que alunos identifiquem famílias de insetos por meio de chaves dicotômicas interativas, com painel administrativo completo para gerenciamento do conteúdo.
 
-Sistema web para classificacao entomologica de insetos da Classe Insecta. Permite que alunos identifiquem familias de insetos por meio de chaves dicotomicas interativas. Possui painel administrativo para gerenciamento de ordens, familias e chaves.
+**[Acesse o sistema](https://agroproj-plgg.onrender.com/)**
+
+---
+
+## Funcionalidades
+
+**Área pública**
+- Listagem de ordens em grid de cards com imagem e descrição
+- Modal com características, exemplos e importância agrícola de cada ordem
+- **Specimen Match**: navegação passo a passo pela chave dicotômica com comparação visual lado a lado entre duas alternativas
+
+**Painel administrativo** *(requer autenticação)*
+- Dashboard com contadores gerais
+- CRUD completo de ordens, famílias e passos da chave dicotômica
+- Upload de imagens para ordens, famílias e alternativas da chave
+- Gerenciamento de administradores
+
+---
+
+## Tecnologias
+
+| Camada | Tecnologia |
+|--------|-----------|
+| Backend | PHP (PDO + prepared statements) |
+| Banco de dados | PostgreSQL (Neon) |
+| Frontend | HTML, CSS, JavaScript vanilla |
+| Infraestrutura | Docker + Render |
+| Fontes | Playfair Display, Source Sans 3 |
 
 ---
 
@@ -10,164 +37,115 @@ Sistema web para classificacao entomologica de insetos da Classe Insecta. Permit
 
 ```
 /
-|-- index.php              - pagina principal (listagem de ordens)
-|-- chave.php              - interface da chave dicotomica
-|-- api.php                - api publica (json)
-|-- gerar_senha.php        - utilitario para gerar hash de senha
-|-- teste.php              - utilitario de teste de autenticacao
-|-- .env                   - configuracoes locais (nao versionar)
-|-- .env.example           - modelo das configuracoes locais
-|-- assets/
-|   |-- css/               - estilos separados das paginas PHP
-|   `-- js/                - scripts separados das paginas PHP
-|-- includes/
-|   |-- config.php         - carregamento das variaveis do .env
-|   `-- db.php             - conexao com banco e funcoes auxiliares
-|-- admin/
-|   |-- index.php          - dashboard administrativo
-|   |-- ordens.php         - crud de ordens
-|   |-- familias.php       - crud de familias
-|   |-- chaves.php         - crud de passos da chave dicotomica
-|   |-- admins.php         - gerenciamento de administradores
-|   |-- login.php          - autenticacao do admin
-|   |-- logout.php         - controle de logout
-|   `-- check_auth.php     - controle de login
-|-- database/
-|   `-- entomologia.sql    - estrutura e carga inicial do banco
-|-- graphify-out/          - mapeamento de dependencias e arquitetura do sistema
-`-- docs/
-    |-- telas/                                     - capturas das telas do sistema
-    |-- RELATORIO_ALTERACOES_UI_ACESSIBILIDADE.md  - relatorio das melhorias
-    `-- Diagrama de caso de uso.PNG
+├── index.php                   # Página principal - listagem de ordens
+├── chave.php                   # Interface da chave dicotômica (Specimen Match)
+├── api.php                     # Endpoint JSON interno
+├── gerar_senha.php             # Utilitário para gerar hash de senha
+├── Dockerfile                  # Configuração do container
+├── .env.example                # Modelo das variáveis de ambiente
+├── .gitignore
+├── admin/
+│   ├── index.php               # Dashboard administrativo
+│   ├── ordens.php              # CRUD de ordens
+│   ├── familias.php            # CRUD de famílias
+│   ├── chaves.php              # CRUD de passos da chave dicotômica
+│   ├── admins.php              # Gerenciamento de administradores
+│   ├── configuracoes.php       # Configurações do sistema
+│   ├── login.php               # Autenticação do admin
+│   ├── logout.php              # Controle de logout
+│   └── check_auth.php          # Middleware de autenticação
+├── assets/
+│   ├── css/
+│   │   ├── ui-base.css         # Estilos base compartilhados
+│   │   ├── site-home.css       # Estilos da página principal
+│   │   ├── site-chave.css      # Estilos da chave dicotômica
+│   │   ├── admin-index.css
+│   │   ├── admin-ordens.css
+│   │   ├── admin-familias.css
+│   │   ├── admin-chaves.css
+│   │   ├── admin-admins.css
+│   │   ├── admin-login.css
+│   │   └── admin-responsive.css
+│   └── js/
+│       └── admin-layout.js
+├── includes/
+│   ├── config.php              # Carregamento das variáveis do .env
+│   └── db.php                  # Conexão com banco e funções auxiliares
+├── database/
+│   └── entomologia.sql         # Estrutura e carga inicial do banco
+├── uploads/
+│   └── insetos/                # Imagens enviadas via painel admin
+├── docs/
+│   ├── telas/                  # Capturas de tela do sistema
+│   ├── Diagrama de caso de uso.PNG
+│   └── RELATORIO_ALTERACOES_UI_ACESSIBILIDADE.md
+└── graphify-out/               # Mapeamento de dependências do projeto
+```
+
+---
+
+## Como rodar localmente
+
+### Pré-requisitos
+- Docker e Docker Compose **ou** PHP 8+ com PostgreSQL
+
+### Com Docker
+
+```bash
+git clone https://github.com/RennaSag/agroProj.git
+cd agroProj
+cp .env.example .env
+# Preencha as variáveis de ambiente no .env
+docker compose up --build
+```
+
+### Sem Docker
+
+```bash
+git clone https://github.com/RennaSag/agroProj.git
+cd agroProj
+cp .env.example .env
+# Preencha as variáveis de ambiente no .env
+# Importe database/entomologia.sql no seu PostgreSQL
+# Sirva o projeto com PHP built-in server ou Apache/Nginx
+php -S localhost:8000
+```
+
+---
+
+## Variáveis de Ambiente
+
+Copie `.env.example` para `.env` e preencha com o exemplo, ou use o painel environment do render:
+
+```env
+DB_HOST=
+DB_PORT=
+DB_NAME=
+DB_USER=
+DB_PASS=
 ```
 
 ---
 
 ## Banco de Dados
 
-As credenciais do banco ficam no arquivo `.env`.
-Use `.env.example` como modelo ao configurar o projeto em outra maquina.
+O schema completo está em `database/entomologia.sql`, com a variação em PostgreSQL. As principais tabelas são:
 
-### Tabelas
-
-#### admins
-| campo      | tipo         | descricao                    |
-|------------|--------------|------------------------------|
-| id         | int PK AI    | identificador                |
-| nome       | varchar(100) | nome do administrador        |
-| email      | varchar(150) | email (unico)                |
-| senha      | varchar(255) | hash md5 da senha            |
-| criado_em  | timestamp    | data de criacao              |
-
-#### ordens
-| campo               | tipo         | descricao                              |
-|---------------------|--------------|----------------------------------------|
-| id                  | int PK AI    | identificador                          |
-| nome                | varchar(100) | nome da ordem ou subordem              |
-| descricao           | text         | descricao geral                        |
-| caracteristicas     | text         | json array de caracteristicas          |
-| exemplos            | varchar(255) | exemplos de insetos                    |
-| importancia_agricola| text         | relevancia agricola                    |
-| imagem              | varchar(255) | caminho da imagem                      |
-| ativo               | tinyint(1)   | visibilidade no site                   |
-| ordem_exibicao      | int          | ordenacao na listagem                  |
-| criado_em           | timestamp    | data de criacao                        |
-| atualizado_em       | timestamp    | data de atualizacao                    |
-
-#### familias
-| campo      | tipo         | descricao                        |
-|------------|--------------|----------------------------------|
-| id         | int PK AI    | identificador                    |
-| ordem_id   | int FK       | referencia a ordens              |
-| nome       | varchar(100) | nome da familia                  |
-| descricao  | text         | descricao da familia             |
-| exemplos   | varchar(255) | exemplos de insetos              |
-| imagem     | varchar(255) | caminho da imagem                |
-| ativo      | tinyint(1)   | visibilidade no site             |
-
-#### chave_passos
-| campo                   | tipo         | descricao                                 |
-|-------------------------|--------------|-------------------------------------------|
-| id                      | int PK AI    | identificador                             |
-| ordem_id                | int FK       | referencia a ordens                       |
-| passo_numero            | int          | numero sequencial do passo                |
-| pergunta                | text         | pergunta dicotomica                       |
-| opcao_sim_texto         | varchar(255) | texto descritivo da opcao sim             |
-| sim_imagem              | varchar(255) | imagem da opcao A (caminho sim)           |
-| opcao_nao_texto         | varchar(255) | texto descritivo da opcao nao             |
-| nao_imagem              | varchar(255) | imagem da opcao B (caminho nao)           |
-| sim_leva_passo          | int          | numero do proximo passo se sim            |
-| nao_leva_passo          | int          | numero do proximo passo se nao            |
-| sim_resultado_familia_id| int FK       | familia identificada se sim               |
-| nao_resultado_familia_id| int FK       | familia identificada se nao               |
-
----
-
-## API Publica (api.php)
-
-Endpoint: `api.php?action=<acao>`
-
-| action     | parametros         | descricao                                   |
-|------------|--------------------|---------------------------------------------|
-| ordens     | nenhum             | lista todas as ordens ativas                |
-| ordem      | id (int)           | retorna dados de uma ordem e suas familias  |
-| passos     | ordem_id (int)     | retorna todos os passos da chave dicotomica |
-| familia    | id (int)           | retorna dados de uma familia                |
-
----
-
-## Funcionalidades
-
-### Area Publica
-
-- **Listagem de Ordens**: grid de cards com imagem, nome e botoes de acao
-- **Modal de Descricao**: exibe caracteristicas, exemplos, importancia agricola e familias da ordem
-- **Chave Dicotomica / Specimen Match**: navegacao passo a passo com comparacao visual lado a lado. A Opcao A representa o caminho `sim`; a Opcao B representa o caminho `nao`. Cada opcao pode ter imagem propria para comparacao de especimes.
-
-### Specimen Match
-
-A tela `chave.php` apresenta cada passo como uma comparacao entre duas alternativas:
-
-- **Opcao A**: usa `opcao_sim_texto`, `sim_imagem`, `sim_leva_passo` e `sim_resultado_familia_id`.
-- **Opcao B**: usa `opcao_nao_texto`, `nao_imagem`, `nao_leva_passo` e `nao_resultado_familia_id`.
-
-A mudanca e principalmente visual: a logica dicotomica continua baseada nos mesmos caminhos sim/nao. Quando nao houver imagem cadastrada para uma opcao, a interface mostra um placeholder.
-
-### Area Administrativa
-
-Requer autenticacao via sessao PHP.
-
-- **Dashboard**: exibe contadores de ordens, familias e passos cadastrados
-- **Ordens**: listagem, criacao, edicao e exclusao de ordens com upload de imagem
-- **Familias**: listagem filtrada por ordem, criacao, edicao e exclusao com upload de imagem
-- **Chaves Dicotomicas**: selecao de ordem, listagem dos passos, adicao e edicao de passos com definicao de destinos (proximo passo ou familia resultado) e upload de imagem para Opcao A/Opcao B
-- **Administradores**: listagem e cadastro de novos admins; exclusao de outros admins (nao de si mesmo)
-
----
-
-## Autenticacao
-
-- Login via formulario com email/nome e senha
-- Senha armazenada como hash MD5 (legado; novos admins usam password_hash)
-- Sessao PHP com `$_SESSION['admin_id']` e `$_SESSION['admin_nome']`
-- Funcao `requireAdmin()` redireciona para login.php se nao autenticado
+- **admins** - usuários do painel administrativo
+- **ordens** - ordens e subordens de insetos
+- **familias** - famílias vinculadas a cada ordem
+- **chave_passos** - passos da chave dicotômica com caminhos sim/não e resultados
 
 ---
 
 ## Upload de Imagens
 
-- Diretorio: `uploads/insetos/`
-- Tipos aceitos: JPG, PNG, WebP
-- Tamanho maximo: 5MB
-- Nome gerado com prefixo + uniqid()
-- Imagens de ordens, familias e alternativas da chave usam o mesmo fluxo de upload.
+- Diretório: `uploads/insetos/`
+- Formatos aceitos: JPG, PNG, WebP
+- Tamanho máximo: 5 MB
 
 ---
 
-## Observacoes Tecnicas
+## Autenticação
 
-- PHP com PDO e prepared statements em todas as queries
-- Banco MariaDB/MySQL com charset utf8mb4
-- Frontend vanilla JS sem frameworks
-- Fontes: Playfair Display (titulos) e Source Sans 3 (texto)
-- Design responsivo com media queries para mobile
+Login via sessão PHP com email e senha. A função `requireAdmin()` protege todas as rotas administrativas, redirecionando para a tela de login caso não autenticado.
