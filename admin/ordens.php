@@ -211,14 +211,24 @@ requireAdmin(); ?>
               </div>
 
               <div class="form-group">
-                <label>Imagem</label>
-                <input type="file" name="imagem" class="form-control" accept="image/*" onchange="previewImg(this)">
+                <label class="lbl">Imagem</label>
+                <div class="custom-file-input-wrapper" style="position: relative; display: flex; align-items: center; border: 1.5px solid var(--verde-borda); border-radius: 9px; padding: 5px 14px 5px 5px; background: #fff;">
+                  <label for="imagem" class="btn-secondary" style="margin:0; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; text-transform: none;">Escolher imagem</label>
+                  <span id="imagemName" style="margin-left: 12px; font-size: 0.95rem; color: var(--texto-suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">Nenhum arquivo escolhido</span>
+                  <input type="file" id="imagem" name="imagem" accept="image/*" onchange="previewImg(this); const hasFiles = this.files.length > 0; document.getElementById('imagemName').textContent = hasFiles ? this.files[0].name : 'Nenhum arquivo escolhido';" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                </div>
                 <p class="hint">JPG, PNG ou WebP - máx 5MB. <?= $e['imagem'] ?? '' ? 'Imagem atual: <em>' . basename($e['imagem']) . '</em>' : '' ?></p>
                 <?php if (!empty($e['imagem'])): ?>
-                  <img src="../<?= htmlspecialchars($e['imagem']) ?>" class="img-preview" style="display:block" alt="Pré-visualização da imagem atual">
+                  <div style="position:relative; width:max-content;">
+                    <img id="imgPreview" src="../<?= htmlspecialchars($e['imagem']) ?>" data-original-src="../<?= htmlspecialchars($e['imagem']) ?>" class="img-preview" style="display:block;max-width:180px;border-radius:10px;margin-top:10px" alt="Pré-visualização da imagem atual">
+                    <button type="button" id="imgPreviewClear" class="btn-del" style="position:absolute; top:16px; right:6px; padding:4px; border-radius:50%; min-width:28px; height:28px; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.2);" aria-label="Remover imagem" onclick="document.getElementById('imagem').value=''; document.getElementById('imagem').dispatchEvent(new Event('change'));">&#128465;</button>
+                  </div>
                 <?php else: ?>
                   <div id="imgPreviewEmpty" class="upload-empty">Sem imagem cadastrada. Selecione um arquivo para visualizar antes de salvar.</div>
-                  <img id="imgPreview" class="img-preview" hidden alt="Pré-visualização da nova imagem">
+                  <div style="position:relative; width:max-content;">
+                    <img id="imgPreview" class="img-preview" hidden style="display:none;max-width:180px;border-radius:10px;margin-top:10px" alt="Pré-visualização da nova imagem">
+                    <button type="button" id="imgPreviewClear" class="btn-del" style="position:absolute; top:16px; right:6px; padding:4px; border-radius:50%; min-width:28px; height:28px; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.2);" aria-label="Remover imagem" onclick="document.getElementById('imagem').value=''; document.getElementById('imagem').dispatchEvent(new Event('change'));">&#128465;</button>
+                  </div>
                 <?php endif; ?>
               </div>
 
@@ -243,8 +253,25 @@ requireAdmin(); ?>
           prev.style.display = 'block';
           const empty = document.getElementById('imgPreviewEmpty');
           if (empty) empty.hidden = true;
+          const clearBtn = document.getElementById('imgPreviewClear');
+          if (clearBtn) { clearBtn.style.display = 'flex'; clearBtn.hidden = false; }
         };
         reader.readAsDataURL(input.files[0]);
+      } else {
+        const clearBtn = document.getElementById('imgPreviewClear');
+        if (clearBtn) { clearBtn.style.display = 'none'; }
+        const origSrc = prev.getAttribute('data-original-src');
+        if (origSrc) {
+           prev.src = origSrc;
+           prev.hidden = false;
+           prev.style.display = 'block';
+        } else {
+           prev.hidden = true;
+           prev.style.display = 'none';
+           prev.removeAttribute('src');
+           const empty = document.getElementById('imgPreviewEmpty');
+           if (empty) empty.hidden = false;
+        }
       }
     }
   </script>

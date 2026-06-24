@@ -265,13 +265,23 @@ requireAdmin(); ?>
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Imagem da Opção A</label>
                   <input type="hidden" name="sim_imagem_atual" value="<?= htmlspecialchars($pe['sim_imagem'] ?? '') ?>">
-                  <input type="file" name="sim_imagem" class="form-control" accept="image/*" data-preview-target="simOptionPreview" data-empty-target="simOptionEmpty">
+                  <div class="custom-file-input-wrapper" style="position: relative; display: flex; align-items: center; border: 1.5px solid var(--verde-borda); border-radius: 9px; padding: 5px 14px 5px 5px; background: #fff;">
+                    <label for="sim_imagem" class="btn-secondary" style="margin:0; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; text-transform: none;">Escolher imagem</label>
+                    <span id="sim_imagemName" style="margin-left: 12px; font-size: 0.95rem; color: var(--texto-suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">Nenhum arquivo escolhido</span>
+                    <input type="file" id="sim_imagem" name="sim_imagem" accept="image/*" data-preview-target="simOptionPreview" data-empty-target="simOptionEmpty" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                  </div>
                   <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['sim_imagem']) ? 'Atual: <em>' . basename($pe['sim_imagem']) . '</em>' : '' ?></p>
                   <?php if (!empty($pe['sim_imagem'])): ?>
-                    <img id="simOptionPreview" src="../<?= htmlspecialchars($pe['sim_imagem']) ?>" class="option-preview" alt="Pré-visualização da opção A">
+                    <div style="position:relative; width:max-content; margin-top:10px;">
+                      <img id="simOptionPreview" src="../<?= htmlspecialchars($pe['sim_imagem']) ?>" data-original-src="../<?= htmlspecialchars($pe['sim_imagem']) ?>" class="option-preview" alt="Pré-visualização da opção A" style="display:block; margin:0;">
+                      <button type="button" id="simOptionClear" class="btn-del" style="position:absolute; top:6px; right:6px; padding:4px; border-radius:50%; min-width:28px; height:28px; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.2);" aria-label="Remover imagem" onclick="document.getElementById('sim_imagem').value=''; document.getElementById('sim_imagem').dispatchEvent(new Event('change'));">&#128465;</button>
+                    </div>
                   <?php else: ?>
                     <div id="simOptionEmpty" class="upload-empty">Sem imagem cadastrada para a opção A.</div>
-                    <img id="simOptionPreview" class="option-preview" hidden alt="Pré-visualização da opção A">
+                    <div style="position:relative; width:max-content; margin-top:10px;">
+                      <img id="simOptionPreview" class="option-preview" hidden alt="Pré-visualização da opção A" style="display:none; margin:0;">
+                      <button type="button" id="simOptionClear" class="btn-del" style="position:absolute; top:6px; right:6px; padding:4px; border-radius:50%; min-width:28px; height:28px; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.2);" aria-label="Remover imagem" onclick="document.getElementById('sim_imagem').value=''; document.getElementById('sim_imagem').dispatchEvent(new Event('change'));">&#128465;</button>
+                    </div>
                   <?php endif; ?>
                 </div>
               </div>
@@ -304,13 +314,23 @@ requireAdmin(); ?>
                 <div class="form-group" style="margin-bottom:0">
                   <label class="lbl">Imagem da Opção B</label>
                   <input type="hidden" name="nao_imagem_atual" value="<?= htmlspecialchars($pe['nao_imagem'] ?? '') ?>">
-                  <input type="file" name="nao_imagem" class="form-control" accept="image/*" data-preview-target="naoOptionPreview" data-empty-target="naoOptionEmpty">
+                  <div class="custom-file-input-wrapper" style="position: relative; display: flex; align-items: center; border: 1.5px solid var(--verde-borda); border-radius: 9px; padding: 5px 14px 5px 5px; background: #fff;">
+                    <label for="nao_imagem" class="btn-secondary" style="margin:0; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; text-transform: none;">Escolher imagem</label>
+                    <span id="nao_imagemName" style="margin-left: 12px; font-size: 0.95rem; color: var(--texto-suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">Nenhum arquivo escolhido</span>
+                    <input type="file" id="nao_imagem" name="nao_imagem" accept="image/*" data-preview-target="naoOptionPreview" data-empty-target="naoOptionEmpty" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                  </div>
                   <p class="hint">Imagem visual para comparar esta característica. <?= !empty($pe['nao_imagem']) ? 'Atual: <em>' . basename($pe['nao_imagem']) . '</em>' : '' ?></p>
                   <?php if (!empty($pe['nao_imagem'])): ?>
-                    <img id="naoOptionPreview" src="../<?= htmlspecialchars($pe['nao_imagem']) ?>" class="option-preview" alt="Pré-visualização da opção B">
+                    <div style="position:relative; width:max-content; margin-top:10px;">
+                      <img id="naoOptionPreview" src="../<?= htmlspecialchars($pe['nao_imagem']) ?>" data-original-src="../<?= htmlspecialchars($pe['nao_imagem']) ?>" class="option-preview" alt="Pré-visualização da opção B" style="display:block; margin:0;">
+                      <button type="button" id="naoOptionClear" class="btn-del" style="position:absolute; top:6px; right:6px; padding:4px; border-radius:50%; min-width:28px; height:28px; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.2);" aria-label="Remover imagem" onclick="document.getElementById('nao_imagem').value=''; document.getElementById('nao_imagem').dispatchEvent(new Event('change'));">&#128465;</button>
+                    </div>
                   <?php else: ?>
                     <div id="naoOptionEmpty" class="upload-empty">Sem imagem cadastrada para a opção B.</div>
-                    <img id="naoOptionPreview" class="option-preview" hidden alt="Pré-visualização da opção B">
+                    <div style="position:relative; width:max-content; margin-top:10px;">
+                      <img id="naoOptionPreview" class="option-preview" hidden alt="Pré-visualização da opção B" style="display:none; margin:0;">
+                      <button type="button" id="naoOptionClear" class="btn-del" style="position:absolute; top:6px; right:6px; padding:4px; border-radius:50%; min-width:28px; height:28px; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.2);" aria-label="Remover imagem" onclick="document.getElementById('nao_imagem').value=''; document.getElementById('nao_imagem').dispatchEvent(new Event('change'));">&#128465;</button>
+                    </div>
                   <?php endif; ?>
                 </div>
               </div>
