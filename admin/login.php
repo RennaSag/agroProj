@@ -57,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="form-group">
         <label for="senha">Senha</label>
         <input id="senha" type="password" name="senha" autocomplete="current-password" required placeholder="********">
+        <div style="text-align: right; margin-top: 5px;">
+          <a href="forgot_password.php" style="font-size: 0.85rem; color: var(--verde); text-decoration: none;">Esqueci minha senha</a>
+        </div>
       </div>
       <button type="submit" class="btn-login">Entrar</button>
     </form>

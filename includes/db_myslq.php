@@ -1,5 +1,5 @@
 <?php
-// includes/db_postgres.php (Versão para PostgreSQL)
+// includes/db.php
 
 require_once __DIR__ . '/config.php';
 
@@ -16,7 +16,7 @@ function getDB()
     if ($pdo === null) {
         try {
             $pdo = new PDO(
-                'pgsql:host=' . DB_HOST . ';port=5432;dbname=' . DB_NAME . ';sslmode=require',
+                'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
                 DB_USER,
                 DB_PASS,
                 [
@@ -83,9 +83,8 @@ function ensureConfiguracoesTable($pdo = null)
     ");
 
     $stmt = $pdo->prepare("
-        INSERT INTO configuracoes (chave, valor, descricao)
+        INSERT IGNORE INTO configuracoes (chave, valor, descricao)
         VALUES (?, ?, ?)
-        ON CONFLICT (chave) DO NOTHING
     ");
     $stmt->execute([
         'exibir_miniaturas_historico',
@@ -114,9 +113,9 @@ function setConfiguracao($chave, $valor, $descricao = null)
     $stmt = $pdo->prepare("
         INSERT INTO configuracoes (chave, valor, descricao)
         VALUES (?, ?, ?)
-        ON CONFLICT (chave) DO UPDATE
-            SET valor = EXCLUDED.valor,
-            descricao = EXCLUDED.descricao,
+        ON DUPLICATE KEY UPDATE
+            valor = VALUES(valor),
+            descricao = VALUES(descricao),
             atualizado_em = current_timestamp
     ");
     $stmt->execute([$chave, $valor, $descricao]);
@@ -133,10 +132,10 @@ function ensureFamiliaExemploImagensTable($pdo = null)
     $pdo = $pdo ?: getDB();
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS familia_exemplo_imagens (
-            id serial PRIMARY KEY,
-            familia_id integer NOT NULL,
+            id int AUTO_INCREMENT PRIMARY KEY,
+            familia_id int(11) NOT NULL,
             imagem varchar(255) NOT NULL,
-            ordem integer NOT NULL DEFAULT 0,
+            ordem int(11) NOT NULL DEFAULT 0,
             criado_em timestamp NOT NULL DEFAULT current_timestamp,
             CONSTRAINT familia_exemplo_imagens_ibfk_1
                 FOREIGN KEY (familia_id) REFERENCES familias (id)
