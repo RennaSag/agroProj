@@ -15,7 +15,7 @@
 
   <header>
   <h1>Chaves de Classificação Entomológica</h1>
-  <p>IF GOIANO &nbsp;- &nbsp;Entomologia de Insetos</p>
+  <p>IF GOIANO &nbsp;- &nbsp;Campus Iporá</p>
   <div class="header-accent"></div>
   <a href="admin/check_auth.php" class="admin-link">Área administrativa</a>
 </header>
@@ -29,6 +29,23 @@
     <div class="ordens-grid" id="ordensgrid">
     </div>
   </main>
+
+
+<!--Sessão com os creditos-->
+<footer class="site-footer">
+    <div class="footer-content">
+      <p class="footer-creditos">
+        Desenvolvido por <strong>Rennã S. A. Gonçalves, Saymon Cassiano, Uender, Rian, Jon</strong>
+      </p>
+
+      <!--
+      <p class="footer-copyright">
+        &copy; 2026 Classificação de Chaves Entomológicas. Todos os direitos reservados.
+      </p> 
+      -->
+      
+    </div>
+  </footer>
 
   <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
     <div class="modal" id="modalContent" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" tabindex="-1">
