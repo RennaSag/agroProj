@@ -259,19 +259,6 @@
       line-height: 1;
     }
 
-    .card-badge {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      background: rgba(26, 46, 24, 0.78);
-      color: var(--branco);
-      font-size: 0.76rem;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-      backdrop-filter: blur(2px);
-    }
-
     .card-body {
       padding: 20px 24px 24px;
       flex: 1;

@@ -123,13 +123,9 @@
             `<img src="${escapeHtml(ordem.imagem)}" class="card-img" alt="${nome}" loading="lazy">` :
             imagemAusente('card-img-placeholder');
 
-          const totalFamilias = Number(ordem.total_familias || 0);
-          const familiasLabel = totalFamilias === 1 ? '1 família' : `${totalFamilias} famílias`;
-
           card.innerHTML = `
             <div class="card-media">
               ${imgHtml}
-              <span class="card-badge">${familiasLabel}</span>
             </div>
             <div class="card-body">
               <div class="card-nome">${nome}</div>
