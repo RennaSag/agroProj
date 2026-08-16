@@ -35,7 +35,17 @@
 <footer class="site-footer">
     <div class="footer-content">
       <p class="footer-creditos">
-        Desenvolvido por <strong>Rennã S. A. Gonçalves, Saymon Cassiano, Uender, Rian, Jon</strong>
+        Desenvolvido por <strong>Rennã Samuel Andrade Gonçalves, Saymon Henrique Costa Cassiano, Uender Barbosa de Souza, Rian Tavares Vieira, Joao Victor Almeida Amorim Gomes, Jhonata Ribeiro Sampaio</strong>
+      </p>
+      <p class="footer-orientadora">
+        Orientadora: <strong>Lais Candido Rodrigues da Silva Lopes</strong>
+      </p>
+
+      <p class="footer-creditos">
+        Equipe de agronomia: <strong>Ana Gabriela de Castro Silva, Gabrielly Pereira de Araújo, Marcus Vinícius Silveira Silva, João Paulo Rodrigues Marques</strong>
+      </p>
+      <p class="footer-orientadora">
+        Orientadora: <strong>Daline Benites Bottega</strong>
       </p>
 
       <!--
