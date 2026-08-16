@@ -92,15 +92,6 @@ switch ($action) {
         ]);
         break;
 
-    case 'estatisticas':
-        $totalOrdens = (int)$pdo->query("SELECT COUNT(*) FROM ordens WHERE ativo=TRUE")->fetchColumn();
-        $totalFamilias = (int)$pdo->query("SELECT COUNT(*) FROM familias WHERE ativo=TRUE")->fetchColumn();
-        echo json_encode([
-            'ordens' => $totalOrdens,
-            'familias' => $totalFamilias,
-        ]);
-        break;
-
     case 'buscar':
         $termo = trim($_GET['q'] ?? '');
         if (mb_strlen($termo) < 2) {

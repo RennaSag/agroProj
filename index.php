@@ -19,7 +19,6 @@
         <p class="brand-kicker">IF Goiano &nbsp;·&nbsp; Campus Iporá</p>
         <h1>Chaves de Classificação Entomológica</h1>
       </div>
-      <a href="admin/check_auth.php" class="admin-link">Área administrativa</a>
     </div>
 
     <div class="header-search">
@@ -38,21 +37,6 @@
   </header>
 
   <main>
-    <section class="stats-bar" id="statsBar" aria-label="Estatísticas do acervo">
-      <div class="stat">
-        <strong id="statOrdens">&ndash;</strong>
-        <span>Ordens catalogadas</span>
-      </div>
-      <div class="stat">
-        <strong id="statFamilias">&ndash;</strong>
-        <span>Famílias documentadas</span>
-      </div>
-      <div class="stat">
-        <strong>100%</strong>
-        <span>Chaves dicotômicas guiadas</span>
-      </div>
-    </section>
-
     <section class="intro" aria-labelledby="introTitulo">
       <p class="intro-kicker">Identificação orientada</p>
       <h2 id="introTitulo">Selecione uma ordem para começar</h2>
@@ -83,9 +67,10 @@
       <!--
       <p class="footer-copyright">
         &copy; 2026 Classificação de Chaves Entomológicas. Todos os direitos reservados.
-      </p> 
+      </p>
       -->
-      
+
+      <a href="admin/check_auth.php" class="footer-admin-link">Área administrativa</a>
     </div>
   </footer>
 
@@ -157,19 +142,6 @@
         });
       } catch (erro) {
         grid.innerHTML = '<p class="empty-feedback">Não foi possível carregar as ordens neste momento.</p>';
-      }
-    }
-
-    async function carregarEstatisticas() {
-      try {
-        const resp = await fetch('api.php?action=estatisticas');
-        if (!resp.ok) throw new Error('Falha ao carregar estatísticas');
-        const data = await resp.json();
-        document.getElementById('statOrdens').textContent = data.ordens ?? '0';
-        document.getElementById('statFamilias').textContent = data.familias ?? '0';
-      } catch (erro) {
-        document.getElementById('statOrdens').textContent = '-';
-        document.getElementById('statFamilias').textContent = '-';
       }
     }
 
@@ -435,7 +407,6 @@
     });
 
     carregarOrdens();
-    carregarEstatisticas();
   </script>
 </body>
 

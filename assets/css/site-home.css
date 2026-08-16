@@ -34,10 +34,7 @@
     .header-top {
       max-width: 1240px;
       margin: 0 auto;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
+      text-align: center;
     }
 
     .brand-kicker {
@@ -56,24 +53,6 @@
       font-weight: 700;
       letter-spacing: -0.01em;
       line-height: 1.25;
-    }
-
-    .admin-link {
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.14);
-      color: var(--branco);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 8px;
-      padding: 9px 16px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background var(--transition-fast);
-      white-space: nowrap;
-    }
-
-    .admin-link:hover {
-      background: rgba(255, 255, 255, 0.25);
     }
 
     .header-search {
@@ -192,43 +171,6 @@
       text-align: center;
     }
 
-    .stats-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      max-width: 720px;
-      margin: -46px auto 40px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .stat {
-      flex: 1;
-      min-width: 150px;
-      background: var(--branco);
-      border: 1px solid var(--verde-borda);
-      border-radius: 12px;
-      box-shadow: var(--sombra);
-      padding: 16px 18px;
-      text-align: center;
-    }
-
-    .stat strong {
-      display: block;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.7rem;
-      color: var(--verde-escuro);
-      line-height: 1.1;
-    }
-
-    .stat span {
-      display: block;
-      color: var(--texto-suave);
-      font-size: 0.8rem;
-      margin-top: 4px;
-    }
-
-    
     main {
       max-width: 1240px;
       margin: 0 auto;
@@ -840,24 +782,8 @@
         padding: 20px 16px 24px;
       }
 
-      .header-top {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .admin-link {
-        display: inline-flex;
-        align-self: flex-start;
-      }
-
       .header-search {
         margin-top: 18px;
-      }
-
-      .stats-bar {
-        margin-top: -30px;
-        flex-direction: column;
       }
 
       main {
