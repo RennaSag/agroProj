@@ -42,6 +42,13 @@
     </aside>
   </div>
 
+  <div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Imagem ampliada" hidden>
+    <div class="image-lightbox-card">
+      <button type="button" class="image-lightbox-close" id="closeImageLightbox" aria-label="Fechar imagem ampliada">&times;</button>
+      <img id="imageLightboxImg" src="" alt="">
+    </div>
+  </div>
+
   <script>
     const params = new URLSearchParams(location.search);
     const ordemId = params.get('ordem');
@@ -51,7 +58,7 @@
     let choiceHistory = [];
     let transitioning = false;
     let exibirMiniaturasHistorico = true;
-    let examplePopoverTrigger = null;
+    let lightboxTriggerEl = null;
 
     const progressBar = document.getElementById('progressBar');
     const progressFill = document.getElementById('progressFill');
@@ -203,7 +210,10 @@
       const titulo = texto || (escolha === 'sim' ? 'Característica presente' : 'Característica ausente');
       const nomeOpcao = escolha === 'sim' ? 'opção A' : 'opção B';
       const imagemHtml = imagem ?
-        `<img src="${escapeHtml(imagem)}" class="specimen-img" alt="${escapeHtml(titulo)}">` :
+        `<button type="button" class="specimen-img-trigger" data-lightbox-src="${escapeHtml(imagem)}" data-lightbox-alt="${escapeHtml(titulo)}" aria-label="Ampliar imagem: ${escapeHtml(titulo)}">
+          <img src="${escapeHtml(imagem)}" class="specimen-img" alt="${escapeHtml(titulo)}">
+          <span class="specimen-zoom-hint" aria-hidden="true">&#128269;</span>
+        </button>` :
         `<div class="specimen-img-placeholder" role="img" aria-label="Imagem não cadastrada"><span aria-hidden="true">▧</span><small>Sem imagem</small></div>`;
 
       return `
@@ -296,7 +306,7 @@
         const src = item.imagem || item;
         const label = `Imagem de exemplo ${index + 1} de ${nomeFamilia}`;
         return `
-          <button type="button" class="example-thumb" data-example-src="${escapeHtml(src)}" data-example-alt="${escapeHtml(label)}" aria-label="Ampliar ${escapeHtml(label)}">
+          <button type="button" class="example-thumb" data-lightbox-src="${escapeHtml(src)}" data-lightbox-alt="${escapeHtml(label)}" aria-label="Ampliar ${escapeHtml(label)}">
             <img src="${escapeHtml(src)}" alt="${escapeHtml(label)}">
           </button>`;
       }).join('');
@@ -304,46 +314,39 @@
       return `
         <div class="resultado-example-gallery" aria-label="Imagens de exemplos da família">
           <div class="example-thumbs">${thumbs}</div>
-          <div class="example-popover" id="examplePopover" role="dialog" aria-modal="true" aria-label="Imagem ampliada do exemplo" hidden>
-            <div class="example-popover-card">
-              <button type="button" class="example-popover-close" id="closeExamplePopover" aria-label="Fechar imagem ampliada">&times;</button>
-              <img id="examplePopoverImg" src="" alt="">
-            </div>
-          </div>
         </div>`;
     }
 
-    function openExamplePopover(button) {
-      const popover = document.getElementById('examplePopover');
-      const popoverImg = document.getElementById('examplePopoverImg');
-      const closeButton = document.getElementById('closeExamplePopover');
-      const gallery = button.closest('.resultado-example-gallery');
-      if (!popover || !popoverImg || !closeButton || !gallery) return;
+    function openImageLightbox(button) {
+      const lightbox = document.getElementById('imageLightbox');
+      const lightboxImg = document.getElementById('imageLightboxImg');
+      const closeButton = document.getElementById('closeImageLightbox');
+      if (!lightbox || !lightboxImg || !closeButton) return;
 
-      examplePopoverTrigger = button;
-      popoverImg.src = button.dataset.exampleSrc;
-      popoverImg.alt = button.dataset.exampleAlt || 'Imagem de exemplo ampliada';
-      popover.hidden = false;
+      lightboxTriggerEl = button;
+      lightboxImg.src = button.dataset.lightboxSrc;
+      lightboxImg.alt = button.dataset.lightboxAlt || 'Imagem ampliada';
+      lightbox.hidden = false;
       document.body.classList.add('example-viewer-open');
       closeButton.focus();
     }
 
-    function closeExamplePopover(returnFocus = true) {
-      const popover = document.getElementById('examplePopover');
-      const popoverImg = document.getElementById('examplePopoverImg');
-      if (!popover || popover.hidden) return;
+    function closeImageLightbox(returnFocus = true) {
+      const lightbox = document.getElementById('imageLightbox');
+      const lightboxImg = document.getElementById('imageLightboxImg');
+      if (!lightbox || lightbox.hidden) return;
 
-      popover.hidden = true;
-      if (popoverImg) {
-        popoverImg.removeAttribute('src');
-        popoverImg.alt = '';
+      lightbox.hidden = true;
+      if (lightboxImg) {
+        lightboxImg.removeAttribute('src');
+        lightboxImg.alt = '';
       }
       document.body.classList.remove('example-viewer-open');
 
-      if (returnFocus && examplePopoverTrigger) {
-        examplePopoverTrigger.focus();
+      if (returnFocus && lightboxTriggerEl) {
+        lightboxTriggerEl.focus();
       }
-      examplePopoverTrigger = null;
+      lightboxTriggerEl = null;
     }
 
     function renderResultado(familia) {
@@ -401,14 +404,14 @@
         return;
       }
 
-      const exampleThumb = event.target.closest('.example-thumb');
-      if (exampleThumb) {
-        openExamplePopover(exampleThumb);
+      const lightboxTrigger = event.target.closest('[data-lightbox-src]');
+      if (lightboxTrigger) {
+        openImageLightbox(lightboxTrigger);
         return;
       }
 
-      if (event.target.closest('#closeExamplePopover')) {
-        closeExamplePopover();
+      if (event.target.closest('#closeImageLightbox')) {
+        closeImageLightbox();
         return;
       }
 
@@ -418,22 +421,22 @@
     });
     backStep.addEventListener('click', voltarPassoAnterior);
     document.addEventListener('click', event => {
-      const popover = document.getElementById('examplePopover');
-      if (!popover || popover.hidden) return;
-      if (event.target.closest('.example-thumb')) return;
-      if (event.target === popover) {
-        closeExamplePopover(false);
+      const lightbox = document.getElementById('imageLightbox');
+      if (!lightbox || lightbox.hidden) return;
+      if (event.target.closest('[data-lightbox-src]')) return;
+      if (event.target === lightbox) {
+        closeImageLightbox(false);
       }
     });
     document.addEventListener('focusin', event => {
-      const popover = document.getElementById('examplePopover');
-      if (!popover || popover.hidden) return;
-      if (event.target.closest('#examplePopover') || event.target.closest('.example-thumb')) return;
-      closeExamplePopover(false);
+      const lightbox = document.getElementById('imageLightbox');
+      if (!lightbox || lightbox.hidden) return;
+      if (event.target.closest('#imageLightbox') || event.target.closest('[data-lightbox-src]')) return;
+      closeImageLightbox(false);
     });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
-        closeExamplePopover();
+        closeImageLightbox();
       }
     });
 

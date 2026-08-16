@@ -203,11 +203,49 @@ header {
   overflow: hidden;
 }
 
+.specimen-img-trigger {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
 .specimen-img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: contain;
+}
+
+.specimen-zoom-hint {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  border-radius: 50%;
+  background: rgba(16, 33, 20, 0.6);
+  color: var(--branco);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.specimen-img-trigger:hover .specimen-zoom-hint,
+.specimen-img-trigger:focus-visible .specimen-zoom-hint {
+  background: var(--verde-escuro);
+}
+
+.specimen-img-trigger:focus-visible {
+  outline: 3px solid rgba(47, 107, 55, 0.35);
+  outline-offset: -3px;
 }
 
 .specimen-img-placeholder {
@@ -427,7 +465,7 @@ header {
   width: 100%;
 }
 
-.example-popover {
+.image-lightbox {
   align-items: center;
   background: rgba(16, 33, 20, 0.72);
   display: flex;
@@ -438,11 +476,11 @@ header {
   z-index: 2000;
 }
 
-.example-popover[hidden] {
+.image-lightbox[hidden] {
   display: none !important;
 }
 
-.example-popover-card {
+.image-lightbox-card {
   background: var(--branco);
   border: 1.5px solid var(--verde);
   border-radius: 12px;
@@ -453,7 +491,7 @@ header {
   width: max-content;
 }
 
-.example-popover-close {
+.image-lightbox-close {
   align-items: center;
   background: var(--verde-escuro);
   border: 0;
@@ -472,12 +510,12 @@ header {
   z-index: 1;
 }
 
-.example-popover-close:focus-visible {
+.image-lightbox-close:focus-visible {
   outline: 3px solid rgba(47, 107, 55, 0.28);
   outline-offset: 2px;
 }
 
-.example-popover-card img {
+.image-lightbox-card img {
   border-radius: 7px;
   display: block;
   max-height: min(74vh, 560px);
@@ -798,15 +836,15 @@ body.example-viewer-open {
     padding: 20px;
   }
 
-  .example-popover {
+  .image-lightbox {
     padding: 14px;
   }
 
-  .example-popover-card {
+  .image-lightbox-card {
     width: 100%;
   }
 
-  .example-popover-card img {
+  .image-lightbox-card img {
     max-width: 100%;
     width: 100%;
   }
@@ -826,7 +864,7 @@ body.example-viewer-open {
 
 @media (prefers-reduced-motion: reduce) {
   .example-thumb,
-  .example-popover {
+  .image-lightbox {
     transition: none;
   }
 }
