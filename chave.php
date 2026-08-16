@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/ui-base.css?v=20260527">
-  <link rel="stylesheet" href="assets/css/site-chave.css?v=20260601-2">
+  <link rel="stylesheet" href="assets/css/site-chave.css?v=20260815">
 </head>
 
 <body>

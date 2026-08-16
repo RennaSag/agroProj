@@ -207,7 +207,7 @@ header {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .specimen-img-placeholder {
@@ -348,7 +348,8 @@ header {
 .resultado-img {
   width: 100%;
   height: 280px;
-  object-fit: cover;
+  object-fit: contain;
+  background: #f3f8f3;
   display: block;
 }
 
