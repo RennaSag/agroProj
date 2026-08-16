@@ -10,7 +10,13 @@ $pdo = getDB();
 switch ($action) {
 
     case 'ordens':
-        $stmt = $pdo->query("SELECT id, nome, imagem FROM ordens WHERE ativo=TRUE ORDER BY ordem_exibicao, id");
+        $stmt = $pdo->query("
+            SELECT o.id, o.nome, o.imagem,
+                   (SELECT COUNT(*) FROM familias f WHERE f.ordem_id = o.id AND f.ativo=TRUE) AS total_familias
+            FROM ordens o
+            WHERE o.ativo=TRUE
+            ORDER BY o.ordem_exibicao, o.id
+        ");
         echo json_encode($stmt->fetchAll());
         break;
 
@@ -83,6 +89,41 @@ switch ($action) {
     case 'configuracoes_chave':
         echo json_encode([
             'exibir_miniaturas_historico' => configuracaoAtiva('exibir_miniaturas_historico', true),
+        ]);
+        break;
+
+    case 'estatisticas':
+        $totalOrdens = (int)$pdo->query("SELECT COUNT(*) FROM ordens WHERE ativo=TRUE")->fetchColumn();
+        $totalFamilias = (int)$pdo->query("SELECT COUNT(*) FROM familias WHERE ativo=TRUE")->fetchColumn();
+        echo json_encode([
+            'ordens' => $totalOrdens,
+            'familias' => $totalFamilias,
+        ]);
+        break;
+
+    case 'buscar':
+        $termo = trim($_GET['q'] ?? '');
+        if (mb_strlen($termo) < 2) {
+            echo json_encode(['ordens' => [], 'familias' => []]);
+            break;
+        }
+        $like = '%' . $termo . '%';
+
+        $so = $pdo->prepare("SELECT id, nome, imagem FROM ordens WHERE ativo=TRUE AND nome ILIKE ? ORDER BY nome LIMIT 8");
+        $so->execute([$like]);
+
+        $sf = $pdo->prepare("
+            SELECT f.id, f.nome, f.imagem, f.ordem_id, o.nome AS ordem_nome
+            FROM familias f
+            JOIN ordens o ON o.id = f.ordem_id
+            WHERE f.ativo=TRUE AND o.ativo=TRUE AND f.nome ILIKE ?
+            ORDER BY f.nome LIMIT 8
+        ");
+        $sf->execute([$like]);
+
+        echo json_encode([
+            'ordens' => $so->fetchAll(),
+            'familias' => $sf->fetchAll(),
         ]);
         break;
 
