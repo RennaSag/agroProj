@@ -6,25 +6,14 @@ if (isset($_SESSION['admin_id'])) {
     exit;
 }
 
-$erro = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $senha = $_POST['senha'] ?? '';
-    $pdo = getDB();
-
-    $stmt = $pdo->prepare("SELECT * FROM admins WHERE email=? OR nome=?");
-    $stmt->execute([$email, $email]);
-    $admin = $stmt->fetch();
-
-    if ($admin && password_verify($senha, $admin['senha'])) {
-        $_SESSION['admin_id']   = $admin['id'];
-        $_SESSION['admin_nome'] = $admin['nome'];
-        header('Location: index.php');
-        exit;
-    } else {
-        $erro = 'E-mail ou senha incorretos.';
-    }
-}
+$mensagens = [
+    'suap_negado'         => 'Login com SUAP cancelado.',
+    'suap_invalido'       => 'Sessão de login expirada ou inválida. Tente novamente.',
+    'suap_token'          => 'Não foi possível validar sua conta no SUAP. Tente novamente.',
+    'suap_perfil'         => 'Não foi possível obter seus dados do SUAP. Tente novamente.',
+    'suap_nao_autorizado' => 'Sua conta do SUAP não tem permissão para acessar este painel.',
+];
+$erro = $mensagens[$_GET['erro'] ?? ''] ?? '';
 
 ?>
 
@@ -49,20 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php if ($erro): ?>
       <div class="alert"><?= htmlspecialchars($erro) ?></div>
     <?php endif; ?>
-    <form method="POST">
-      <div class="form-group">
-        <label for="email">E-mail</label>
-        <input id="email" type="email" name="email" autocomplete="username" required placeholder="professor@gmail.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
-      </div>
-      <div class="form-group">
-        <label for="senha">Senha</label>
-        <input id="senha" type="password" name="senha" autocomplete="current-password" required placeholder="********">
-        <div style="text-align: right; margin-top: 5px;">
-          <a href="forgot_password.php" style="font-size: 0.85rem; color: var(--verde); text-decoration: none;">Esqueci minha senha</a>
-        </div>
-      </div>
-      <button type="submit" class="btn-login">Entrar</button>
-    </form>
+    <p style="text-align: center; color: var(--texto-suave); font-size: 0.95rem; margin-bottom: 20px;">
+      Acesse com sua conta institucional do SUAP.
+    </p>
+    <a href="suap_login.php" class="btn-login" style="display: block; text-align: center; text-decoration: none;">Entrar com SUAP</a>
     <div class="back-link"><a href="../index.php">Voltar ao site</a></div>
   </div>
 </body>

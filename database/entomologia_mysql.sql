@@ -31,17 +31,16 @@ CREATE TABLE `admins` (
   `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `email` varchar(150) NOT NULL,
-  `senha` varchar(255) NOT NULL,
   `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Despejando dados para a tabela `admins`
+-- login e feito via SUAP OAuth2; cada linha e um e-mail institucional autorizado
 --
 
-INSERT INTO `admins` (`id`, `nome`, `email`, `senha`, `criado_em`) VALUES
-(7, 'renna', 'renna@gmail.com', '$2y$10$4fgrWFvb1wN/eYMK/BqxH.g5yOp0KRYTkhkf6.Qre0YRfjpm236ny', '2026-04-14 23:40:38'),
-(8, 'professor', 'professor@gmail.com', '$2y$10$ZawlbOQXR3wU8OTYwlBZNec2TD7C0g5A.Tr3Uew3VbNKqFRKRmYt6', '2026-04-15 17:17:26');
+INSERT INTO `admins` (`nome`, `email`) VALUES
+('Renna Samuel', 'renna.samuel@estudante.ifgoiano.edu.br');
 
 -- --------------------------------------------------------
 

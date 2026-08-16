@@ -25,16 +25,14 @@ requireAdmin(); ?>
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = trim($_POST['nome'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $senha = $_POST['senha'] ?? '';
 
-    if (strlen($senha) < 6) {
-      $erro = 'A senha deve ter pelo menos 6 caracteres.';
+    if ($nome === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $erro = 'Informe um nome e um e-mail institucional do SUAP válido.';
     } else {
-      $hash = password_hash($senha, PASSWORD_DEFAULT);
       try {
-        $stmt = $pdo->prepare("INSERT INTO admins (nome, email, senha) VALUES (?,?,?)");
-        $stmt->execute([$nome, $email, $hash]);
-        $msg = 'Administrador cadastrado com sucesso!';
+        $stmt = $pdo->prepare("INSERT INTO admins (nome, email) VALUES (?,?)");
+        $stmt->execute([$nome, $email]);
+        $msg = 'E-mail autorizado com sucesso!';
       } catch (Exception $e) {
         $erro = 'E-mail já cadastrado.';
       }
@@ -108,9 +106,10 @@ requireAdmin(); ?>
 
       <div class="card">
         <div class="card-header">
-          <h3>Novo Administrador</h3>
+          <h3>Autorizar novo Administrador</h3>
         </div>
         <div class="card-body">
+          <p class="hint">O login é feito com a conta institucional do SUAP. Cadastre aqui o nome e o e-mail exatos retornados pelo SUAP para liberar o acesso ao painel.</p>
           <form method="POST">
             <div class="form-row">
               <div class="form-group">
@@ -118,16 +117,11 @@ requireAdmin(); ?>
                 <input type="text" name="nome" class="form-control" required placeholder="Ex: Prof. Silva">
               </div>
               <div class="form-group">
-                <label class="lbl">E-mail</label>
-                <input type="email" name="email" class="form-control" required placeholder="prof@ufla.br">
+                <label class="lbl">E-mail do SUAP</label>
+                <input type="email" name="email" class="form-control" required placeholder="nome@ifgoiano.edu.br">
               </div>
             </div>
-            <div class="form-group">
-              <label class="lbl">Senha</label>
-              <input type="password" name="senha" class="form-control" required minlength="6">
-              <p class="hint">Mínimo 6 caracteres.</p>
-            </div>
-            <button type="submit" class="btn-primary">Cadastrar Admin</button>
+            <button type="submit" class="btn-primary">Autorizar Admin</button>
           </form>
         </div>
       </div>

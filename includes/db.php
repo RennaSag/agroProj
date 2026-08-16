@@ -247,19 +247,3 @@ function removerFamiliaExemploImagem($imagemId, $familiaId, $pdo = null, $remove
 
     return true;
 }
-
-function ensurePasswordResetsTable($pdo = null)
-{
-    $pdo = $pdo ?: getDB();
-    $pdo->exec("
-        CREATE TABLE IF NOT EXISTS password_resets (
-            email varchar(150) NOT NULL,
-            token_hash varchar(255) NOT NULL,
-            expira_em timestamp NOT NULL,
-            criado_em timestamp NOT NULL DEFAULT current_timestamp
-        )
-    ");
-    $pdo->exec("
-        CREATE INDEX IF NOT EXISTS idx_password_resets_email ON password_resets (email)
-    ");
-}

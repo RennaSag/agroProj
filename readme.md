@@ -40,7 +40,6 @@ Sistema web para classificação de insetos da Classe Insecta, desenvolvido como
 ├── index.php                   # Página principal - listagem de ordens
 ├── chave.php                   # Interface da chave dicotômica (Specimen Match)
 ├── api.php                     # Endpoint JSON interno
-├── gerar_senha.php             # Utilitário para gerar hash de senha
 ├── Dockerfile                  # Configuração do container
 ├── .env.example                # Modelo das variáveis de ambiente
 ├── .gitignore
@@ -49,9 +48,11 @@ Sistema web para classificação de insetos da Classe Insecta, desenvolvido como
 │   ├── ordens.php              # CRUD de ordens
 │   ├── familias.php            # CRUD de famílias
 │   ├── chaves.php              # CRUD de passos da chave dicotômica
-│   ├── admins.php              # Gerenciamento de administradores
+│   ├── admins.php              # Lista de e-mails do SUAP autorizados
 │   ├── configuracoes.php       # Configurações do sistema
-│   ├── login.php               # Autenticação do admin
+│   ├── login.php               # Tela de login (botão "Entrar com SUAP")
+│   ├── suap_login.php          # Inicia o fluxo OAuth2 com o SUAP
+│   ├── suap_callback.php       # Recebe o retorno do SUAP e abre a sessão
 │   ├── logout.php              # Controle de logout
 │   └── check_auth.php          # Middleware de autenticação
 ├── assets/
@@ -70,9 +71,11 @@ Sistema web para classificação de insetos da Classe Insecta, desenvolvido como
 │       └── admin-layout.js
 ├── includes/
 │   ├── config.php              # Carregamento das variáveis do .env
-│   └── db.php                  # Conexão com banco e funções auxiliares
+│   ├── db.php                  # Conexão com banco e funções auxiliares
+│   └── suap.php                # Cliente OAuth2 do SUAP (login)
 ├── database/
-│   └── entomologia.sql         # Estrutura e carga inicial do banco
+│   ├── entomologia_postgresql.sql  # Schema PostgreSQL usado em produção (Neon)
+│   └── entomologia_mysql.sql       # Dump original em MySQL/MariaDB (histórico)
 ├── uploads/
 │   └── insetos/                # Imagens enviadas via painel admin
 ├── docs/
@@ -106,7 +109,7 @@ git clone https://github.com/RennaSag/agroProj.git
 cd agroProj
 cp .env.example .env
 # Preencha as variáveis de ambiente no .env
-# Importe database/entomologia.sql no seu PostgreSQL
+# Importe database/entomologia_postgresql.sql no seu PostgreSQL
 # Sirva o projeto com PHP built-in server ou Apache/Nginx
 php -S localhost:8000
 ```
@@ -123,13 +126,21 @@ DB_PORT=
 DB_NAME=
 DB_USER=
 DB_PASS=
+
+# Login via SUAP OAuth2
+SUAP_BASE_URL=https://suap.ifgoiano.edu.br
+SUAP_CLIENT_ID=
+SUAP_CLIENT_SECRET=
+SUAP_REDIRECT_URI=
 ```
+
+`SUAP_CLIENT_ID` e `SUAP_CLIENT_SECRET` vêm de uma aplicação OAuth2 cadastrada em `https://suap.ifgoiano.edu.br/o/applications/` (tipo *Confidential*, grant *Authorization code*). O `SUAP_REDIRECT_URI` deve ser exatamente `<URL do site>/admin/suap_callback.php` e precisa estar cadastrado como Redirect URI dessa aplicação.
 
 ---
 
 ## Banco de Dados
 
-O schema completo está em `database/entomologia.sql`, com a variação em PostgreSQL. As principais tabelas são:
+O schema em produção está em `database/entomologia_postgresql.sql` (PostgreSQL/Neon). `database/entomologia_mysql.sql` é o dump original em MySQL/MariaDB, mantido como histórico do projeto. As principais tabelas são:
 
 - **admins** - usuários do painel administrativo
 - **ordens** - ordens e subordens de insetos
@@ -148,4 +159,4 @@ O schema completo está em `database/entomologia.sql`, com a variação em Postg
 
 ## Autenticação
 
-Login via sessão PHP com email e senha. A função `requireAdmin()` protege todas as rotas administrativas, redirecionando para a tela de login caso não autenticado.
+Login via **SUAP OAuth2** (Authorization Code Grant). Ao clicar em "Entrar com SUAP", o usuário é redirecionado para autenticar no SUAP da instituição; o SUAP retorna um `code` que é trocado por um token de acesso, usado para consultar `/api/eu/` e obter o e-mail institucional do usuário. Esse e-mail é conferido contra a tabela `admins` (lista de e-mails autorizados, gerenciada em `admin/admins.php`) — só quem estiver cadastrado lá consegue abrir uma sessão no painel. A função `requireAdmin()` protege todas as rotas administrativas, redirecionando para a tela de login caso não autenticado.
