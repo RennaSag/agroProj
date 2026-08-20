@@ -151,6 +151,7 @@
         modal.style = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999; background:#fff; padding:20px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.3); width:90vw; max-width:600px; display:none; flex-direction:column; max-height:90vh;';
         modal.innerHTML = `
           <h3 style="margin-top:0; margin-bottom:15px; color:#333; font-family:var(--font-title, sans-serif);">Recortar Imagem</h3>
+          <div id="cropRatioButtons" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;"></div>
           <div style="flex:1; overflow:hidden; background:#eee; border-radius:8px; display:flex; justify-content:center; align-items:center; min-height:300px;">
             <img id="cropTargetImage" style="max-width:100%; max-height:60vh; display:block;">
           </div>
@@ -161,28 +162,67 @@
         `;
         document.body.appendChild(modal);
       }
-      
+
       const img = document.getElementById('cropTargetImage');
       const cancelBtn = document.getElementById('cropCancelBtn');
       const confirmBtn = document.getElementById('cropConfirmBtn');
-      
+      const ratioButtonsBox = document.getElementById('cropRatioButtons');
+
       overlay.style.display = 'block';
       modal.style.display = 'flex';
-      
+
+      const RATIO_PRESETS = [
+        { label: 'Livre', value: NaN },
+        { label: 'Quadrado', value: 1 },
+        { label: '4:3', value: 4 / 3 },
+        { label: '3:4', value: 3 / 4 },
+        { label: '16:9', value: 16 / 9 },
+        { label: '9:16', value: 9 / 16 }
+      ];
+
+      const setActiveRatioBtn = (btn) => {
+        ratioButtonsBox.querySelectorAll('button').forEach(b => {
+          b.classList.remove('btn-primary');
+          b.classList.add('btn-secondary');
+        });
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-primary');
+      };
+
+      ratioButtonsBox.innerHTML = '';
+      RATIO_PRESETS.forEach((preset, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = preset.label;
+        btn.className = idx === 0 ? 'btn-primary' : 'btn-secondary';
+        btn.style.margin = '0';
+        btn.style.padding = '5px 12px';
+        btn.style.fontSize = '0.8rem';
+        btn.style.borderRadius = '6px';
+        btn.onclick = () => {
+          if (cropperInstance) cropperInstance.setAspectRatio(preset.value);
+          setActiveRatioBtn(btn);
+        };
+        ratioButtonsBox.appendChild(btn);
+      });
+
       const reader = new FileReader();
       reader.onload = (e) => {
         img.src = e.target.result;
-        
+
         if (cropperInstance) cropperInstance.destroy();
         cropperInstance = new Cropper(img, {
-          aspectRatio: 16 / 9,
+          aspectRatio: NaN,
           viewMode: 2,
           autoCropArea: 1,
-          background: false
+          background: false,
+          dragMode: 'move',
+          cropBoxMovable: true,
+          cropBoxResizable: true
         });
       };
       reader.readAsDataURL(file);
-      
+
       const cleanup = () => {
          if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
          overlay.style.display = 'none';
